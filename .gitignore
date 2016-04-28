@@ -1,2 +1,5 @@
 .directory
 unsupervised-old/
+papers/
+Garshana\ Dataset/
+*.py.swp
