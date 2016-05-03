@@ -1,10 +1,43 @@
 #!/usr/bin/python3
 
 
-#map of 1 2 and 3 grams matched to the number of occurences of that n-gram
-#need 1,2,3 grams for all words as well as grams within names, associate names with two numbers?
+#dictionaries of monograms, bigrams, and trigrams
+#format is a name key, associated with a two element list containing the number of occurences of that gram
+#the first element is number of occurences of that gram in total, the second is number of occurences within names
 
+from collections import defaultdict
 
+monograms = defaultdict(list)
+bigrams = defaultdict(list)
+trigrams = defaultdict(list)
+
+#isName takes one if it is a name, zero otherwise
+def addMonogram(gram, isName):
+    list = monograms[gram]
+    
+    if(len(list) == 0):
+        list.append(0)
+        list.append(0)
+
+    list[isName] += 1
+
+def addBigram(gram):
+    list = bigrams[gram]
+    
+    if(len(list) == 0):
+        list.append(0)
+        list.append(0)
+
+    list[isName] += 1
+
+def addTrigram(gram):
+    list = bigrams[gram]
+    
+    if(len(list) == 0):
+        list.append(0)
+        list.append(0)
+
+    list[isName] += 1
 
 #utility functions to insert grams into maps
 
