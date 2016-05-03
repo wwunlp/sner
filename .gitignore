@@ -2,4 +2,6 @@
 unsupervised-old/
 papers/
 Garshana\ Dataset/
+__pycache__
 *.py.swp
+*.pyc
