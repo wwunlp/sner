@@ -2,6 +2,7 @@
 
 
 #map of 1 2 and 3 grams matched to the number of occurences of that n-gram
+#need 1,2,3 grams for all words as well as grams within names, associate names with two numbers?
 
 
 
