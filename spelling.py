@@ -11,6 +11,8 @@ monograms = defaultdict(list)
 bigrams = defaultdict(list)
 trigrams = defaultdict(list)
 
+#utility functions to insert grams into maps
+    
 #isName takes one if it is a name, zero otherwise
 def addMonogram(gram, isName):
     list = monograms[gram]
@@ -38,9 +40,6 @@ def addTrigram(gram):
         list.append(0)
 
     list[isName] += 1
-
-#utility functions to insert grams into maps
-
 
 
 #xml parser to fetch names from the xml file and harvest the grams
