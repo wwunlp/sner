@@ -23,7 +23,7 @@ def addMonogram(gram, isName):
 
     list[isName] += 1
 
-def addBigram(gram):
+def addBigram(gram, isName):
     list = bigrams[gram]
     
     if(len(list) == 0):
@@ -32,8 +32,8 @@ def addBigram(gram):
 
     list[isName] += 1
 
-def addTrigram(gram):
-    list = bigrams[gram]
+def addTrigram(gram, isName):
+    list = trigrams[gram]
     
     if(len(list) == 0):
         list.append(0)
@@ -43,8 +43,31 @@ def addTrigram(gram):
 
 
 #xml parser to fetch names from the xml file and harvest the grams
+#not sure how to do this for format reasons
 
 
 
 #collect percentage statistics from the gram maps
+#probably should be written to a file?
 
+def analyzeData():
+    for k,v in monograms.items():
+        print('{0:10}: {1:f}'.format(k, v[1]/v[0]))
+        
+    for k,v in monograms.items():
+        print('{0:10}: {1:f}'.format(k, v[1]/v[0]))
+        
+    for k,v in monograms.items():
+        print('{0:10}: {1:f}'.format(k, v[1]/v[0]))
+
+#testing
+testnames = ("potatoes", "potatoes", "boil", "em", "em")
+testwords = ("potatoes", "potatoes", "potatoes", "boil", "em", "mash", "em", "stick", "em", "in", "a", "stew", "em", "em")
+
+for x in testnames:
+    addMonogram(x, 1)
+
+for x in testwords:
+    addMonogram(x, 0)
+
+analyzeData()
