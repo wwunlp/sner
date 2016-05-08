@@ -42,8 +42,7 @@ def get_counts():
                 word_count[word] = count + 1
 
                 # Track occurrences of syllables
-                if '-' in word:
-                    update_syllable_count(word, syll_count)
+                update_syllable_count(word, syll_count)
 
         open_file.close()
     except IOError:
@@ -84,12 +83,13 @@ def clean_line(line):
     # Remove square brackets, ceiling characters, and line breaks
     line = re.sub (r'(\[|\])', '', line)
     line = re.sub(r'(⌈|⌉)', '', line)
-    line = re.sub(r'/', '', line)
+    line = re.sub(r' / ', '', line)
 
-    # Remove researcher's notes, and multiple dashes
+    # Remove researcher's notes, and multiple dashes or '='s
     line = re.sub (r'(\(.*\))', '', line)
     line = re.sub (r'(#[.]*)', '', line)
     line = re.sub (r'[-]{2}', '', line)
+    line = re.sub (r'[=]{2}', '', line)
 
     return line
 
