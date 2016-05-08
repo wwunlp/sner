@@ -50,19 +50,24 @@ def addTrigram(gram, isName):
 #       collect percentage statistics from the gram maps
 #probably should be written to a file?
 
+f = open('spellinganalysis.csv', 'w')
+
 def analyzeData():
+    f.write("ngram,percentage,in names, total\n")
+    
     print('monogram analysis')
     for k,v in monograms.items():
         outputAnalysis(k,v)
     if len(monograms) <= 0:
         print("no monograms")
-
+    print("done.")
 
     print('\nbigram analysis')
     for k,v in bigrams.items():
         outputAnalysis(k,v)
     if len(bigrams) <= 0:
         print("no bigrams")
+    print("done.")
 
         
     print('\ntrigram analysis')
@@ -70,10 +75,12 @@ def analyzeData():
         outputAnalysis(k,v)
     if len(trigrams) <= 0:
         print("no trigrams")
+    print("done.")
 
+    f.close()
 
 def outputAnalysis(k,v):
-    print('{0:10}: {1:.3f}, tot. occurences: {2}'.format(k, v[1]/v[0], v[0]))
+    f.write("{0:10},{1:.3f},{2},{3}\n".format(k, v[1]/v[0], v[1], v[0]))
 
 #       testing
 testnames = ("potatoes", "potatoes", "boil", "em", "em")
