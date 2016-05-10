@@ -24,6 +24,9 @@ def main():
         else:
             names.personal[name] = 1
         context.main(text, name)
+        spelling.main(name)
+
+        '''
         for word in text:
             if word is name:
                 isName = 1
@@ -33,7 +36,7 @@ def main():
                 word = word.split('-')
                 for gram in word:
                     spelling.addMonogram(gram, isName)
-
+        '''
 
     word_count, syll_count = utilities.get_counts()
 
@@ -66,6 +69,18 @@ def main():
                     'Total Occurrence' : str(total),
                     'Percentage' : str(percent)})
 
+        for rule in spelling.rules:
+            if rule in syll_count:
+                total = syll_count[rule]
+                percent = float(spelling.rules[rule]) / float(total)
+                writer.writerow({
+                    'Context' : 'Spelling',
+                    'Rule' : rule,
+                    'Occurrence' : str(spelling.rules[rule]),
+                    'Total Occurrence' : str(total),
+                    'Percentage' : str(percent)})
+
+        '''
         for gram in spelling.monograms:
             # if gram in syll_count:
                 total = spelling.monograms[gram][0] # syll_count[gram]
@@ -77,7 +92,6 @@ def main():
                     'Total Occurrence' : str(total),
                     'Percentage' : str(percent)})
 
-        '''
         for gram in spelling.bigrams:
             if gram in syll_count:
                 total = syll_count[gram]

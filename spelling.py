@@ -109,6 +109,20 @@ def analyzeData():
 def outputAnalysis(k,v):
     f.write("{0},{1},{2},{3}\n".format(k, v[1]/v[0], v[1], v[0]).encode('utf-8'))
 
+
+rules = {}
+
+def main(name):
+    for n in range(1, 4):
+        name_list = name.split('-')
+        for i in range(len(name_list) - n + 1):
+            gram = '-'.join(name_list[1 : i + n])
+            if gram in rules:
+                rules[gram] += 1
+            else:
+                rules[gram] = 1
+
+
 #       testing
 
 loadData()
