@@ -46,7 +46,7 @@ def getKgrams(names, k):
     for i in range(0, k):
             grams[i] = defaultdict(int)
     
-    for name, value in names.iteritems():
+    for name, value in names.items():
         syllables = name.split('-')
         
         for i in range(1, k + 1):            

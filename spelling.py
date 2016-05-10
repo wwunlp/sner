@@ -1,11 +1,14 @@
 #!/usr/bin/python3
 
+#imports
+
+from collections import defaultdict
+import readnames
+import utilities
 
 #       dictionaries of monograms, bigrams, and trigrams
 #format is a name key, associated with a two element list containing the number of occurences of that gram
 #the first element is number of occurences of that gram in total, the second is number of occurences within names
-
-from collections import defaultdict
 
 monograms = defaultdict(list)
 bigrams = defaultdict(list)
@@ -13,47 +16,72 @@ trigrams = defaultdict(list)
 
 #       utility functions to insert grams into maps
     
-#isName takes one if it is a name, zero otherwise
-def addMonogram(gram, isName):
-    list = monograms[gram]
+def gramhelper(gramDict, gram, namecount, totalcount):
+    list = gramDict[gram]
     
     if(len(list) == 0):
         list.append(0)
         list.append(0)
 
-    list[isName] += 1
+    list[0] += totalcount
+    list[1] += namecount
 
-def addBigram(gram, isName):
-    list = bigrams[gram]
+def addMonogram(gram, namecount, totalcount):
+    gramhelper(monograms, gram, namecount, totalcount)
+
+def addBigram(gram, namecount, totalcount):
+    gramhelper(bigrams, gram, namecount, totalcount)
+
+def addTrigram(gram, namecount, totalcount):
+    gramhelper(trigrams, gram, namecount, totalcount)
+
+#       load name data
+
+def loadData():
     
-    if(len(list) == 0):
-        list.append(0)
-        list.append(0)
-
-    list[isName] += 1
-
-def addTrigram(gram, isName):
-    list = trigrams[gram]
+    not_used, allgrams = utilities.get_counts()
     
-    if(len(list) == 0):
-        list.append(0)
-        list.append(0)
+    #load ngrams found in names
+    namegrams = readnames.getKgrams(readnames.getPNs(),3)
+    
+    if len(namegrams) >= 1:
+        print("loading monograms in names")
+        for k,v in namegrams[0].items():
+            klower = k.lower()
+            if klower in allgrams:
+                totalcount = allgrams[klower]
+                addMonogram(klower,v,totalcount)
+            else:
+                print("ERROR: monogram \"{0}\" found in name dataset but not overall dataset".format(klower))
+                
 
-    list[isName] += 1
-
-
-#       xml parser to fetch names from the xml file and harvest the grams
-#not sure how to do this for format reasons
-
-
-
+    if len(namegrams) >= 2:
+        print("loading bigrams in names")
+        for k,v in namegrams[1].items():
+            klower = k.lower()
+            if klower in allgrams:
+                totalcount = allgrams[klower]
+                addBigram(klower,v,totalcount)
+            else:
+                print("ERROR: bigram \"{0}\" found in name dataset but not overall dataset".format(klower))
+            
+    if len(namegrams) >= 3:
+        print("loading trigrams in names")
+        for k,v in namegrams[2].items():
+            klower = k.lower()
+            if klower in allgrams:
+                totalcount = allgrams[klower]
+                addTrigram(klower,v,totalcount)
+            else:
+                print("ERROR: trigram \"{0}\" found in name dataset but not overall dataset".format(klower))
+            
 #       collect percentage statistics from the gram maps
 #probably should be written to a file?
 
-f = open('spellinganalysis.csv', 'w')
+f = open('spellinganalysis.csv', 'wb')
 
 def analyzeData():
-    f.write("ngram,percentage,in names, total\n")
+    f.write("ngram,percentage,in names, total\n".encode('utf-8'))
     
     print('monogram analysis')
     for k,v in monograms.items():
@@ -80,16 +108,10 @@ def analyzeData():
     f.close()
 
 def outputAnalysis(k,v):
-    f.write("{0:10},{1:.3f},{2},{3}\n".format(k, v[1]/v[0], v[1], v[0]))
+    f.write("{0},{1},{2},{3}\n".format(k, v[1]/v[0], v[1], v[0]).encode('utf-8'))
 
 #       testing
-testnames = ("potatoes", "potatoes", "boil", "em", "em")
-testwords = ("potatoes", "potatoes", "potatoes", "boil", "em", "mash", "em", "stick", "em", "in", "a", "stew", "em", "em")
 
-for x in testnames:
-    addMonogram(x, 1)
-
-for x in testwords:
-    addMonogram(x, 0)
-
+loadData()
+print()
 analyzeData()
