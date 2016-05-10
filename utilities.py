@@ -39,19 +39,19 @@ def get_counts():
                 count = word_count.setdefault(word, 0)
                 word_count[word] = count + 1
 
-                if '-' in word:
-                    for n in range(1, 4):
-                        word_list = word.split('-')
-                        for i in range(len(word_list) - n + 1):
-                            gram = '-'.join(word_list[1 : i + n])
-                            if gram in syll_count:
-                                syll_count[gram] += 1
-                            else:
-                                syll_count[gram] = 1
+                # if '-' in word:
+                #     for n in range(1, 4):
+                #         word_list = word.split('-')
+                #         for i in range(len(word_list) - n + 1):
+                #             gram = '-'.join(word_list[1 : i + n])
+                #             if gram in syll_count:
+                #                 syll_count[gram] += 1
+                #             else:
+                #                 syll_count[gram] = 1
 
 
                 # Track occurrences of syllables
-                # update_syllable_count(word, syll_count)
+                update_syllable_count(word, syll_count)
 
         open_file.close()
     except IOError:
@@ -69,10 +69,9 @@ def update_syllable_count(word, syll_count):
     """
 
     syllables = word.split('-')
-    num_sylls = [1, 2, 3] # [Unigram, bigram, trigram]
-    for i in range(len(num_sylls)):
-        for j in range(len(syllables) - num_sylls[i] + 1):
-            gram = '-'.join(syllables[j : j + num_sylls[i]])
+    for i in range(1, 4):
+        for j in range(len(syllables) - i + 1):
+            gram = '-'.join(syllables[j : j + i])
             count = syll_count.setdefault(gram, 0)
             syll_count[gram] = count + 1
 
@@ -92,7 +91,7 @@ def clean_line(line):
     # Remove square brackets, ceiling characters, and line breaks
     line = re.sub (r'(\[|\])', '', line)
     line = re.sub(r'(⌈|⌉)', '', line)
-    line = re.sub(r' / ', '', line)
+    line = re.sub(r' / ', ' ', line)
 
     # Remove researcher's notes, and multiple dashes or '='s
     line = re.sub (r'(\(.*\))', '', line)
