@@ -25,19 +25,17 @@ def get_counts():
 
     # Hard coding this filename in so there is no ambiguity as to what we 
     # consider the original text to be.
-    infile = "Garshana Dataset/Garshana_translit_Unicode.tab.txt"
+    infile = "Garshana Dataset/Texts.csv"
     try:
 
         open_file = codecs.open(infile, 'r', encoding='utf-16')
         for line in open_file:
             # Remove tablet indexing info and line numbers. Grab only text data
-            line_list = line.split()
-            line_list = line_list[5:]
-            line = ' '.join(line_list)
-            line = clean_line(line)
+            line = line.split(',')
+            text = clean_line(line[7])
 
             # Update the occurrences of the words in the line
-            for word in line.split():
+            for word in text.split():
                 count = word_count.setdefault(word, 0)
                 word_count[word] = count + 1
 
