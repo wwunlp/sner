@@ -30,6 +30,8 @@ def get_counts():
 
         open_file = codecs.open(infile, 'r', encoding='utf-16')
         for line in open_file:
+            line = line.lower()
+
             # Remove tablet indexing info and line numbers. Grab only text data
             line = line.split(',')
             text = clean_line(line[7])
@@ -88,10 +90,15 @@ def clean_line(line):
 
     """
 
-    # Remove square brackets, ceiling characters, and line breaks
+    # Remove square brackets, ceiling characters, question marks, other
+    # questionable characters, and line breaks
     line = re.sub (r'(\[|\])', '', line)
     line = re.sub(r'(⌈|⌉)', '', line)
-    line = re.sub(r' / ', ' ', line)
+    line = re.sub(r'( / )', ' ', line)
+    line = re.sub(r'/', '', line)
+    line = re.sub(r'\?', '', line)
+    line = re.sub(r'([<]|[>])+', '', line)
+    line = re.sub(r'!', '', line)
 
     # Remove researcher's notes, and multiple dashes or '='s
     line = re.sub (r'(\(.*\))', '', line)
