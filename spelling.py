@@ -76,7 +76,6 @@ def loadData():
                 print("ERROR: trigram \"{0}\" found in name dataset but not overall dataset".format(klower))
             
 #       collect percentage statistics from the gram maps
-#probably should be written to a file?
 
 f = open('spellinganalysis.csv', 'wb')
 
