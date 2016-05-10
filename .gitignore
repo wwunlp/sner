@@ -1,4 +1,6 @@
 .directory
+Results.csv
+spellinganalysis.csv
 unsupervised-old/
 papers/
 Garshana\ Dataset/
