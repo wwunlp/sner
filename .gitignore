@@ -1,4 +1,6 @@
 .directory
+.DS_Store
+.~*
 Results.csv
 spellinganalysis.csv
 unsupervised-old/
