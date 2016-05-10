@@ -19,11 +19,21 @@ def main():
         line = line.split(',')
         text = utilities.clean_line(line[4].rstrip())
         name = line[5].rstrip()
-        if name in names.personal.keys():
+        if name in names.personal:
             names.personal[name] += 1
         else:
             names.personal[name] = 1
         context.main(text, name)
+        for word in text:
+            if word is name:
+                isName = 1
+            else:
+                isName = 0
+            if '-' in word:
+                word = word.split('-')
+                for gram in word:
+                    spelling.addMonogram(gram, isName)
+
 
     word_count, syll_count = utilities.get_counts()
 
@@ -55,6 +65,41 @@ def main():
                     'Occurrence' : str(context.right_rules[rule]),
                     'Total Occurrence' : str(total),
                     'Percentage' : str(percent)})
+
+        for gram in spelling.monograms:
+            # if gram in syll_count:
+                total = spelling.monograms[gram][0] # syll_count[gram]
+                percent = float(spelling.monograms[gram][1]) / float(total)
+                writer.writerow({
+                    'Context' : 'Spelling',
+                    'Rule' : gram,
+                    'Occurrence' : str(spelling.monograms[gram]),
+                    'Total Occurrence' : str(total),
+                    'Percentage' : str(percent)})
+
+        '''
+        for gram in spelling.bigrams:
+            if gram in syll_count:
+                total = syll_count[gram]
+                percent = float(spelling.bigrams[gram][1]) / float(total)
+                writer.writerow({
+                    'Context' : 'Spelling',
+                    'Rule' : gram,
+                    'Occurrence' : str(spelling.bigrams[gram]),
+                    'Total Occurrence' : str(total),
+                    'Percentage' : str(percent)})
+
+        for gram in spelling.trigrams:
+            if gram in syll_count:
+                total = syll_count[gram]
+                percent = float(spelling.trigrams[gram][1]) / float(total)
+                writer.writerow({
+                    'Context' : 'Spelling',
+                    'Rule' : gram,
+                    'Occurrence' : str(spelling.trigrams[gram]),
+                    'Total Occurrence' : str(total),
+                    'Percentage' : str(percent)})
+        '''
 
 
 if __name__ == '__main__':
