@@ -24,15 +24,16 @@ def main():
         else:
             names.personal[name] = 1
         context.main(text, name)
-        spelling.main()
-
+    
     word_count, syll_count = utilities.get_counts()
     rules_collection = [
             [context.left_rules,  word_count, 'Left'],
-            [context.right_rules, word_count, 'Right'],
-            [spelling.rules,      syll_count, 'Spelling']]
+            [context.right_rules, word_count, 'Right']]
+    
+    #do spelling analysis
+    spelling.main(syll_count)
 
-    with open('Results.csv', 'w', newline = '',
+    with open('context_results.csv', 'w', newline = '',
             encoding = 'utf-16') as csvfile:
         fieldnames = [
                 'Context',

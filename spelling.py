@@ -7,12 +7,14 @@ import readnames
 import utilities
 
 #       dictionaries of monograms, bigrams, and trigrams
+#other global declarations
 #format is a name key, associated with a two element list containing the number of occurences of that gram
 #the first element is number of occurences of that gram in total, the second is number of occurences within names
 
 monograms = defaultdict(list)
 bigrams = defaultdict(list)
 trigrams = defaultdict(list)
+rules = {}
 
 #       utility functions to insert grams into maps
     
@@ -37,10 +39,7 @@ def addTrigram(gram, namecount, totalcount):
 
 #       load name data
 
-def loadData():
-    
-    not_used, allgrams = utilities.get_counts()
-    
+def loadData(allgrams,f):
     #load ngrams found in names
     namegrams = readnames.getKgrams(readnames.getPNs(),3)
     
@@ -80,21 +79,19 @@ def loadData():
             
 #       collect percentage statistics from the gram maps
 
-f = open('spellinganalysis.csv', 'wb')
-
-def analyzeData():
-    f.write("ngram,percentage,in names, total\n".encode('utf-8'))
+def analyzeData(f):
+    f.write("N-gram,Percentage,Occurence, Total Occurence\n".encode('utf-8'))
     
     print('monogram analysis')
     for k,v in monograms.items():
-        outputAnalysis(k,v)
+        outputAnalysis(k,v,f)
     if len(monograms) <= 0:
         print("no monograms")
     print("done.")
 
     print('\nbigram analysis')
     for k,v in bigrams.items():
-        outputAnalysis(k,v)
+        outputAnalysis(k,v,f)
     if len(bigrams) <= 0:
         print("no bigrams")
     print("done.")
@@ -102,14 +99,14 @@ def analyzeData():
         
     print('\ntrigram analysis')
     for k,v in trigrams.items():
-        outputAnalysis(k,v)
+        outputAnalysis(k,v,f)
     if len(trigrams) <= 0:
         print("no trigrams")
     print("done.")
 
     f.close()
 
-def outputAnalysis(k,v):
+def outputAnalysis(k,v,f):
     significance = v[1] / v[0]
     if significance > 1:
         print("ERROR: ngram \"{0}\" has greater than 100% significance ({1:.4}) {2}:{3}".format(k,significance,v[1],v[0]))
@@ -117,8 +114,9 @@ def outputAnalysis(k,v):
 
     
 #main
-    
-def main():        
-    loadData()
+
+def main(syll_count):
+    f = open('spelling_results.csv', 'wb')
+    loadData(syll_count,f)
     print()
-    analyzeData()
+    analyzeData(f)
