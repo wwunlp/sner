@@ -24,7 +24,7 @@ def main():
         else:
             names.personal[name] = 1
         context.main(text, name)
-        spelling.main(name)
+        spelling.main()
 
     word_count, syll_count = utilities.get_counts()
     rules_collection = [
