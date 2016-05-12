@@ -1,8 +1,8 @@
 .directory
 .DS_Store
 .~*
-Results.csv
-spellinganalysis.csv
+context_results.csv
+spelling_results.csv
 unsupervised-old/
 papers/
 Garshana\ Dataset/
