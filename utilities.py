@@ -5,7 +5,7 @@
 
 import codecs
 import re
-
+import professions
 
 def get_counts():
     """ 
@@ -31,7 +31,6 @@ def get_counts():
         open_file = codecs.open(infile, 'r', encoding='utf-16')
         for line in open_file:
             line = line.lower()
-
             # Remove tablet indexing info and line numbers. Grab only text data
             line = line.split(',')
             text = clean_line(line[7])
@@ -105,6 +104,13 @@ def clean_line(line):
     line = re.sub (r'(#[.]*)', '', line)
     line = re.sub (r'[-]{2}', '', line)
     line = re.sub (r'[=]{2}', '', line)
+
+    # Replace numbers with 'number'
+    line = re.sub (r'\b(?<!-)(\d+)(?![\w-])', 'number', line)
+
+    # Replace professions with 'profession'
+    line = professions.replaceProfessions(line)
+
 
     return line
 
