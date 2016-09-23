@@ -9,3 +9,9 @@ Garshana\ Dataset/
 __pycache__
 *.py.swp
 *.pyc
+bin/
+include/
+lib/
+pip*
+share/
+
