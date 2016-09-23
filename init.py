@@ -17,14 +17,15 @@ def main():
             'r', encoding = 'utf-16')
     for line in file:
         line = line.split(',')
-        text = utilities.clean_line(line[4].rstrip())
-        name = line[5].rstrip()
-        if name in names.personal:
-            names.personal[name] += 1
-        else:
-            names.personal[name] = 1
-        context.main(text, name)
-    
+        if line[9].rstrip() == 'PN':
+            text = utilities.clean_line(line[4].rstrip())
+            name = line[5].rstrip()
+            if name in names.personal:
+                names.personal[name] += 1
+            else:
+                names.personal[name] = 1
+            context.main(text, name)
+        
     word_count, syll_count = utilities.get_counts()
     rules_collection = [
             [context.left_rules,  word_count, 'Left'],
@@ -55,6 +56,13 @@ def main():
                         'Occurrence'       : str(rules[0][rule]),
                         'Total Occurrence' : str(total),
                         'Percentage'       : str(percent)})
+
+        writer.writerow({
+            'Context'          : 'Skipped',
+            'Rule'             : 'lines',
+            'Occurrence'       : str(context.skipped['lines']),
+            'Total Occurrence' : '',
+            'Percentage'       : ''})
 
 
 if __name__ == '__main__':

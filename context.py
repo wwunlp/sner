@@ -4,9 +4,10 @@
 # Authored     5/3/2016
 # Last updated 5/9/2016
 
+
 left_rules = {}
 right_rules = {}
-
+skipped = {'lines' : 0}
 
 def main(text, name):
     text = text.split(' ')
@@ -24,5 +25,5 @@ def main(text, name):
                 right_rules[right] += 1
             else:
                 right_rules[right] = 1
-
-
+    else:
+        skipped['lines'] += 1
