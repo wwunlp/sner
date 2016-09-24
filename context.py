@@ -14,7 +14,7 @@ def main(text, name):
     skip = True
     text = text.split(' ')
     for word in text:
-        if editdistance.eval(name, word) < 2:
+        if editdistance.eval(name, word) < 5:
             skip = False
             index = text.index(word)
             if index - 1 >= 0:
@@ -32,3 +32,7 @@ def main(text, name):
     
     if skip:
         skipped['lines'] += 1
+        if name in skipped.keys():
+            skipped[name] += 1
+        else:
+            skipped[name] = 1

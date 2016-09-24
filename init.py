@@ -19,7 +19,7 @@ def main():
         line = line.split(',')
         if line[9].rstrip() == 'PN':
             text = utilities.clean_line(line[4].rstrip())
-            name = line[5].rstrip()
+            name = utilities.clean_line(line[5].rstrip())
             if name in names.personal:
                 names.personal[name] += 1
             else:
@@ -57,12 +57,13 @@ def main():
                         'Total Occurrence' : str(total),
                         'Percentage'       : str(percent)})
 
-        writer.writerow({
-            'Context'          : 'Skipped',
-            'Rule'             : 'lines',
-            'Occurrence'       : str(context.skipped['lines']),
-            'Total Occurrence' : '',
-            'Percentage'       : ''})
+        for name in context.skipped.keys():
+            writer.writerow({
+                'Context'          : 'Skipped',
+                'Rule'             : name,
+                'Occurrence'       : str(context.skipped[name]),
+                'Total Occurrence' : '', # str(word_count[name]),
+                'Percentage'       : ''}) # str(float(context.skipped[name] / word_count[name]))})
 
 
 if __name__ == '__main__':
