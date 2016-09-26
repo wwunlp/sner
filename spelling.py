@@ -96,7 +96,7 @@ def analyzeData(f):
         print("no bigrams")
     print("done.")
 
-        
+ 
     print('\ntrigram analysis')
     for k,v in trigrams.items():
         outputAnalysis(k,v,f)
@@ -112,7 +112,7 @@ def outputAnalysis(k,v,f):
         print("ERROR: ngram \"{0}\" has greater than 100% significance ({1:.4}) {2}:{3}".format(k,significance,v[1],v[0]))
     f.write("{0},{1},{2},{3}\n".format(k, significance, v[1], v[0]).encode('utf-8'))
 
-    
+
 #main
 
 def main(syll_count):

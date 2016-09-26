@@ -3,6 +3,7 @@
 import codecs
 from collections import defaultdict
 import utilities
+import editdistance
 
 def getPersonalNames(csvFile):
     """
@@ -17,6 +18,15 @@ def getPersonalNames(csvFile):
             line_list = line.split(',')
             name = line_list[5].rstrip()
             name = utilities.clean_line(name)
+            
+            text = line_list[4].rstrip()
+            text = utilities.clean_line(text)
+            text = text.split(' ')
+            for word in text:
+                if editdistance.eval(word, name) < 5:
+                    name = word
+                    break
+            
             nameType = line_list[9].rstrip()
             if (nameType == "PN"):                
                 names[name] = names[name] + 1;
