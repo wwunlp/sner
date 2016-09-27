@@ -40,17 +40,6 @@ def get_counts():
                 count = word_count.setdefault(word, 0)
                 word_count[word] = count + 1
 
-                # if '-' in word:
-                #     for n in range(1, 4):
-                #         word_list = word.split('-')
-                #         for i in range(len(word_list) - n + 1):
-                #             gram = '-'.join(word_list[1 : i + n])
-                #             if gram in syll_count:
-                #                 syll_count[gram] += 1
-                #             else:
-                #                 syll_count[gram] = 1
-
-
                 # Track occurrences of syllables
                 update_syllable_count(word, syll_count)
 
@@ -98,6 +87,7 @@ def clean_line(line):
     line = re.sub(r'\?', '', line)
     line = re.sub(r'([<]|[>])+', '', line)
     line = re.sub(r'!', '', line)
+    line = re.sub(r'"', '', line)
 
     # Remove researcher's notes, and multiple dashes or '='s
     line = re.sub (r'(\(.*\))', '', line)

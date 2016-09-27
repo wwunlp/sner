@@ -57,13 +57,13 @@ def main():
                         'Total Occurrence' : str(total),
                         'Percentage'       : str(percent)})
 
-        for name in context.skipped.keys():
+        for name in context.varients.keys():
             writer.writerow({
-                'Context'          : 'Skipped',
+                'Context'          : 'Varients',
                 'Rule'             : name,
-                'Occurrence'       : str(context.skipped[name]),
-                'Total Occurrence' : '', # str(word_count[name]),
-                'Percentage'       : ''}) # str(float(context.skipped[name] / word_count[name]))})
+                'Occurrence'       : str(context.varients[name]),
+                'Total Occurrence' : '', 
+                'Percentage'       : ''}) 
 
 
 if __name__ == '__main__':

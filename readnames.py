@@ -22,11 +22,12 @@ def getPersonalNames(csvFile):
             text = line_list[4].rstrip()
             text = utilities.clean_line(text)
             text = text.split(' ')
-            for word in text:
-                if editdistance.eval(word, name) < 5:
-                    name = word
-                    break
             
+            edit_distance = []
+            for word in text:
+                edit_distance.append(editdistance.eval(name, word))
+            
+            name = text[edit_distance.index(min(edit_distance))]
             nameType = line_list[9].rstrip()
             if (nameType == "PN"):                
                 names[name] = names[name] + 1;
