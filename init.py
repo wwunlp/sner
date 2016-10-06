@@ -25,7 +25,7 @@ def main():
             else:
                 names.personal[name] = 1
             context.main(text, name)
-        
+ 
     word_count, syll_count = utilities.get_counts()
     rules_collection = [
             [context.left_rules,  word_count, 'Left'],
@@ -63,8 +63,19 @@ def main():
                 'Rule'             : name,
                 'Occurrence'       : str(context.varients[name]),
                 'Total Occurrence' : '', 
-                'Percentage'       : ''}) 
+                'Percentage'       : ''})
 
+    with open('namesperrule.csv', 'w', newline = '',
+              encoding = 'utf-16') as csvfile:
+        fieldnames = ['Rule', 'Name', 'Occurrences']
+        writer = csv.DictWriter(csvfile, fieldnames = fieldnames)
+        writer.writeheader()
+        for rule in context.rules:
+            for name in context.rules[rule]:
+                writer.writerow({
+                    'Rule'        : rule,
+                    'Name'        : name,
+                    'Occurrences' : str(context.rules[rule][name])})
 
 if __name__ == '__main__':
     main()
