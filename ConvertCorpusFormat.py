@@ -12,7 +12,7 @@ import csv
 knownNames = {}
 
 def main():
-    file = codecs.open('Garshana Dataset/Attestations_PNs_GNs.csv',
+    file = codecs.open('Garshana Dataset/Attestations_PNs.csv',
             'r', encoding = 'utf-16')
     # find all of the names
     for line in file:

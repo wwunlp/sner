@@ -116,7 +116,7 @@ def outputAnalysis(k,v,f):
 #main
 
 def main(syll_count):
-    f = open('spelling_results.csv', 'wb')
+    f = open('results/spelling.csv', 'wb')
     loadData(syll_count,f)
     print()
     analyzeData(f)

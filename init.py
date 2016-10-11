@@ -13,7 +13,7 @@ import csv
 
 
 def main():
-    file = codecs.open('Garshana Dataset/Attestations_PNs_GNs.csv',
+    file = codecs.open('Garshana Dataset/Attestations_PNs.csv',
             'r', encoding = 'utf-16')
     for line in file:
         line = line.split(',')
@@ -34,7 +34,7 @@ def main():
     #do spelling analysis
     spelling.main(syll_count)
 
-    with open('context_results.csv', 'w', newline = '',
+    with open('results/context.csv', 'w', newline = '',
             encoding = 'utf-16') as csvfile:
         fieldnames = [
                 'Context',
@@ -56,16 +56,21 @@ def main():
                         'Occurrence'       : str(rules[0][rule]),
                         'Total Occurrence' : str(total),
                         'Percentage'       : str(percent)})
-
+                    
+    with open('results/varients.csv', 'w', newline = '',
+            encoding = 'utf-16') as csvfile:
+        fieldnames = [
+                'Name',
+                'Varients']
+        writer = csv.DictWriter(csvfile, fieldnames = fieldnames)
+        writer.writeheader()
+        
         for name in context.varients.keys():
             writer.writerow({
-                'Context'          : 'Varients',
-                'Rule'             : name,
-                'Occurrence'       : str(context.varients[name]),
-                'Total Occurrence' : '', 
-                'Percentage'       : ''})
+                'Name'     : name,
+                'Varients' : str(context.varients[name])})
 
-    with open('namesperrule.csv', 'w', newline = '',
+    with open('results/namesperrule.csv', 'w', newline = '',
               encoding = 'utf-16') as csvfile:
         fieldnames = ['Rule', 'Name', 'Occurrences']
         writer = csv.DictWriter(csvfile, fieldnames = fieldnames)

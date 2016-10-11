@@ -41,7 +41,7 @@ def getPNs():
     """
     Collects names in Garshana csv and returns them
     """
-    return getPersonalNames("Garshana Dataset/Attestations_PNs_GNs.csv")
+    return getPersonalNames("Garshana Dataset/Attestations_PNs.csv")
 
 def getKgrams(names, k):
     """
