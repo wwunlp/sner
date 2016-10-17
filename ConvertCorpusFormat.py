@@ -8,12 +8,12 @@
 import utilities
 import codecs
 import csv
+import re
 
 knownNames = {}
 
 def main():
-    file = codecs.open('Garshana Dataset/Attestations_PNs.csv',
-            'r', encoding = 'utf-16')
+    file = codecs.open('Garshana Dataset/Attestations_PNs.csv', 'r', encoding = 'utf-16')
     # find all of the names
     for line in file:
         line = line.split(',')
@@ -28,8 +28,7 @@ def main():
     # replace concatenate all names with $PN$
     # and add in &P<Tablet ID number> before the start
     # of each tablet that is found
-    file2 = codecs.open('Garshana Dataset/Texts.csv',
-            'r', encoding = 'utf-16')
+    file2 = codecs.open('Garshana Dataset/Texts.csv', 'r', encoding = 'utf-16')
     out = open("convertedCorpusTexts", "w")
     prints = 0
     curTablet = -1
@@ -39,6 +38,8 @@ def main():
         
         text = utilities.clean_line(line[7].rstrip())
         text = text.lower()
+        text = " ".join(text.split())
+        text = text.strip()
 
         # We should skip the first line that labels the csv
         if "text" in text:
@@ -46,10 +47,15 @@ def main():
         
         newText = text;
         words = text.split(' ')
-        for w in words:
+        newWords = text.split(' ')
+        for i in range(len(words)):
+            w = words[i]
             if w in knownNames:
-                newText = text.replace(w, w + "$PN$")
-        newText = "<l> " + newText + " <\l>\n"
+                newWords[i] = w + "$PN$"
+            #else:
+            #    newWords[i] = w + "$" + w + "$"
+                    
+        newText = "<l> " + ' '.join(newWords) + " <\l>\n"
 
         # Indicate the start of a new tablet
         if curID != curTablet:
