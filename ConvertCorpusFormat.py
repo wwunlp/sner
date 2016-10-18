@@ -102,6 +102,11 @@ def main():
         # csv Mode
         if args.mode == "csv":
             lineID = line[6]
+            if lineID == "":
+                continue
+            if "'" in lineID:
+                lineID = re.sub("[']", "", lineID)
+                lineID = "'" + lineID
             for i in range(len(words)):
                 w = words[i]
                 wType = "-"
