@@ -66,7 +66,8 @@ def update_syllable_count(word, syll_count):
             syll_count[gram] = count + 1
 
 
-def clean_line(line):
+
+def clean_line(line, normNum=True, normProf=True):
     """ 
     Clean a line of data, removing all annotations from the line.
 
@@ -96,10 +97,12 @@ def clean_line(line):
     line = re.sub (r'[=]{2}', '', line)
 
     # Replace numbers with 'number'
-    line = re.sub (r'\b(?<!-)(\d+)(?![\w-])', 'number', line)
+    if normNum == True:
+        line = re.sub (r'\b(?<!-)(\d+)(?![\w-])', 'number', line)
 
     # Replace professions with 'profession'
-    line = professions.replaceProfessions(line)
+    if normProf == True:
+        line = professions.replaceProfessions(line)
 
 
     return line
