@@ -102,8 +102,12 @@ def main():
         # csv Mode
         if args.mode == "csv":
             lineID = line[6]
+            # skip description lines
             if lineID == "":
                 continue
+            # change to lineID
+            lineID = line[4]
+            lineID = re.sub("[L]", "", lineID)
             if "'" in lineID:
                 lineID = re.sub("[']", "", lineID)
                 lineID = "'" + lineID
