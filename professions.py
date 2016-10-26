@@ -2,7 +2,7 @@
 import re
 
 professions = ["aga'us",
-               "arad",			
+               "arad",
                "aszgab",
                "azlag",
                "ama-gal",
@@ -75,26 +75,26 @@ professions = ["aga'us",
                "zabardab",
                "zadim"]
 
-prof_re = re.compile(r'\b(?<!-)' + r'(?![\w-])|\b(?<!-)'.join(professions) + r'(?![\w-])')
+prof_re = re.compile(r'\b(?<!-)' + r'(?![\w-])|\b(?<!-)'.join(professions) +
+                     r'(?![\w-])')
 
 
 def replaceProfessions(line):
     """
     Replaces known professions with 'profession'
-    """    
+    """
     line, numReplaces = re.subn(prof_re, 'profession', line)
     return line
-    
+
 
 def main():
     """
     Testing function
     """
     line = 'testing 1234 zadim abc df3urin33  unud 3223aa ne33ds33 345'
-    line = re.sub (r'\b(?<!-)(\d+)(?![\w-])', 'number', line)
+    line = re.sub(r'\b(?<!-)(\d+)(?![\w-])', 'number', line)
     line = replaceProfessions(line)
     print(line)
 
 if __name__ == '__main__':
     main()
-
