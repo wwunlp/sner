@@ -104,7 +104,7 @@ def clean_line(line, normNum=True, normProf=True):
 
     # Remove blank character at end of line
     linelength = len(line)
-    if line[linelength-1] == "":
+    if (linelength > 0 and line[linelength-1] == ""):
         del line[0:linelength-2]
 
     return line
