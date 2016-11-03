@@ -3,19 +3,96 @@ from tokenset import *
 import namesfromrules
 import contextualfromnames
 import spellingfromnames
+import config
 
+
+# Handles pulling things from config file
+# Currently gets corpus file name and rule file name.
+# Expects a "blank" configuration.txt to look like this:
+# CORPUS_NAME=
+# SEED_RULES=
+# ITERATION_COUNT=
+# RULES_PER_ITERATION=
+# Otherwise prompts user for answers to everything, makes sure iterations and maxrules are ints
+def init():
+    try:
+        print("Pulling configuration options from: configuration.txt")
+        configfile = open("configuration.txt", "r")
+        nextline = configfile.readline().split('=')
+        
+        while(nextline[0] != ""):
+            nextline[0] = nextline[0].rstrip('\n')
+            nextline[1] = nextline[1].rstrip('\n')
+            
+            if nextline[0] == "CORPUS_NAME":
+                corpusname = nextline[1]
+                if not corpusname:
+                    corpusname = input("Please enter the name of the corpus data file: ")
+                    
+            elif nextline[0] == "SEED_RULES":
+                rulesname = nextline[1]
+                if rulesname == "":
+                    rulesname = input("Please enter the name of the corpus data file: ")
+                        
+            elif nextline[0] == "ITERATION_COUNT":
+                iterations = nextline[1]
+                if iterations == "":
+                    iterations = input("Please enter the number of iterations: ")
+                    while(not iterations.isdigit()):
+                        iterations = input("Please enter a valid integer for number of " +
+                                           " iterations: ")
+                            
+            elif nextline[0] == "RULES_PER_ITERATION":
+                maxrules = nextline[1]
+                if maxrules == "":
+                    maxrules = input("Please enter the maximum number of new rules " +
+                                     " per iteration: ")
+                    while(not maxrules.isdigit()):
+                        maxrules = input("Please enter a valid integer for maximum number of " +
+                                           " rules per iteration: ")
+                        
+            nextline = configfile.readline().split('=')
+                    
+    except FileNotFoundError:
+        print("Couldn't find a config file, getting input...")
+        corpusname = input("Please enter the name of the corpus data file: ")
+        rulesname = input("Please enter the name of the corpus data file: ")
+        iterations = input("Please enter the number of iterations: ")
+        while(not iterations.isdigit()):
+            iterations = input("Please enter a valid integer for number of iterations: ")
+        maxrules = input("Please enter the maximum number of new rules per iteration: ")
+        while(not maxrules.isdigit()):
+            maxrules = input("Please enter a valid integer for maximum number of " +
+                             " rules per iteration: ")
+    except:
+        print("ERROR: Unable to open configuration file")
+
+
+    if corpusname == "":
+        corpusname = input("Please enter the name of the corpus data file: ")
+    if rulesname == "":
+        rulesname = input("Please enter the name of the corpus data file: ")
+    if iterations == "":
+        iterations = input("Please enter the number of iterations: ")
+        while(not iterations.isdigit()):
+            iterations = input("Please enter a valid integer for number of iterations: ")
+    if maxrules == "":
+        maxrules = input("Please enter the maximum number of new rules per iteration: ")
+        while(not maxrules.isdigit()):
+            maxrules = input("Please enter a valid integer for maximum number of " +
+                             " rules per iteration: ")
+    
+    return [corpusname, rulesname, iterations, maxrules]
+    
 # Reads the corpus file into memory by prompting the user for a file name.
 # Returns the contents of the corpus as a TokenSet.
 # Kind of a horribly bloody mess right now.
 
 
-def loadCorpus():
+def loadCorpus(corpusname):
 
     rawcorpus = list()
-
-    # Prompt for the name of the corpus file.
-    corpusname = input("please enter the name of the corpus data file: ")
-
+    
     try:
         corpusfile = open(corpusname, "r")
     except:
@@ -86,11 +163,8 @@ def loadCorpus():
 
 # This function will read the seed rule file, and return the contents as
 # a RuleSet (defined in ruleset.py)
-def loadSeedRules():
+def loadSeedRules(rulename):
     rules = RuleSet()
-
-    # Prompt for the name of the seed rule file
-    rulename = input("please enter the name of the seed rule file: ")
 
     try:
         rulefile = open(rulename, "r")
@@ -133,18 +207,25 @@ def main():
     # And so on.
     rulestack = list()
     names = list()
-
+    
     # Meant to store all rules that are ultimately used by the algorithm
     allrules = RuleSet()
 
+    # Pulls things from configuration file
+    configs = init()
+    corpusname = configs[0]
+    rulename = configs[1]
+    iterations = int(configs[2])
+    maxrules = int(configs[3])
+    
     # Load and prepare corpus data.
     # Corpus is a TokenSet, which is a container for many Token items.
     # Tokens represent individual words in the corpus, and contain left
     #  and right context as well as annotations
-    corpus = loadCorpus()
+    corpus = loadCorpus(corpusname)
 
     # Get the seed rules
-    seedrules = loadSeedRules()
+    seedrules = loadSeedRules(rulename)
     rulestack.append(seedrules)
     allrules.extend(seedrules)
 
@@ -153,10 +234,6 @@ def main():
     names.append(newNames)
 
     contextualIteration = False
-
-    iterations = int(input("please enter the number of iterations: "))
-    maxrules = int(input("please enter the number of rules to keep between" +
-                         " iterations: "))
 
     # Begin iterating.
     i = 0
@@ -177,7 +254,7 @@ def main():
                   str(len(newNames.tokens)) + " new names")
             names.append(newNames)
         else:
-            print("iteration " + str(i + 1) + ": spelling")
+            print("iteration " + str(i + 1) + ": find spelling")
             newRules = spellingfromnames.run(corpus, allrules, names[i],
                                              maxrules)
             rulesFound = len(list(newRules.rules))
