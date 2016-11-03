@@ -51,9 +51,16 @@ class Rule:
     def key(self):
         return self.contents + str(self.rtype.value)
 
+    #needed for the hashing to work in the RuleSet above
     def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.key() == other.key()
+        return self.key() == other.key()
+
+    #needed so that the rules can be sorted easily
+    def __lt__(self, other):
+        if self.strength == other.strength:
+            return self.contents < other.contents
+        else:
+            return self.strength < other.strength
 
     def __hash__(self):
         return hash(self.contents + str(self.rtype))

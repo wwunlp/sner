@@ -4,7 +4,6 @@
 from ruleset import *
 from tokenset import *
 import rulesperformance
-import rulefilter
 
 
 # Stolen from readnames.py, identifies spelling patterns in the form of k-grams
@@ -55,6 +54,13 @@ def run(corpus, allrules, names, maxrules):
 
     rulesperformance.run(corpus, rules)
 
-    rules = rulefilter.run(rules, maxrules)
+    resultlist = sorted(list(rules.rules), key=lambda x: x.strength,
+                        reverse=True)
+    resultlist = resultlist[:maxrules]
 
-    return rules
+    result = RuleSet()
+
+    for rule in resultlist:
+        result.addRule(rule)
+
+    return result

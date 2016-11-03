@@ -7,8 +7,6 @@ class TokenType(Enum):
     unset = -1
     none = 0
     personal_name = 1
-    geographic_name = 2
-    profession = 3
 
 
 # This represents a given 'token' in the corpus.
@@ -22,6 +20,7 @@ class Token:
     left_context = None
     right_context = None
     occurrences = 1
+    chanceOfName = 0
 
     def key(self):
         return ((self.token + str(self.left_context) +

@@ -40,10 +40,6 @@ def loadCorpus():
     def interpretTokenType(wordType):
         if wordType == "PN":
             return TokenType.personal_name
-        elif wordType == "GN":
-            return TokenType.geographic_name
-        elif wordType == "PF":
-            return TokenType.profession
         elif wordType == "-":
             return TokenType.none
         else:
@@ -189,7 +185,7 @@ def main():
             # Get the names for the next iteration
             newNames = namesfromrules.run(corpus, newRules)
             print("top " + str(rulesFound) + " rules found " +
-                  str(len(newNames.tokens)) + " new names")
+                    str(len(newNames.tokens)) + " new names")
             names.append(newNames)
 
         contextualIteration = not contextualIteration
@@ -203,7 +199,7 @@ def main():
     #    i += 1
 
     # Really half assed output system, needs upgrading.
-    
+
     f = open("output.csv", 'wb')
 
     f.write("Rule,Rule Type,Strength\n".encode('utf-8'))
@@ -213,27 +209,5 @@ def main():
 
     f.close()
 
-    #use the top rules (allrules variable) to get all names that apply to the rules we found
-    namesfound = namesfromrules.run(corpus, allrules)
-
-    totalresults = 0
-    namecount = 0
-    #sum the occurrences of all things in the nameset, add this to totalresults
-    #also scan for occurrences annotated as names and add those occurences to namecount
-    for token in namesfound:
-        totalresults += token.occurrences
-        if token.annotation == TokenType.personal_name:
-            namecount += token.occurrences
-
-    print("accuracy: " + str(100 * (namecount / totalresults)) + "%")
-
-    totalnames = 0
-    #scan for all tokens annotated as names and sum, to find all name occurence
-    for token in corpus:
-        if token.annotation == TokenType.personal_name:
-            totalnames += token.occurrences
-
-    print("recall: " + str(100 * (namecount / totalnames)) + "%")
-    
 # Begin execution
 main()

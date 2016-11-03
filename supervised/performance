@@ -1,0 +1,54 @@
+alpha value at 0.1
+k = 2
+
+	using top n rules approach to filtering rules
+
+	10 iterations, 20 rules per cycle
+	accuracy: 78.15392417902878%
+	recall: 61.10229976209358%
+
+	20 iterations, 20 rules per cycle
+	accuracy: 32.97983982325324%
+	recall: 92.18774123822757%
+
+
+	proposed rule selection technique
+	acceptance threshold at 0.9
+
+	10 iterations, 20 rules minimum per cycle
+	accuracy: 88.1829889004722%
+	recall: 91.38862408643152%
+
+	20 iterations, 20 rules minimum per cycle
+	accuracy: 86.68931277763261%
+	recall: 94.80482368406012%
+
+
+alpha value at 5
+k = 2
+	
+	using top n rules approach to filtering rules
+
+	10 iterations, 20 rules per cycle
+	accuracy: 80.25767931495011%
+	recall: 84.78008298755186%
+
+	20 iterations, 20 rules per cycle
+	accuracy: 80.22641952135147%
+	recall: 91.77346842917532%
+
+
+	proposed rule selection technique
+	acceptance threshold at 0.9
+
+	10 iterations, 20 rules minimum per cycle
+	accuracy: 78.21286618577949%
+	recall: 86.5802982155952%
+
+	20 iterations, 20 rules minimum per cycle
+	accuracy: 79.49553395876636%
+	recall: 92.63550667714061%
+
+
+
+

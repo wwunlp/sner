@@ -10,7 +10,7 @@ from tokenset import *
 # Rate the strength of the individual rule passed in,
 # given all Tokens where the rule is true (identifiedNames)
 def rateRulePerformance(identifiedNames, rule):
-    alpha = 0.1
+    alpha = 5
     k = 2
 
     namesFound = 0
