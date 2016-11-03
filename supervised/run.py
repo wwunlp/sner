@@ -1,5 +1,6 @@
 from ruleset import *
 from tokenset import *
+from sys import argv
 import namesfromrules
 import contextualfromnames
 import spellingfromnames
@@ -13,77 +14,105 @@ import config
 # SEED_RULES=
 # ITERATION_COUNT=
 # RULES_PER_ITERATION=
-# Otherwise prompts user for answers to everything, makes sure iterations and maxrules are ints
+# Otherwise prompts user for answers to everything, makes sure
+#  iterations and maxrules are ints.
 def init():
-    try:
-        print("Pulling configuration options from: configuration.txt")
-        configfile = open("configuration.txt", "r")
-        nextline = configfile.readline().split('=')
-        
-        while(nextline[0] != ""):
-            nextline[0] = nextline[0].rstrip('\n')
-            nextline[1] = nextline[1].rstrip('\n')
-            
-            if nextline[0] == "CORPUS_NAME":
-                corpusname = nextline[1]
-                if not corpusname:
-                    corpusname = input("Please enter the name of the corpus data file: ")
-                    
-            elif nextline[0] == "SEED_RULES":
-                rulesname = nextline[1]
-                if rulesname == "":
-                    rulesname = input("Please enter the name of the corpus data file: ")
-                        
-            elif nextline[0] == "ITERATION_COUNT":
-                iterations = nextline[1]
-                if iterations == "":
-                    iterations = input("Please enter the number of iterations: ")
-                    while(not iterations.isdigit()):
-                        iterations = input("Please enter a valid integer for number of " +
-                                           " iterations: ")
-                            
-            elif nextline[0] == "RULES_PER_ITERATION":
-                maxrules = nextline[1]
-                if maxrules == "":
-                    maxrules = input("Please enter the maximum number of new rules " +
-                                     " per iteration: ")
-                    while(not maxrules.isdigit()):
-                        maxrules = input("Please enter a valid integer for maximum number of " +
-                                           " rules per iteration: ")
-                        
+    corpusname = ""
+    rulesname = ""
+    iterations = -1
+    maxrules = -1
+
+    # Get from command line
+    if len(sys.argv) == 5:
+        corpusname = argv[1]
+        rulesname = argv[2]
+        if argv[3].isdigit():
+            iterations = argv[3]
+        if argv[4].isdigit():
+            maxrules = argv[4]
+
+    # Get from configuration file
+    else:
+        try:
+            print("Pulling configuration options from: configuration.txt")
+            configfile = open("configuration.txt", "r")
             nextline = configfile.readline().split('=')
-                    
-    except FileNotFoundError:
-        print("Couldn't find a config file, getting input...")
-        corpusname = input("Please enter the name of the corpus data file: ")
-        rulesname = input("Please enter the name of the corpus data file: ")
-        iterations = input("Please enter the number of iterations: ")
-        while(not iterations.isdigit()):
-            iterations = input("Please enter a valid integer for number of iterations: ")
-        maxrules = input("Please enter the maximum number of new rules per iteration: ")
-        while(not maxrules.isdigit()):
-            maxrules = input("Please enter a valid integer for maximum number of " +
-                             " rules per iteration: ")
-    except:
-        print("ERROR: Unable to open configuration file")
 
+            while(nextline[0] != ""):
+                nextline[0] = nextline[0].rstrip('\n')
+                nextline[1] = nextline[1].rstrip('\n')
 
+                if nextline[0] == "CORPUS_NAME" and not corpusname:
+                    corpusname = nextline[1]
+                    if not corpusname:
+                        corpusname = input("Please enter the name of the" +
+                                           " corpus data file: ")
+
+                elif nextline[0] == "SEED_RULES" and not rulesname:
+                    rulesname = nextline[1]
+                    if rulesname == "":
+                        rulesname = input("Please enter the name of the" +
+                                          " corpus data file: ")
+
+                elif nextline[0] == "ITERATION_COUNT" and iterations < 0:
+                    iterations = nextline[1]
+                    if iterations == "":
+                        iterations = input("Please enter the number of" +
+                                           " iterations: ")
+                        while(not iterations.isdigit()):
+                            iterations = input("Please enter a valid integer" +
+                                               " for number of iterations: ")
+
+                elif nextline[0] == "RULES_PER_ITERATION" and maxrules < 0:
+                    maxrules = nextline[1]
+                    if maxrules == "":
+                        maxrules = input("Please enter the maximum number of" +
+                                         " new rules per iteration: ")
+                        while(not maxrules.isdigit()):
+                            maxrules = input("Please enter a valid integer" +
+                                             " for maximum number of rules" +
+                                             " per iteration: ")
+
+                nextline = configfile.readline().split('=')
+
+        except FileNotFoundError:
+            print("Couldn't find a config file, getting input...")
+            corpusname = input("Please enter the name of the corpus" +
+                               " data file: ")
+            rulesname = input("Please enter the name of the corpus" +
+                              " data file: ")
+            iterations = int(input("Please enter the number of iterations: "))
+            while(not iterations.isdigit()):
+                iterations = int(input("Please enter a valid integer for" +
+                                       " number of iterations: "))
+                maxrules = int(input("Please enter the maximum number of" +
+                                     " new rules per iteration: "))
+                while(not maxrules.isdigit()):
+                    maxrules = int(input("Please enter a valid integer for" +
+                                         " maximum number of rules per" +
+                                         " iteration: "))
+        except:
+            print("ERROR: Unable to open configuration file")
+
+    # Any missing values found here
     if corpusname == "":
         corpusname = input("Please enter the name of the corpus data file: ")
     if rulesname == "":
         rulesname = input("Please enter the name of the corpus data file: ")
-    if iterations == "":
+    if int(iterations) <= 0:
         iterations = input("Please enter the number of iterations: ")
         while(not iterations.isdigit()):
-            iterations = input("Please enter a valid integer for number of iterations: ")
-    if maxrules == "":
-        maxrules = input("Please enter the maximum number of new rules per iteration: ")
+            iterations = int(input("Please enter a valid integer for number" +
+                                   " of iterations: "))
+    if int(maxrules) <= 0:
+        maxrules = int(input("Please enter the maximum number of new rules" +
+                             " per iteration: "))
         while(not maxrules.isdigit()):
-            maxrules = input("Please enter a valid integer for maximum number of " +
-                             " rules per iteration: ")
-    
+            maxrules = int(input("Please enter a valid integer for maximum" +
+                                 " number of rules per iteration: "))
+
     return [corpusname, rulesname, iterations, maxrules]
-    
+
 # Reads the corpus file into memory by prompting the user for a file name.
 # Returns the contents of the corpus as a TokenSet.
 # Kind of a horribly bloody mess right now.
@@ -92,7 +121,7 @@ def init():
 def loadCorpus(corpusname):
 
     rawcorpus = list()
-    
+
     try:
         corpusfile = open(corpusname, "r")
     except:
@@ -203,7 +232,7 @@ def main():
     # And so on.
     rulestack = list()
     names = list()
-    
+
     # Meant to store all rules that are ultimately used by the algorithm
     allrules = RuleSet()
 
@@ -213,7 +242,7 @@ def main():
     rulename = configs[1]
     iterations = int(configs[2])
     maxrules = int(configs[3])
-    
+
     # Load and prepare corpus data.
     # Corpus is a TokenSet, which is a container for many Token items.
     # Tokens represent individual words in the corpus, and contain left
