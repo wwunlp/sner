@@ -2,9 +2,9 @@
 # name tokens. It needs the corpus as well as the name set in order to
 # assess the performance of any rules it finds from the names
 
-from ruleset import *
-from tokenset import *
-import rulesperformance
+from supervised.ruleset import *
+from supervised.tokenset import *
+from supervised import rulesperformance
 
 
 def genContextuals(names, existingrules):

@@ -1,48 +1,13 @@
-#!/usr/bin/python3
-
-# Convert our current Garshana (Atte / Texts.csv) corpus to old corpus style
-# for use in unsupervised learning program
-# Andy Brown
-# Authored     10/7/2016
-# Last Updated 10/7/2016
-
-import utilities
-import professions
+from scripts import professions, utilities
 import codecs
 import csv
 import re
 import argparse
 
-class Args(object):
-    pass
 
 knownPN = {}
 knownGN = {}
-args = Args()
 
-def initializeArgs():
-    """
-    Initialize the arg parser.
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-nameTag", "-nt",  help="The formating for names, default is $PN$",
-                        required=False, default="$PN$")
-    parser.add_argument("--normNum", "--n", help="Enable the nomralization  of numbers",
-                        required=False, dest='normNum', action='store_true')
-    parser.add_argument("--normProf", "--p", help="Enable the normalization of professions",
-                        required=False, dest='normProf', action='store_true')
-    parser.add_argument("-lt",  help="Left tag of a sentence, default blank",
-                        required=False, default="")
-    parser.add_argument("-rt",  help="Right tag of a sentence, default newline",
-                        required=False, default="\n")
-    parser.add_argument("--tablet", "--t", help="Add start of tablet line, default False",
-                        required=False, dest='tablet', action='store_true')
-    parser.add_argument("-output", "-o",  help="Name of the output file, default convertedCorpuseText",
-                        required=False, default="convertedCorpusText.csv")
-    parser.add_argument("-mode", "-m", help="Switch between [csv] and [multiline] modes, default csv",
-                        required=False, choices=["csv", "multiline"], default="csv")
-    parser.set_defaults(normNum = False, normProf = False, tablet = False)
-    parser.parse_args(namespace=args)
 
 def findKnownPN():
     """
@@ -89,7 +54,8 @@ def findKnownGN():
             else :
                 knownGN[name].append(lineID)            
                 
-def main():
+
+def main(data, options):
     """
     Find all names in Attestations file, and goes through each in in the main Texts file
     to fill a new output file (default convertedCorpusText, can specify with -o arg)
@@ -114,11 +80,11 @@ def main():
     findKnownGN()
     
     # iterate each line in Garshana Text and output to specified file
-    file2 = codecs.open('Garshana Dataset/Texts.csv', 'r', encoding = 'utf-16')
-    out = open(args.output, "w")
+    file2 = codecs.open(data.corpus, 'r', encoding = 'utf-8')
+    out = open(data.output, "w")
 
     
-    if args.mode == "csv":
+    if options.mode == "csv":
         out.write("Tablet ID,Line Number,Word Number,Word,Word Type\n")
     
     curTablet = -1
@@ -140,23 +106,23 @@ def main():
         words = text.split(' ')
 
         # multiline mode
-        if args.mode == "multiline":
+        if options.mode == "multiline":
             newWords = text.split(' ')
             for i in range(len(words)):
                 w = words[i]
                 if w in knownPN:
-                    newWords[i] = w + args.nameTag
-            newText = args.lt + ' '.join(newWords) + args.rt
+                    newWords[i] = w + options.name_tag
+            newText = options.left_tag + ' '.join(newWords) + options.right_tag
             # Indicate the start of a new tablet
             if tabletID != curTablet:
                 curTablet = tabletID
-                if args.tablet == True:
+                if options.tablet == True:
                     out.write("&P" + tabletID + "\n")
             # write the converted line
             out.write(newText)
 
         # csv Mode
-        if args.mode == "csv":
+        if options.mode == "csv":
             lineID = line[6]
             # skip description lines
             if lineID == "":
@@ -189,4 +155,4 @@ def main():
 if __name__ == '__main__':
     print ("Starting conversion...")
     main()
-    print ("Converted and saved as " + args.output + "!")
+    print ("Converted and saved as " + data.output + "!")

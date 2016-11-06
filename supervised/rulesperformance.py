@@ -3,8 +3,8 @@
 # It will check the annotations of these tokens to see if they are really names
 # then it will use that to compute a strength rating
 
-from ruleset import *
-from tokenset import *
+from supervised.ruleset import *
+from supervised.tokenset import *
 
 
 # Rate the strength of the individual rule passed in,

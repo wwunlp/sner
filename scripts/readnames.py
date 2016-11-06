@@ -1,8 +1,6 @@
-
-
-import codecs
+from scripts import utilities
 from collections import defaultdict
-import utilities
+import codecs
 import editdistance
 
 
@@ -41,11 +39,11 @@ def getPersonalNames(csvFile):
     return names
 
 
-def getPNs():
+def getPNs(data):
     """
     Collects names in Garshana csv and returns them
     """
-    return getPersonalNames("Garshana Dataset/Attestations_PNs.csv")
+    return getPersonalNames(data.attestations)
 
 
 def getKgrams(names, k):
@@ -81,7 +79,7 @@ def testKgrams():
     A simple test to print off Trigrams and Quadgrams that
     occur more than once [note: duplicate names will trigger these]
     """
-    nameDict = getPNs()
+    nameDict = getPNs(data)
     # sampleNames = {"ab-ac-ad-ae" : 3, "ab-ae-ad" : 5, "ae-ac-ac-ad" : 1}
     testGrams = getKgrams(nameDict, 4)
     for i in range(2, 4):

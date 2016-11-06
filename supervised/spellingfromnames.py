@@ -1,9 +1,9 @@
 # This file is meant to generate spelling rules from a list of identified name
 # tokens.
 
-from ruleset import *
-from tokenset import *
-import rulesperformance
+from supervised.ruleset import *
+from supervised.tokenset import *
+from supervised import rulesperformance
 
 
 # Stolen from readnames.py, identifies spelling patterns in the form of k-grams

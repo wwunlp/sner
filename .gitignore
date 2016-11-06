@@ -1,4 +1,8 @@
-# Result files
+# Config files
+sner.conf
+
+# Data files
+data/
 results/
 
 # unsupervised-old

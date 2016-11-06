@@ -1,14 +1,9 @@
-#!/usr/bin/python3
-
-# Ian Fisk
-# Authored 5/1/2016
-
+from scripts import professions
 import codecs
 import re
-import professions
 
 
-def get_counts():
+def get_counts(data):
     """
     Get the total occurrences of words and syllables in the original Unicode
     Garshana text.
@@ -25,7 +20,7 @@ def get_counts():
 
     # Hard coding this filename in so there is no ambiguity as to what we
     # consider the original text to be.
-    infile = "Garshana Dataset/Texts.csv"
+    infile = data.corpus
     try:
 
         open_file = codecs.open(infile, 'r', encoding='utf-16')

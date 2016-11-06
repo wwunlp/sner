@@ -1,7 +1,7 @@
 # This file is meant to recognize names in the corpus when given a set of rules
 
-from ruleset import *
-from tokenset import *
+from supervised.ruleset import *
+from supervised.tokenset import *
 
 # Takes the overall corpus as input, as well as a single Rule object,
 #  as defined in ruleset.py.

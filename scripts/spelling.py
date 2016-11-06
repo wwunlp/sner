@@ -1,10 +1,5 @@
-#!/usr/bin/python3
-
-# Imports
-
+from scripts import readnames, utilities
 from collections import defaultdict
-import readnames
-import utilities
 
 # Dictionaries of monograms, bigrams, and trigrams
 # Other global declarations
@@ -46,9 +41,9 @@ def addTrigram(gram, namecount, totalcount):
 # Load name data
 
 
-def loadData(allgrams, f):
+def loadData(data, allgrams, f):
     # Load ngrams found in names
-    namegrams = readnames.getKgrams(readnames.getPNs(), 3)
+    namegrams = readnames.getKgrams(readnames.getPNs(data), 3)
 
     if len(namegrams) >= 1:
         print("loading monograms in names")
@@ -129,8 +124,8 @@ def outputAnalysis(k, v, f):
 # Main
 
 
-def main(syll_count):
+def main(data, syll_count):
     f = open('results/spelling.csv', 'wb')
-    loadData(syll_count, f)
+    loadData(data, syll_count, f)
     print()
     analyzeData(f)
