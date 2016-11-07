@@ -1,5 +1,5 @@
 from classes import Data, Options
-from supervised import run
+from models import ner
 from scripts import analysis, formatting
 import argparse
 import json
@@ -89,7 +89,7 @@ def main():
     options = Options(iterations, max_rules, name_tag, norm_num,
                       norm_prof, left_tag, right_tag, tablet, mode)
 
-    if run == 'analysis':
+    if run== 'analysis':
         analysis.main(data, options)
     elif run == 'formatting':
         formatting.main(data, options)
@@ -97,7 +97,7 @@ def main():
         os.chdir('unsupervised-old/')
         subprocess.run('./run.sh')
     elif run == 'supervised':
-        run.main(data=data, options=options)
+        ner.main(data, options)
 
 if __name__ == '__main__':
     main()
