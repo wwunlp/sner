@@ -94,7 +94,7 @@ def main():
     elif run == 'formatting':
         formatting.main(data, options)
     elif run == 'unsupervised':
-        os.chdir('unsupervised-old/')
+        os.chdir('models/unsupervised-old/')
         subprocess.run('./run.sh')
     elif run == 'supervised':
         ner.main(data, options)
