@@ -5,6 +5,7 @@
 from ruleset import *
 from tokenset import *
 import rulesperformance
+import rulefilter
 
 
 def genContextuals(names, existingrules):
@@ -24,7 +25,7 @@ def genContextuals(names, existingrules):
         if not existingrules.containsRule(leftContext):
             newRules.addRule(leftContext)
 
-        if not existingrules.containsRule(leftContext):
+        if not existingrules.containsRule(rightContext):
             newRules.addRule(rightContext)
 
     return newRules
@@ -35,13 +36,6 @@ def run(corpus, existingrules, names, maxrules):
 
     rulesperformance.run(corpus, rules)
 
-    sortedlist = sorted(list(rules.rules),
-                        key=lambda x: x.strength, reverse=True)
-    sortedlist = sortedlist[:maxrules]
-
-    rules = RuleSet()
-
-    for rule in sortedlist:
-        rules.addRule(rule)
+    rules = rulefilter.run(rules, maxrules)
 
     return rules
