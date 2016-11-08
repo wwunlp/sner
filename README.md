@@ -19,6 +19,7 @@ routines.
 * `-mr` or `--max-rules`: Max number of rules per iterations.
 * `-mf` or `--mod-freq`: Modifier of rule frequency.
 * `-ms` or `--mod-str`: Modifier of rule strength.
+* `-at` or `--accept-threshold`: Nam acceptance threshold.
 
 * `-nt` or `--name-tag`: The formating for names, default is `$PN$`.
 * `-nn` or `--norm-num`: Enable the normalization  of numbers.
