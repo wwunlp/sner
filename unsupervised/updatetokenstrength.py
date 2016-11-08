@@ -70,7 +70,7 @@ def updateWithRule(rule, tokens):
         
         
 
-def run(tokens, rules):
+def run(tokens, rules, cfg):
     for rule in rules:
         updateWithRule(rule, tokens)
     

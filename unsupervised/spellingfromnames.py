@@ -45,7 +45,7 @@ def gramsToRules(kgrams, allrules):
     return rules
 
 
-def run(corpus, allrules, names, maxrules):
+def run(corpus, allrules, names, maxrules, cfg):
     # Uses up to trigrams currently
     maxGram = 3
 
