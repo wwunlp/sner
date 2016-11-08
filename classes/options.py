@@ -6,6 +6,7 @@ class Options:
         max_rules (int): Max number of rules per iterations.
         mod_freq (float): Modifier of rule frequency.
         mod_str (float): Modifier of rule strength.
+        accept_threshold (float): Name acceptance threshold.
         name_tag (str): The formating for names.
         norm_tag (bool): Enable the nomralization  of numbers.
         norm_prof (bool): Enable the normalization of professions.
@@ -16,7 +17,7 @@ class Options:
     """
 
     def __init__(self, iterations, max_rules, mod_freq, mod_str,
-                 name_tag, norm_num, norm_prof,
+                 accept_threshold, name_tag, norm_num, norm_prof,
                  left_tag, right_tag, tablet, mode):
         """Sets the ``iterations``, ``max_rules``, ``name_tag``, ``norm_num``,
         ``norm_prof``, ``left_tag``, ``right_tag``, ``tablet``, and ``mode``
@@ -27,6 +28,7 @@ class Options:
             max_rules (int): Max number of rules per iterations.
             mod_freq (float): Modifier of rule frequency.
             mod_str (float): Modifier of rule strength.
+            accept_threshold (float): Name acceptance threshold.
             name_tag (str): The formating for names.
             norm_tag (bool): Enable the nomralization  of numbers.
             norm_prof (bool): Enable the normalization of professions.
@@ -46,6 +48,8 @@ class Options:
         self.max_rules = max_rules
         self.mod_freq = mod_freq
         self.mod_str = mod_str
+        self.accept_threshold = accept_threshold
+
         self.name_tag = name_tag
         self.norm_num = norm_num
         self.norm_prof = norm_prof

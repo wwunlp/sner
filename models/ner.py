@@ -1,5 +1,6 @@
 from classes import Rule, RuleSet, RuleType, Token, TokenSet, TokenType
-from scripts.ner import namesfromrules, contextualfromnames, spellingfromnames
+from scripts.ner import contextualfromnames, namesfromrules, \
+spellingfromnames, updatetokenstrength
 
 
 def loadCorpus(corpusname):
@@ -30,6 +31,10 @@ def loadCorpus(corpusname):
     def interpretTokenType(wordType):
         if wordType == "PN":
             return TokenType.personal_name
+        elif wordType == "GN":
+            return TokenType.geographic_name
+        elif wordType == "PF":
+            return TokenType.profession
         elif wordType == "-":
             return TokenType.none
         else:
@@ -103,6 +108,81 @@ def loadSeedRules(rulename):
 
     return rules
 
+def performanceAssessment(corpus, options):
+    #find all names that pass a certain probability threshold, these will be considered our results
+    namethreshold = options.accept_threshold
+    namesfound = TokenSet()
+    for token in corpus:
+        if token.name_probability > namethreshold:
+            namesfound.addToken(token, None)
+
+    totalresults = 0
+    accurateresults = 0
+    #sum the occurrences of all things in the nameset, add this to totalresults
+    #also scan for occurrences annotated as names and add those occurences to namecount
+    for token in namesfound:
+        totalresults += token.occurrences
+        if token.annotation == TokenType.personal_name:
+            accurateresults += token.occurrences
+
+    totalnames = 0
+    #scan for all tokens annotated as names and sum, to find all name occurence
+    for token in corpus:
+        if token.annotation == TokenType.personal_name:
+            totalnames += token.occurrences
+
+    accuracy = accurateresults / totalresults
+    recall = accurateresults / totalnames
+    print("accuracy: " + str(100 * accuracy) + "%")
+    print("recall: " + str(100 * recall) + "%")
+    print("acceptance threshold: " + str(100 * namethreshold) + "%")
+    print("probability ratings off by " + str(100 * abs(namethreshold - accuracy)) + " points")
+
+def rulesStrengthAssessment(rules, corpus, cfg):
+
+    badrules = 0
+    totalspelling = 0
+    badspelling = 0
+    totalcontext = 0
+    badcontext = 0
+
+    totaldelta = 0
+
+    print("calculating...", end='\r')
+
+    for rule in rules:
+        names = namesfromrules.namesFromRule(corpus, rule)
+        realnames = 0
+        total = 0
+        for token in names:
+            if token.annotation == TokenType.personal_name:
+                realnames += 1
+                total += 1
+            else:
+                total += 1
+
+        truestrength = realnames/total
+        delta = abs(truestrength - rule.strength)
+        totaldelta += delta
+
+        if rule.rtype == RuleType.spelling:
+            totalspelling += 1
+        else:
+            totalcontext += 1
+
+        if delta > 0.2:
+            badrules += 1
+            if rule.rtype == RuleType.spelling:
+                badspelling += 1
+            else:
+                badcontext += 1
+
+    print("               ", end='\r')
+
+    print("percentage of bad rules: " + str(100 * badrules/len(rules.rules)) + "%")
+    print("percentage of bad context: " + str(100 * badcontext/totalcontext) + "%")
+    print("percentage of bad spelling: " + str(100 * badspelling/totalspelling) + "%")
+    print("average delta value: " + str(100 * totaldelta / len(rules.rules)) + "%")
 
 # Orchestrate the execution of the program
 def main(data, options):
@@ -122,7 +202,7 @@ def main(data, options):
 
     # Pulls things from configuration file
     corpusname = data.corpus
-    rulename = data.seed_rules
+    rulesname = data.seed_rules
     iterations = options.iterations
     maxrules = options.max_rules
 
@@ -133,12 +213,17 @@ def main(data, options):
     corpus = loadCorpus(corpusname)
 
     # Get the seed rules
-    seedrules = loadSeedRules(rulename)
+    seedrules = loadSeedRules(rulesname)
+
+    #apply them to the tokens in the corpus
+    updatetokenstrength.run(corpus, seedrules, options)
+
+    #add them as the first generation of rules, and add them to the 'all rules' set
     rulestack.append(seedrules)
     allrules.extend(seedrules)
 
-    # Identify names via seed rules
-    newNames = namesfromrules.run(corpus, seedrules)
+    # Identify names via the seed rules
+    newNames = namesfromrules.run(corpus, seedrules, options)
     names.append(newNames)
 
     contextualIteration = False
@@ -146,21 +231,16 @@ def main(data, options):
     # Begin iterating.
     i = 0
     while i < iterations:
+
+        #detect the new rules
+        newRules = RuleSet()
+        rulesFound = 0
         if contextualIteration:
             print("iteration " + str(i + 1) + ": find contextual rules")
             newRules = contextualfromnames.run(corpus, allrules, names[i],
-                                               maxrules)
+                                               maxrules, options)
             rulesFound = len(list(newRules.rules))
             print("found " + str(rulesFound) + " new contextual rules!")
-
-            rulestack.append(newRules)
-            allrules.extend(newRules)
-
-            # Get the names for the next iteration.
-            newNames = namesfromrules.run(corpus, newRules)
-            print("top " + str(rulesFound) + " rules found " +
-                  str(len(newNames.tokens)) + " new names")
-            names.append(newNames)
         else:
             print("iteration " + str(i + 1) + ": find spelling")
             newRules = spellingfromnames.run(corpus, allrules, names[i],
@@ -168,24 +248,38 @@ def main(data, options):
             rulesFound = len(list(newRules.rules))
             print("found " + str(rulesFound) + " new spelling rules!")
 
-            rulestack.append(newRules)
-            allrules.extend(newRules)
+        #at this point in execution the new rules have had their strength ratings assigned (unless something broke)
 
-            # Get the names for the next iteration
-            newNames = namesfromrules.run(corpus, newRules)
-            print("top " + str(rulesFound) + " rules found " +
-                  str(len(newNames.tokens)) + " new names")
-            names.append(newNames)
+        #update the name_probability ratings of all of the tokens using the new rules
+        #so, in light of the new rules, how does that effect all tokens chances of being a name?
+        updatetokenstrength.run(corpus, newRules, options)
+
+        #record the rules found in this iteration of the algorithm
+        rulestack.append(newRules)
+
+        #update the list of all rules found
+        allrules.extend(newRules)
+
+
+        # Get the names for the next iteration
+        newNames = namesfromrules.run(corpus, newRules, options)
+        names.append(newNames)
+
+        print("top " + str(rulesFound) + " rules found " +
+              str(len(newNames.tokens)) + " new names")
+
+
+        print("performance so far:")
+        performanceAssessment(corpus, options)
+
+        print("")
+
 
         contextualIteration = not contextualIteration
         i += 1
 
-    # Debug output
-    # i = 0
-    # for rule in allrules:
-    #    print("rule " + str(i) + ": " + str(rule.rtype) + " " +
-    #          str(rule.contents) + " " + str(rule.strength))
-    #    i += 1
+    print("rule performance:")
+    rulesStrengthAssessment(allrules, corpus, options)
 
     # Really half assed output system, needs upgrading.
 

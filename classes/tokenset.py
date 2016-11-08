@@ -1,4 +1,3 @@
-
 from enum import Enum
 import sys
 
@@ -7,6 +6,8 @@ class TokenType(Enum):
     unset = -1
     none = 0
     personal_name = 1
+    geographic_name = 2
+    profession = 3
 
 
 # This represents a given 'token' in the corpus.
@@ -16,6 +17,8 @@ class TokenType(Enum):
 # This is meant to be used in conjunction with the TokenSet implemented below.
 class Token:
     token = None
+    applicable_rules = list() #list of Rule objects that are associated with this token
+    name_probability = 0 #percent chance that this token represents a name
     annotation = TokenType.unset
     left_context = None
     right_context = None
@@ -41,6 +44,9 @@ class Token:
         self.rightContext = str(right)
         self.annotation = annotation
         self.occurrences = 1
+
+        self.applicable_rules = list()
+        self.name_probability = 0
 
     def __str__(self):
         return self.token
