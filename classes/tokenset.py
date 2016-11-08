@@ -55,7 +55,7 @@ class TokenSet:
     def __iter__(self):
         return iter(self.tokens)
 
-    def addToken(self, token):
+    def addToken(self, token, rule):
         if(type(token) is not Token):
             tb = sys.exc_info()[2]
             raise TypeError("Tried to push something other than a token" +
@@ -70,6 +70,8 @@ class TokenSet:
             self.tokens[token] = token
         else:
             existingtoken.occurrences += 1
+            if rule:
+                rule.occurrence += 1
 
     def extend(self, setOfTokens):
         if(type(setOfTokens) is not TokenSet):
@@ -79,7 +81,7 @@ class TokenSet:
                             " than a TokenSet to add").with_traceback(tb)
 
         for token in setOfTokens:
-            self.addToken(token)
+            self.addToken(token, None)
 
     def __init__(self):
         self.tokens = dict()

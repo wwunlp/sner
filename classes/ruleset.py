@@ -62,3 +62,4 @@ class Rule:
         self.rtype = ruletype
         self.contents = str(rule)
         self.strength = float(strength)
+        self.occurrence = 1

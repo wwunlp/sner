@@ -54,18 +54,18 @@ def loadCorpus(corpusname):
                           interpretTokenType(line[4]))
 
             prevToken.right_context = str(token)
-            corpus.addToken(prevToken)
+            corpus.addToken(prevToken, None)
 
             prevToken = token
 
         else:
-            corpus.addToken(prevToken)
+            corpus.addToken(prevToken, None)
 
             tabletID = line[0]
             token = Token(None, line[3], None, interpretTokenType(line[4]))
             prevToken = token
 
-    corpus.addToken(prevToken)
+    corpus.addToken(prevToken, None)
 
     return corpus
 

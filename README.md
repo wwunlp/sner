@@ -2,7 +2,7 @@
 ---
 ## Installation
 ```
-pip3 install git+https://gitlab.cs.wwu.edu/canoym/sumerian.git@master
+pip3 install git+https://gitlab.cs.wwu.edu/canoym/sumerian.git@mike
 ```
 If you are not in a [virtualenv] you may need to use `pip3` with `sudo` or
 `--user`.
@@ -14,8 +14,11 @@ routines.
 * `-a` or `--attestations`: Location of attestations file.
 * `-sr` or `--seed-rules`: Location of seed rules file.
 * `-o` or `--output`: Location of output file.
+
 * `-i` or `--iterations`: Number of iterations.
 * `-mr` or `--max-rules`: Max number of rules per iterations.
+* `-mf` or `--mod-freq`: Modifier of rule frequency.
+* `-ms` or `--mod-str`: Modifier of rule strength.
 
 * `-nt` or `--name-tag`: The formating for names, default is `$PN$`.
 * `-nn` or `--norm-num`: Enable the normalization  of numbers.

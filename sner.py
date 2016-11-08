@@ -31,11 +31,16 @@ def add_args(parser):
                         'file', required=False)
     parser.add_argument('-o', '--output', help='Location of output file',
                         required=False)
+    
     parser.add_argument('-i', '--iterations', help='Number of iterations',
                         required=False)
     parser.add_argument('-mr', '--max-rules', help='Max number of rules per '
                         'iterations', required=False)
-    
+    parser.add_argument('-mf', '--mod-freq', help='Modifier of rule frequency',
+                        required=False)
+    parser.add_argument('-ms', '--mod-str', help='Modifier of rule strength',
+                        required=False)
+
     parser.add_argument('-nt', '--name-tag', help='The formating for names, '
                         'default is $PN$', required=False)
     parser.add_argument('-nn', '--norm-num', help='Enable the nomralization '
@@ -76,6 +81,9 @@ def main():
     
     iterations = args.iterations or config['iterations'] or 5
     max_rules = args.max_rules or config['max-rules'] or 5
+    mod_freq = args.mod_freq or config['mod-freq'] or 0.0
+    mod_str = args.mod_str or config['mod-str'] or 1.0
+
     name_tag = args.name_tag or config['name-tag'] or '$PN$'
     norm_num = args.norm_num or config['norm-num'] or False
     norm_prof = args.norm_prof or config['norm-prof'] or False
@@ -86,8 +94,9 @@ def main():
     
     data = Data(corpus, attestations, seed_rules, output)
 
-    options = Options(iterations, max_rules, name_tag, norm_num,
-                      norm_prof, left_tag, right_tag, tablet, mode)
+    options = Options(iterations, max_rules, mod_freq, mod_str,
+                      name_tag, norm_num, norm_prof,
+                      left_tag, right_tag, tablet, mode)
 
     if run== 'analysis':
         analysis.main(data, options)
