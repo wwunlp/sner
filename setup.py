@@ -21,7 +21,7 @@ setup(
         'Environment :: Console',
         'Natural Language :: English',
     ],
-    py_modules=['sner', 'editdistance'],
+    py_modules=['sner', 'editdistance', 'classes', 'models', 'scripts'],
     entry_points={
         'console_scripts': [
             'sner=sner:main',
