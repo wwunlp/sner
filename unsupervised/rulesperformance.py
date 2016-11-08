@@ -16,7 +16,7 @@ def rateRulePerformance(identifiedNames, rule):
     namesFound = 0
     total = 0
     for token in identifiedNames:
-        namesFound += (token.name_probability * token.occurrences)
+        namesFound += token.name_probability * token.occurrences
         total += token.occurrences
 
     strength = (namesFound + alpha) / (total + k * alpha)

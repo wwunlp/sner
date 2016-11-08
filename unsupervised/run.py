@@ -21,6 +21,7 @@ def init():
     rulesname = ""
     iterations = -1
     maxrules = -1
+    name_acceptance_threshold = -1
 
     # Get from command line
     if len(sys.argv) == 5:
@@ -72,6 +73,15 @@ def init():
                             maxrules = input("Please enter a valid integer" +
                                              " for maximum number of rules" +
                                              " per iteration: ")
+                elif nextline[0] == "NAME_ACCEPTANCE_THRESHOLD" and name_acceptance_threshold < 0:
+                    name_acceptance_threshold = nextline[1]
+                    if name_acceptance_threshold == "":
+                        name_acceptance_threshold = input("Please enter the maximum number of" +
+                                         " new rules per iteration: ")
+                        while(not maxrules.isdigit()):
+                            name_acceptance_threshold = input("Please enter a valid integer" +
+                                             " for maximum number of rules" +
+                                             " per iteration: ")
 
                 nextline = configfile.readline().split('=')
 
@@ -111,7 +121,18 @@ def init():
             maxrules = int(input("Please enter a valid integer for maximum" +
                                  " number of rules per iteration: "))
 
-    return [corpusname, rulesname, iterations, maxrules]
+    if float(name_acceptance_threshold) <= 0:
+        name_acceptance_threshold = float(input("Please enter the certainty threshold at which new names will be accepted:"))
+        while (not name_acceptance_threshold.isdigit()) and not (0 <= name_acceptance_threshold and name_acceptance_threshold <= 1):
+            name_acceptance_threshold = float(input("Please enter a valid value for the name acceptance threshold: "))
+
+    config = dict()
+    config["corpusname"] = corpusname
+    config["rulesname"] = rulesname
+    config["iterations"] = int(iterations)
+    config["maxrules"] = int(maxrules)
+    config["name_acceptance_threshold"] = float(name_acceptance_threshold)
+    return config
 
 # Reads the corpus file into memory by prompting the user for a file name.
 # Returns the contents of the corpus as a TokenSet.
@@ -223,9 +244,9 @@ def loadSeedRules(rulename):
 
     return rules
 
-def performanceAssessment(corpus):
+def performanceAssessment(corpus, cfg):
     #find all names that pass a certain probability threshold, these will be considered our results
-    namethreshold = 0.7
+    namethreshold = cfg["name_acceptance_threshold"]
     namesfound = TokenSet()
     for token in corpus:
         if token.name_probability > namethreshold:
@@ -246,11 +267,15 @@ def performanceAssessment(corpus):
     for token in corpus:
         if token.annotation == TokenType.personal_name:
             totalnames += token.occurrences
-            
-    print("accuracy: " + str(100 * (accurateresults / totalresults)) + "%")
-    print("recall: " + str(100 * (accurateresults / totalnames)) + "%")
 
-def rulesStrengthAssessment(rules, corpus):
+    accuracy = accurateresults / totalresults
+    recall = accurateresults / totalnames
+    print("accuracy: " + str(100 * accuracy) + "%")
+    print("recall: " + str(100 * recall) + "%")
+    print("acceptance threshold: " + str(100 * namethreshold) + "%")
+    print("probability ratings off by " + str(100 * abs(namethreshold - accuracy)) + " points")
+
+def rulesStrengthAssessment(rules, corpus, cfg):
 
     badrules = 0
     totalspelling = 0
@@ -259,6 +284,8 @@ def rulesStrengthAssessment(rules, corpus):
     badcontext = 0
 
     totaldelta = 0
+
+    print("calculating...", end='\r')
     
     for rule in rules:
         names = namesfromrules.namesFromRule(corpus, rule)
@@ -281,18 +308,18 @@ def rulesStrengthAssessment(rules, corpus):
             totalcontext += 1
         
         if delta > 0.2:
-            print(str(rule.rtype) + ": " + rule.contents + ", strength: " + str(rule.strength) + " delta: " + str(delta))
             badrules += 1
             if rule.rtype == RuleType.spelling:
                 badspelling += 1
             else:
                 badcontext += 1
             
+    print("               ", end='\r')
 
-    print("percentage of bad rules: " + str(badrules/len(rules.rules)))
-    print("percentage of bad context: " + str(badcontext/totalcontext))
-    print("percentage of bad spelling: " + str(badspelling/totalspelling))
-    print("average delta value: " + str(totaldelta / len(rules.rules)))
+    print("percentage of bad rules: " + str(100 * badrules/len(rules.rules)) + "%")
+    print("percentage of bad context: " + str(100 * badcontext/totalcontext) + "%")
+    print("percentage of bad spelling: " + str(100 * badspelling/totalspelling) + "%")
+    print("average delta value: " + str(100 * totaldelta / len(rules.rules)) + "%")
         
 
 # Orchestrate the execution of the program
@@ -313,10 +340,10 @@ def main():
 
     # Pulls things from configuration file
     configs = init()
-    corpusname = configs[0]
-    rulename = configs[1]
-    iterations = int(configs[2])
-    maxrules = int(configs[3])
+    corpusname = configs.get("corpusname")
+    rulesname = configs.get("rulesname")
+    iterations = configs.get("iterations")
+    maxrules = configs.get("maxrules")
 
     # Load and prepare corpus data.
     # Corpus is a TokenSet, which is a container for many Token items.
@@ -325,21 +352,20 @@ def main():
     corpus = loadCorpus(corpusname)
 
     # Get the seed rules
-    seedrules = loadSeedRules(rulename)
+    seedrules = loadSeedRules(rulesname)
 
     #apply them to the tokens in the corpus
-    updatetokenstrength.run(corpus, seedrules)
+    updatetokenstrength.run(corpus, seedrules, configs)
 
     #add them as the first generation of rules, and add them to the 'all rules' set
     rulestack.append(seedrules)
     allrules.extend(seedrules)
 
     # Identify names via the seed rules
-    newNames = namesfromrules.run(corpus, seedrules)
+    newNames = namesfromrules.run(corpus, seedrules, configs)
     names.append(newNames)
 
     contextualIteration = False
-
 
     # Begin iterating.
     i = 0
@@ -351,13 +377,13 @@ def main():
         if contextualIteration:
             print("iteration " + str(i + 1) + ": find contextual rules")
             newRules = contextualfromnames.run(corpus, allrules, names[i],
-                                               maxrules)
+                                               maxrules, configs)
             rulesFound = len(list(newRules.rules))
             print("found " + str(rulesFound) + " new spelling rules!")
         else:
             print("iteration " + str(i + 1) + ": find spelling")
             newRules = spellingfromnames.run(corpus, allrules, names[i],
-                                             maxrules)
+                                             maxrules, configs)
             rulesFound = len(list(newRules.rules))
             print("found " + str(rulesFound) + " new spelling rules!")
         
@@ -365,7 +391,7 @@ def main():
 
         #update the name_probability ratings of all of the tokens using the new rules
         #so, in light of the new rules, how does that effect all tokens chances of being a name?
-        updatetokenstrength.run(corpus, newRules)
+        updatetokenstrength.run(corpus, newRules, configs)
 
         #record the rules found in this iteration of the algorithm
         rulestack.append(newRules)
@@ -375,7 +401,7 @@ def main():
 
 
         # Get the names for the next iteration
-        newNames = namesfromrules.run(corpus, newRules)
+        newNames = namesfromrules.run(corpus, newRules, configs)
         names.append(newNames)
         
         print("top " + str(rulesFound) + " rules found " +
@@ -383,11 +409,16 @@ def main():
 
         
         print("performance so far:")
-        performanceAssessment(corpus)
+        performanceAssessment(corpus, configs)
+
         print("")
+        
 
         contextualIteration = not contextualIteration
         i += 1
+        
+    print("rule performance:")
+    rulesStrengthAssessment(allrules, corpus, configs)
 
     # Really half assed output system, needs upgrading.
     
@@ -399,9 +430,6 @@ def main():
                 str(rule.strength)).encode('utf-8'))
 
     f.close()
-
-    print("assessing rule performance:")
-    rulesStrengthAssessment(allrules, corpus)
     
     
 # Begin execution

@@ -74,5 +74,5 @@ def namesFromRules(corpus, rules):
 
 
 # Convenience function
-def run(corpus, rules):
+def run(corpus, rules, cfg):
     return namesFromRules(corpus, rules)

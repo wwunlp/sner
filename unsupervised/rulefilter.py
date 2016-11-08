@@ -49,5 +49,5 @@ def truncateCull(ruleset, maxrules):
 
 def run(ruleset, maxrules):
     #cut the rules down to only the ones that will be accepted in the next iteration
-    rules = fancyCull(ruleset, maxrules)
+    rules = truncateCull(ruleset, maxrules)
     return rules

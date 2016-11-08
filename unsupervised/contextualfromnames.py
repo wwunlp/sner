@@ -31,7 +31,7 @@ def genContextuals(names, existingrules):
     return newRules
 
 
-def run(corpus, existingrules, names, maxrules):
+def run(corpus, existingrules, names, maxrules, cfg):
     rules = genContextuals(names, existingrules)
 
     rulesperformance.run(corpus, rules)
