@@ -6,30 +6,30 @@ from classes import Rule, Token
 
 #borrowed from namesfromrules, used to find all names a given rule applies to
 def namesFromRule(corpus, rule):
-    names = dict()
+    names = set()
 
     # How to handle a spelling rule
-    def spelling(corpus, rule):
-        names = dict()
+    def spelling(corpus, ruleset
+        names = set()
         for token in corpus:
             if rule.contents in str(token):
-                names.addToken(token, rule)
+                Token.add(names, token, rule)
         return names
 
     # How to handle a right context rule
     def leftContext(corpus, rule):
-        names = dict()
+        names = set()
         for token in corpus:
             if str(token.left_context) == rule.contents:
-                names.addToken(token, rule)
+                Token.add(names, token, rule)
         return names
 
     # How to handle a right context rule
     def rightContext(corpus, rule):
-        names = dict()
+        names = set()
         for token in corpus:
             if str(token.right_context) == rule.contents:
-                names.addToken(token, rule)
+                Token.add(names, token, rule)
         return names
 
     # Decide how to handle the passed-in rule

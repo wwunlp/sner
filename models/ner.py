@@ -22,7 +22,7 @@ def loadCorpus(corpusname):
 
     corpusfile.close()
 
-    corpus = dict()
+    corpus = set()
 
     # Convert the line into the appropriate format
     # Each entry being a three element list, containing left context, token,
@@ -59,18 +59,18 @@ def loadCorpus(corpusname):
                           interpretTokenType(line[4]))
 
             prevToken.right_context = str(token)
-            corpus.addToken(prevToken, None)
+            Token.add(corpus, prevToken, None)
 
             prevToken = token
 
         else:
-            corpus.addToken(prevToken, None)
+            Token.add(corpus, prevToken, None)
 
             tabletID = line[0]
             token = Token(None, line[3], None, interpretTokenType(line[4]))
             prevToken = token
 
-    corpus.addToken(prevToken, None)
+    Token.add(corpus, prevToken, None)
 
     return corpus
 
@@ -111,10 +111,10 @@ def loadSeedRules(rulename):
 def performanceAssessment(corpus, options):
     #find all names that pass a certain probability threshold, these will be considered our results
     namethreshold = options.accept_threshold
-    namesfound = dict()
+    namesfound = set()
     for token in corpus:
         if token.name_probability > namethreshold:
-            namesfound.addToken(token, None)
+            Token.add(namesfound, token, None)
 
     totalresults = 0
     accurateresults = 0
