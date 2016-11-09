@@ -1,5 +1,5 @@
 from classes import Data, Options
-from models import ner
+# from models import ner
 from scripts import analysis, formatting
 import argparse
 import json
@@ -43,21 +43,12 @@ def add_args(parser):
     parser.add_argument('-at', '--accept-threshold', help='Name acceptance '
                         'threshold', required=False)
 
-    parser.add_argument('-nt', '--name-tag', help='The formating for names, '
-                        'default is $PN$', required=False)
     parser.add_argument('-nn', '--norm-num', help='Enable the nomralization '
                         'of numbers', required=False)
     parser.add_argument('-np', '--norm-prof', help='Enable the normalization '
                         'of professions', required=False)
-    parser.add_argument('-lt', '--left-tag', help='Left tag of a sentence, '
-                        'default blank', required=False)
-    parser.add_argument('-rt', '--right-tag', help='Right tag of a sentence, '
-                        'default newline', required=False)
-    parser.add_argument('-t', '--tablet', help='Add start of tablet line, '
-                        'default False', required=False)
-    parser.add_argument('-m', '--mode', help='Switch between [csv] and '
-                        '[multiline] modes, default csv', required=False, 
-                        choices=['csv', 'multiline'])
+    parser.add_argument('-ng', '--norm-geo', help='Enable the normalization '
+                        'of geographic names', required=False)
 
 
 def main():
@@ -87,20 +78,17 @@ def main():
     mod_str = args.mod_str or config['mod-str'] or 1.0
     accept_threshold = args.accept_threshold or config['accept-threshold'] or \
         0.9
-
-    name_tag = args.name_tag or config['name-tag'] or '$PN$'
+    
     norm_num = args.norm_num or config['norm-num'] or False
     norm_prof = args.norm_prof or config['norm-prof'] or False
-    left_tag = args.left_tag or config['left-tag'] or ''
-    right_tag = args.right_tag or config['right-tag'] or '\n'
-    tablet = args.tablet or config['tablet'] or False
-    mode = args.mode or config['mode'] or 'csv'
+    norm_geo = args.norm_geo or config['norm-geo'] or False
+
     
     data = Data(corpus, attestations, seed_rules, output)
 
     options = Options(iterations, max_rules, mod_freq, mod_str,
-                      accept_threshold, name_tag, norm_num, norm_prof,
-                      left_tag, right_tag, tablet, mode)
+                      accept_threshold, norm_num, norm_prof,
+                      norm_geo)
 
     if run== 'analysis':
         analysis.main(data, options)
