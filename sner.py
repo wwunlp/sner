@@ -1,5 +1,5 @@
 from classes import Data, Options
-from models import ner
+# from models import ner
 from scripts import analysis, formatting
 import argparse
 import json
