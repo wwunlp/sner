@@ -5,95 +5,67 @@ import re
 import argparse
 
 
-knownPN = {}
-knownGN = {}
-
-
-def findKnownPN():
+def findKnown(data, options, knownPN, knownGN):
     """
-    Iterate through the Attenstations file for Personal  names
-    and add the lineIDs in a list to the knownPN dictionary.
+    Iterate through the Attenstations file for Personal and Geographical  names
+    and add the lineIDs in a list to the knownPN and knownGN dictionaries.
     """
-    file = codecs.open('Garshana Dataset/Attestations_PNs.csv', 'r', encoding = 'utf-16')
+    file = codecs.open(data.attestations, 'r', encoding = 'utf-8')
     # find all of the names
     for line in file:
-        line = line.split(',')
+        line = line.split(',')        
+        text = utilities.clean_line(line[4].rstrip(), options.norm_num, options.norm_prof)
+        text = text.lower()
+        name = utilities.clean_line(line[5].rstrip(), options.norm_num, options.norm_prof)
+        name = name.lower()
+        lineID = line[1]
+        lineID = re.sub("[L]", "", lineID)
+
         if line[9].rstrip() == 'PN':
-            text = utilities.clean_line(line[4].rstrip(), args.normNum, args.normProf)
-            text = text.lower()
-            name = utilities.clean_line(line[5].rstrip(), args.normNum, args.normProf)
-            name = name.lower()
-            lineID = line[1]
-            lineID = re.sub("[L]", "", lineID)
             if (name not in knownPN):
                 knownPN[name] = [lineID]
             else :
                 knownPN[name].append(lineID)
-            
-
-def findKnownGN():
-    """
-    Iterate through the Attenstations file for Geographic names
-    and add the lineIDs in a list to the knownGN dictionary.
-    """
-    file = codecs.open('Garshana Dataset/Attestations_GNs.csv', 'r', encoding = 'utf-8')
-    # find all of the names
-    for line in file:
-        line = line.split(',')
         if line[9].rstrip() == 'GN':
-            text = utilities.clean_line(line[4].rstrip(), args.normNum, args.normProf)
-            text = text.lower()
-            name = utilities.clean_line(line[5].rstrip(), args.normNum, args.normProf)
-            name = name.lower()
-            lineID = line[1]
-            lineID = re.sub("[L]", "", lineID)
             if (name not in knownGN):
                 knownGN[name] = [lineID]
                 if (name in knownPN):
                     print ("Note: ", name, " is both a PN and GN.")
             else :
-                knownGN[name].append(lineID)            
-                
+                knownGN[name].append(lineID)                
 
 def main(data, options):
     """
-    Find all names in Attestations file, and goes through each in in the main Texts file
-    to fill a new output file (default convertedCorpusText, can specify with -o arg)
-    The default mode is a CSV file with the format:
+    Find all names in options.attestations file, and goes through each word in in the main 
+    options.corpus file to fill a new output file specified by options.output
+    The output will be a CSV file with the format:
       TabletID, LineID, LocationInSentence, Word, Word Type
-    Word Type is either '-' or 'PN' to identify personal names. 
+    Word Types:  '-' for unknown
+                 'PN' to identify personal names.
+                 'GN' to identify geographical names. 
+                 'PF' to identify professions. 
 
-    If you specify -mode to be 'multiline' then you can generate an ouput similiar to the
-    corpus used in the old unsupervised model.
-    
-    You can use --normProf [-p] to normalize professions in the output
-    You can use --normNum [-n] to normalize the numbers in the output
-
-    There are additional args for multiline mode which can be seen by running the
-    program with the -h tag. 
+    options.norm_num  = True to normalize numbers
+    options.norm_prof = True to normalize professions
+    options.norm_geo  = True to normalize geographical names
     """
-
-    initializeArgs()
     
-    findKnownPN()
-
-    findKnownGN()
+    knownPN = {}
+    knownGN = {}
+    findKnown(data, options, knownPN, knownGN)
     
     # iterate each line in Garshana Text and output to specified file
     file2 = codecs.open(data.corpus, 'r', encoding = 'utf-8')
     out = open(data.output, "w")
-
+        
+    out.write("Tablet ID,Line Number,Word Number,Word,Word Type\n")
     
-    if options.mode == "csv":
-        out.write("Tablet ID,Line Number,Word Number,Word,Word Type\n")
-    
-    curTablet = -1
     for line in file2:
         line = line.split(',')
         tabletID = line[0]
 
         # Clean up the line and ensure that there are no extra spaces
-        text = utilities.clean_line(line[7].rstrip(), args.normNum, args.normProf)
+        text = utilities.clean_line(line[7].rstrip(), options.norm_num, options.norm_prof)
         text = text.lower()
         text = " ".join(text.split())
         text = text.strip()
@@ -104,55 +76,33 @@ def main(data, options):
         
         newText = text;
         words = text.split(' ')
-
-        # multiline mode
-        if options.mode == "multiline":
-            newWords = text.split(' ')
-            for i in range(len(words)):
-                w = words[i]
-                if w in knownPN:
-                    newWords[i] = w + options.name_tag
-            newText = options.left_tag + ' '.join(newWords) + options.right_tag
-            # Indicate the start of a new tablet
-            if tabletID != curTablet:
-                curTablet = tabletID
-                if options.tablet == True:
-                    out.write("&P" + tabletID + "\n")
-            # write the converted line
-            out.write(newText)
-
-        # csv Mode
-        if options.mode == "csv":
-            lineID = line[6]
-            # skip description lines
-            if lineID == "":
-                continue
-            # change to lineID
-            lineID = line[4]
-            lineID = re.sub("[L]", "", lineID)
-            if "'" in lineID:
-                lineID = re.sub("[']", "", lineID)
-                lineID = "'" + lineID
-            for i in range(len(words)):
-                w = words[i]
-                wType = "-"
-                # Set types if they are known and avoid
-                # conflicts by using the lineID.
-                if w in knownPN:
-                    if (lineID in knownPN[w]):
-                        wType = "PN"
-                if w in knownGN:
-                    if (lineID in knownGN[w]):
-                        if (w in knownPN and wType != "-"):
-                            print("Warning, replacing PN with GN!")
-                        wType = "GN"                    
-                if professions.replaceProfessions(w) == 'profession':
-                    if (wType != "-"):
-                        print ("Warning, replacing name with profession!")
-                    wType = "PF"
-                out.write("{},{},{},{},{}\n".format(tabletID, lineID, i, w, wType))  
-
-if __name__ == '__main__':
-    print ("Starting conversion...")
-    main()
-    print ("Converted and saved as " + data.output + "!")
+        lineID = line[6]
+        # skip description lines
+        if lineID == "":
+            continue
+        # change to lineID
+        lineID = line[4]
+        lineID = re.sub("[L]", "", lineID)
+        if "'" in lineID:
+            lineID = re.sub("[']", "", lineID)
+            lineID = "'" + lineID
+        for i in range(len(words)):
+            w = words[i]
+            wType = "-"
+            # Set types if they are known and avoid
+            # conflicts by using the lineID.
+            if w in knownPN:
+                if (lineID in knownPN[w]):
+                    wType = "PN"
+            if w in knownGN:
+                if (lineID in knownGN[w]):
+                    if (w in knownPN and wType != "-"):
+                        print("Warning, replacing PN with GN!")
+                    wType = "GN"
+                    if (options.norm_geo):
+                        w = "geoname"
+            if professions.replaceProfessions(w) == 'profession':
+                if (wType != "-"):
+                    print ("Warning, replacing name with profession!")
+                wType = "PF"
+            out.write("{},{},{},{},{}\n".format(tabletID, lineID, i, w, wType))  
