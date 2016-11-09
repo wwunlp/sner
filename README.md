@@ -32,13 +32,9 @@ routines.
 * `-ms` or `--mod-str`: Modifier of rule strength.
 * `-at` or `--accept-threshold`: Name acceptance threshold.
 
-* `-nt` or `--name-tag`: The formating for names, default is `$PN$`.
 * `-nn` or `--norm-num`: Enable the normalization  of numbers.
 * `-np` or `--norm-prof`: Enable the normalization of professions.
-* `-lt` or `--left-tag`: Left tag of a sentence, default is `''`.
-* `-rt` or `--right-tag`: Right tag of a sentence, default is `'\n'`.
-* `-t` or `--tablet`: Add start of tablet line, default is `False`.
-* `-m` or `--mode`: Switch between `csv` and `multiline` modes, default `csv`.
+* `-ng` or `--norm-geo`: Enable the normalization of geographic names.
 
 If an argument is not given, `sner` will check `sner.conf` before using the
 default value. The `sner.conf` uses `JSON` syntax. i.e. `--name-tag $PN$` would
