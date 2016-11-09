@@ -7,8 +7,19 @@ pip3 install git+https://gitlab.cs.wwu.edu/canoym/sumerian.git@mike
 If you are not in a [virtualenv] you may need to use `pip3` with `sudo` or
 `--user`.
 
+If you'd rather not use `pip3`, you can clone the repo.
+```
+git clone -b mike https://gitlab.cs.wwu.edu/canoym/sumerian.git
+pip3 install editdistance
+```
+
+## Usage
+If you used `pip3` to install `sner`, you can call `sner` from the command
+line. If you cloned the repo, you can run `python3 sner.py` from within the 
+repo.
+
 ## Options and Arguments
-* `-r` or `--run`: Run `analysis`, `formatting`, `unsupervised`, or `supervised`
+* `-r` or `--run`: Run `analysis`, `formatting`, `unsupervised-old`, or `ner`
 routines.
 * `-c` or `--corpus`: Location of corpus file.
 * `-a` or `--attestations`: Location of attestations file.

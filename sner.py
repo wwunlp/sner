@@ -20,7 +20,7 @@ def add_args(parser):
     """
     
     parser.add_argument('-r', '--run', help='Run [analysis], [formatting], '
-                        '[unsupervised], or [supervised] routines',
+                        '[unsupervised-old], or [ner] routines',
                         required=False, choices=['analysis', 'formatting', 
                         'unsupervised', 'supervised'], default='supervised')
     parser.add_argument('-c', '--corpus', help='Location of corpus file',
@@ -73,7 +73,7 @@ def main():
     add_args(parser)
     args = parser.parse_args()
 
-    run = args.run or config['run'] or 'supervised'
+    run = args.run or config['run'] or 'ner'
     corpus = args.corpus or config['corpus'] or 'data/corpus.csv'
     attestations = args.attestations or config['attestations'] or \
         'data/attestations.csv'
@@ -106,10 +106,10 @@ def main():
         analysis.main(data, options)
     elif run == 'formatting':
         formatting.main(data, options)
-    elif run == 'unsupervised':
+    elif run == 'unsupervised-old':
         os.chdir('models/unsupervised-old/')
         subprocess.run('./run.sh')
-    elif run == 'supervised':
+    elif run == 'ner':
         ner.main(data, options)
 
 if __name__ == '__main__':
