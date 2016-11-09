@@ -2,29 +2,29 @@
 # name tokens. It needs the corpus as well as the name set in order to
 # assess the performance of any rules it finds from the names
 
-from classes import Rule, RuleSet, RuleType, Token, TokenSet, TokenType
+from classes import Rule, Token
 from scripts.ner import rulesperformance, rulefilter
 
 
 def genContextuals(names, existingrules):
-    newRules = RuleSet()
+    newRules = set()
 
     for name in names:
         # New rules are assumed to have no strength until they are assessed
         #  later by scanning the whole corpus
 
         # Create left context rule
-        leftContext = Rule(RuleType.left_context, str(name.left_context), -1)
+        leftContext = Rule(Rule.Types.left_context, str(name.left_context), -1)
         # Create right context rule
-        rightContext = Rule(RuleType.right_context,
+        rightContext = Rule(Rule.Types.right_context,
                             str(name.right_context), -1)
 
         # No redundant rules allowed!
-        if not existingrules.containsRule(leftContext):
-            newRules.addRule(leftContext)
+        if not leftContext in existingrules:
+            newRules.add(leftContext)
 
-        if not existingrules.containsRule(rightContext):
-            newRules.addRule(rightContext)
+        if not rightContext in existingrules:
+            newRules.add(rightContext)
 
     return newRules
 

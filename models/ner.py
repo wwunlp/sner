@@ -1,4 +1,4 @@
-from classes import Rule, RuleSet, RuleType, Token, TokenSet, TokenType
+from classes import Rule, Token
 from scripts.ner import contextualfromnames, namesfromrules, \
 spellingfromnames, updatetokenstrength
 
@@ -22,7 +22,7 @@ def loadCorpus(corpusname):
 
     corpusfile.close()
 
-    corpus = TokenSet()
+    corpus = dict()
 
     # Convert the line into the appropriate format
     # Each entry being a three element list, containing left context, token,
@@ -30,13 +30,13 @@ def loadCorpus(corpusname):
 
     def interpretTokenType(wordType):
         if wordType == "PN":
-            return TokenType.personal_name
+            return Token.Types.personal_name
         elif wordType == "GN":
-            return TokenType.geographic_name
+            return Token.Types.geographic_name
         elif wordType == "PF":
-            return TokenType.profession
+            return Token.Types.profession
         elif wordType == "-":
-            return TokenType.none
+            return Token.Types.none
         else:
             tb = sys.exc_info()[2]
             raise TypeError("Unrecognized Word Type in corpus" +
@@ -78,7 +78,7 @@ def loadCorpus(corpusname):
 # This function will read the seed rule file, and return the contents as
 # a RuleSet (defined in ruleset.py)
 def loadSeedRules(rulename):
-    rules = RuleSet()
+    rules = set()
 
     try:
         rulefile = open(rulename, "r")
@@ -92,26 +92,26 @@ def loadSeedRules(rulename):
         # Clean out the line returns as they will confuse the algorithm.
         line = line.replace('\n', '')
         ruledata = line.split(",")
-        ruletype = RuleType.unset
+        ruletype = Rule.Types.unset
 
         if ruledata[0] == "LEFT_CONTEXT":
-            ruletype = RuleType.left_context
+            ruletype = Rule.Types.left_context
         elif ruledata[0] == "RIGHT_CONTEXT":
-            ruletype = RuleType.right_context
+            ruletype = Rule.Types.right_context
         elif ruledata[0] == "SPELLING":
-            ruletype = RuleType.spelling
+            ruletype = Rule.Types.spelling
         else:
             print("ERROR: rule parsing failed, invalid type: " + ruledata[0])
             sys.exit()
 
-        rules.addRule(Rule(ruletype, ruledata[1], float(ruledata[2])))
+        rules.add(Rule(ruletype, ruledata[1], float(ruledata[2])))
 
     return rules
 
 def performanceAssessment(corpus, options):
     #find all names that pass a certain probability threshold, these will be considered our results
     namethreshold = options.accept_threshold
-    namesfound = TokenSet()
+    namesfound = dict()
     for token in corpus:
         if token.name_probability > namethreshold:
             namesfound.addToken(token, None)
@@ -122,13 +122,13 @@ def performanceAssessment(corpus, options):
     #also scan for occurrences annotated as names and add those occurences to namecount
     for token in namesfound:
         totalresults += token.occurrences
-        if token.annotation == TokenType.personal_name:
+        if token.annotation == Token.Types.personal_name:
             accurateresults += token.occurrences
 
     totalnames = 0
     #scan for all tokens annotated as names and sum, to find all name occurence
     for token in corpus:
-        if token.annotation == TokenType.personal_name:
+        if token.annotation == Token.Types.personal_name:
             totalnames += token.occurrences
 
     accuracy = accurateresults / totalresults
@@ -155,7 +155,7 @@ def rulesStrengthAssessment(rules, corpus, cfg):
         realnames = 0
         total = 0
         for token in names:
-            if token.annotation == TokenType.personal_name:
+            if token.annotation == Token.Types.personal_name:
                 realnames += 1
                 total += 1
             else:
@@ -165,24 +165,24 @@ def rulesStrengthAssessment(rules, corpus, cfg):
         delta = abs(truestrength - rule.strength)
         totaldelta += delta
 
-        if rule.rtype == RuleType.spelling:
+        if rule.type == Rule.Types.spelling:
             totalspelling += 1
         else:
             totalcontext += 1
 
         if delta > 0.2:
             badrules += 1
-            if rule.rtype == RuleType.spelling:
+            if rule.type == Rule.Types.spelling:
                 badspelling += 1
             else:
                 badcontext += 1
 
     print("               ", end='\r')
 
-    print("percentage of bad rules: " + str(100 * badrules/len(rules.rules)) + "%")
+    print("percentage of bad rules: " + str(100 * badrules/len(rules)) + "%")
     print("percentage of bad context: " + str(100 * badcontext/totalcontext) + "%")
     print("percentage of bad spelling: " + str(100 * badspelling/totalspelling) + "%")
-    print("average delta value: " + str(100 * totaldelta / len(rules.rules)) + "%")
+    print("average delta value: " + str(100 * totaldelta / len(rules)) + "%")
 
 # Orchestrate the execution of the program
 def main(data, options):
@@ -198,7 +198,7 @@ def main(data, options):
     names = list()
 
     # Meant to store all rules that are ultimately used by the algorithm
-    allrules = RuleSet()
+    allrules = set()
 
     # Pulls things from configuration file
     corpusname = data.corpus
@@ -220,7 +220,7 @@ def main(data, options):
 
     #add them as the first generation of rules, and add them to the 'all rules' set
     rulestack.append(seedrules)
-    allrules.extend(seedrules)
+    allrules.union(seedrules)
 
     # Identify names via the seed rules
     newNames = namesfromrules.run(corpus, seedrules, options)
@@ -233,19 +233,19 @@ def main(data, options):
     while i < iterations:
 
         #detect the new rules
-        newRules = RuleSet()
+        newRules = set()
         rulesFound = 0
         if contextualIteration:
             print("iteration " + str(i + 1) + ": find contextual rules")
             newRules = contextualfromnames.run(corpus, allrules, names[i],
                                                maxrules, options)
-            rulesFound = len(list(newRules.rules))
+            rulesFound = len(list(newRules))
             print("found " + str(rulesFound) + " new contextual rules!")
         else:
             print("iteration " + str(i + 1) + ": find spelling")
             newRules = spellingfromnames.run(corpus, allrules, names[i],
                                              maxrules)
-            rulesFound = len(list(newRules.rules))
+            rulesFound = len(list(newRules))
             print("found " + str(rulesFound) + " new spelling rules!")
 
         #at this point in execution the new rules have had their strength ratings assigned (unless something broke)
@@ -258,7 +258,7 @@ def main(data, options):
         rulestack.append(newRules)
 
         #update the list of all rules found
-        allrules.extend(newRules)
+        allrules.union(newRules)
 
 
         # Get the names for the next iteration
@@ -287,7 +287,7 @@ def main(data, options):
 
     f.write("Rule,Rule Type,Strength\n".encode('utf-8'))
     for rule in allrules:
-        f.write("{0},{1},{2}\n".format(str(rule.contents), str(rule.rtype),
+        f.write("{0},{1},{2}\n".format(str(rule.contents), str(rule.type),
                 str(rule.strength)).encode('utf-8'))
 
     f.close()

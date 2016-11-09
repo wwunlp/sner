@@ -1,7 +1,7 @@
 # This file is meant to generate spelling rules from a list of identified name
 # tokens.
 
-from classes import Rule, RuleSet, RuleType, Token, TokenSet, TokenType
+from classes import Rule, Token
 from scripts.ner import rulefilter, rulesperformance
 
 
@@ -33,12 +33,12 @@ def getKgrams(names, k):
 
 
 def gramsToRules(kgrams, allrules):
-    rules = RuleSet()
+    rules = set()
 
     for gram in kgrams:
-        rule = Rule(RuleType.spelling, gram, -1)
-        if not allrules.containsRule(rule):
-            rules.addRule(rule)
+        rule = Rule(Rule.Types.spelling, gram, -1)
+        if not rule in allrules:
+            rules.add(rule)
 
     return rules
 
