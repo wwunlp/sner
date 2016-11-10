@@ -1,12 +1,25 @@
-# This file is meant to generate conextual rules from a set of identified
-# name tokens. It needs the corpus as well as the name set in order to
-# assess the performance of any rules it finds from the names
-
 from classes import Rule, Token
 from scripts.ner import rulesperformance, rulefilter
 
 
-def genContextuals(names, existingrules):
+def main(corpus, existingrules, names, maxrules):
+    """This is meant to generate conextual rules from a set of identified
+    name tokens. It needs the corpus as well as the name set in order to
+    assess the performance of any rules it finds from the names
+
+    Args:
+        corpus (set): Set of Token objects.
+        existingrules (set): Set of Rule objects.
+        names (set): Set of Token objects.
+        maxrules (int): int of max rules.
+
+    Returns:
+        rules (set): Set of Rule objects.
+
+    Raises:
+        None
+    """
+
     newRules = set()
 
     for name in names:
@@ -20,20 +33,14 @@ def genContextuals(names, existingrules):
                             str(name.right_context), -1)
 
         # No redundant rules allowed!
-        if not leftContext in existingrules:
+        if leftContext not in existingrules:
             newRules.add(leftContext)
 
-        if not rightContext in existingrules:
+        if rightContext not in existingrules:
             newRules.add(rightContext)
 
-    return newRules
+    rulesperformance.main(corpus, newRules)
 
-
-def run(corpus, existingrules, names, maxrules, cfg):
-    rules = genContextuals(names, existingrules)
-
-    rulesperformance.run(corpus, rules)
-
-    rules = rulefilter.run(rules, maxrules)
+    rules = rulefilter.main(newRules, maxrules)
 
     return rules

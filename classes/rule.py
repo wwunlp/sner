@@ -3,7 +3,7 @@ from enum import Enum
 
 # Used to represent any name rules identified by the algorithm
 class Rule:
-    Types = Enum('Types', 'spelling left_context right_context')
+    Types = Enum('Types', 'unset spelling left_context right_context')
     contents = str()
     strength = float()
 
@@ -35,4 +35,4 @@ class Rule:
         self.type = ruletype
         self.contents = str(rule)
         self.strength = float(strength)
-        self.occurrence = 1
+        self.occurrences = 1

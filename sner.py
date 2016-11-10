@@ -22,7 +22,7 @@ def add_args(parser):
     parser.add_argument('-r', '--run', help='Run [analysis], [formatting], '
                         '[unsupervised-old], or [ner] routines',
                         required=False, choices=['analysis', 'formatting', 
-                        'unsupervised', 'supervised'], default='supervised')
+                        'unsupervised-old', 'ner'])
     parser.add_argument('-c', '--corpus', help='Location of corpus file',
                         required=False)
     parser.add_argument('-a', '--attestations', help='Location of attestations '
@@ -33,22 +33,22 @@ def add_args(parser):
                         required=False)
     
     parser.add_argument('-i', '--iterations', help='Number of iterations',
-                        required=False)
+                        type=int, required=False)
     parser.add_argument('-mr', '--max-rules', help='Max number of rules per '
-                        'iterations', required=False)
+                        'iterations', type=int, required=False)
     parser.add_argument('-mf', '--mod-freq', help='Modifier of rule frequency',
-                        required=False)
+                        type=float, required=False)
     parser.add_argument('-ms', '--mod-str', help='Modifier of rule strength',
-                        required=False)
+                        type=float, required=False)
     parser.add_argument('-at', '--accept-threshold', help='Name acceptance '
-                        'threshold', required=False)
+                        'threshold', type=float, required=False)
 
     parser.add_argument('-nn', '--norm-num', help='Enable the nomralization '
-                        'of numbers', required=False)
+                        'of numbers', type=bool, required=False)
     parser.add_argument('-np', '--norm-prof', help='Enable the normalization '
-                        'of professions', required=False)
+                        'of professions', type=bool, required=False)
     parser.add_argument('-ng', '--norm-geo', help='Enable the normalization '
-                        'of geographic names', required=False)
+                        'of geographic names', type=bool, required=False)
 
 
 def main():

@@ -5,7 +5,6 @@ from classes import Rule, Token
 from scripts.ner import rulefilter, rulesperformance
 
 
-# Stolen from readnames.py, identifies spelling patterns in the form of k-grams
 # Produces a list of monograms on up to k-grams
 def getKgrams(names, k):
     """
@@ -43,7 +42,7 @@ def gramsToRules(kgrams, allrules):
     return rules
 
 
-def run(corpus, allrules, names, maxrules):
+def main(corpus, allrules, names, maxrules):
     # Uses up to trigrams currently
     maxGram = 3
 
@@ -51,8 +50,8 @@ def run(corpus, allrules, names, maxrules):
     kgrams = getKgrams(names, maxGram)
     rules = gramsToRules(kgrams, allrules)
 
-    rulesperformance.run(corpus, rules)
+    rulesperformance.main(corpus, rules)
 
-    rules = rulefilter.run(rules, maxrules)
+    rules = rulefilter.main(rules, maxrules)
 
     return rules

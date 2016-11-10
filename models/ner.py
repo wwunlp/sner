@@ -1,32 +1,36 @@
 from classes import Rule, Token
-from scripts.ner import contextualfromnames, namesfromrules, \
-spellingfromnames, updatetokenstrength
+from scripts.ner import contextualfromnames, namesfromrule
+from scripts.ner import spellingfromnames, updatetokenstrength
 
 
-def loadCorpus(corpusname):
+def tokenize_corpus(corpus_loc):
+    """
+    Args:
+        corpus_loc (str): Location of corpus file.
 
-    rawcorpus = list()
+    Returns:
+        corpus (set): Set of Token objects.
 
-    try:
-        corpusfile = open(corpusname, "r")
-    except:
-        print("ERROR: Unable to open file: " + corpusname)
+    Raises:
+        TypeError
+    """
 
-    # Skip the first line since its column identifiers
-    next(corpusfile)
-    # Read the corpus from the user-specified file
-    for line in corpusfile:
-        # Clean out the line returns as they will confuse the algorithm
+    corpus_list = []
+
+    corpus_file = open(corpus_loc, 'r')
+
+    next(corpus_file) # Skip headers
+    for line in corpus_file:
         line = line.replace('\n', '')
-        rawcorpus.append(line.split(','))
+        corpus_list.append(line.split(','))
 
-    corpusfile.close()
+    corpus_file.close()
 
     corpus = set()
 
     # Convert the line into the appropriate format
-    # Each entry being a three element list, containing left context, token,
-    #  right context
+    # Each entry being a three element list, containing left context,
+    # token, right context
 
     def interpretTokenType(wordType):
         if wordType == "PN":
@@ -42,8 +46,7 @@ def loadCorpus(corpusname):
             raise TypeError("Unrecognized Word Type in corpus" +
                             " file!").with_traceback(tb)
 
-    # Here you see loop unrolling
-    rawIter = iter(rawcorpus)
+    rawIter = iter(corpus_list)
     line = next(rawIter)
     tabletID = line[0]
     # Inputs here are: the left context for the token, the token itself,
@@ -75,9 +78,19 @@ def loadCorpus(corpusname):
     return corpus
 
 
-# This function will read the seed rule file, and return the contents as
-# a RuleSet (defined in ruleset.py)
-def loadSeedRules(rulename):
+def tokenize_seed_rules(rulename):
+    """This function will read the seed rule file, and return the contents as
+    a set.
+    Args:
+        rulename (str): Location of seed rules file.
+
+    Returns:
+        rules (set): Set of Rule objects corresponding to the rules in the
+            seed rules file.
+
+    Raises:
+        None
+    """
     rules = set()
 
     try:
@@ -85,7 +98,6 @@ def loadSeedRules(rulename):
     except:
         print("ERROR: Unable to open file: " + rulename)
 
-    # Read the corpus from the user-specified file.
     # Skip the first line since its column identifiers.
     next(rulefile)
     for line in rulefile:
@@ -109,7 +121,19 @@ def loadSeedRules(rulename):
     return rules
 
 def performanceAssessment(corpus, options):
-    #find all names that pass a certain probability threshold, these will be considered our results
+    """Find all names that pass a certain probability threshold, these will be
+    considered our results
+    Args:
+        courpus ():
+        options ():
+
+    Returns:
+        None
+
+    Raises:
+        None
+    """
+
     namethreshold = options.accept_threshold
     namesfound = set()
     for token in corpus:
@@ -138,7 +162,19 @@ def performanceAssessment(corpus, options):
     print("acceptance threshold: " + str(100 * namethreshold) + "%")
     print("probability ratings off by " + str(100 * abs(namethreshold - accuracy)) + " points")
 
-def rulesStrengthAssessment(rules, corpus, cfg):
+def rulesStrengthAssessment(rules, corpus):
+    """
+    Args:
+        rules ():
+        corpus ():
+        cfg ():
+
+    Returns:
+        None
+
+    Raises:
+        None
+    """
 
     badrules = 0
     totalspelling = 0
@@ -151,7 +187,7 @@ def rulesStrengthAssessment(rules, corpus, cfg):
     print("calculating...", end='\r')
 
     for rule in rules:
-        names = namesfromrules.namesFromRule(corpus, rule)
+        names = namesfromrule.main(corpus, rule)
         realnames = 0
         total = 0
         for token in names:
@@ -184,109 +220,108 @@ def rulesStrengthAssessment(rules, corpus, cfg):
     print("percentage of bad spelling: " + str(100 * badspelling/totalspelling) + "%")
     print("average delta value: " + str(100 * totaldelta / len(rules)) + "%")
 
-# Orchestrate the execution of the program
+
+def namesFromRules(corpus, rules):
+    """Meant to use the provided ruleset to scan the corpus for names.
+    It will then return the names in quesiton, which will be used
+    to generate more rules.
+
+    """
+
+    names = set()
+
+    for rule in rules:
+        results = namesfromrule.main(corpus, rule)
+
+        # Can probably write an extend function that doesn't enforce
+        #  set properties.
+        # You can insert them without checking for redundancies because
+        # they already were checked.
+        names = names.union(results)
+
+    return names
+
+
 def main(data, options):
-    # Rules and names will be lists of RuleSets or TokenSets.
-    # These sets will represent the results of various iterations of
-    # the algorithm. So index 0 of rules would be the first rule set
-    # (seed rules) and 1 would be the first rules generated and used by the
-    # algorithm itself.
-    # Index zero of names would be the names that came from the seed rules.
-    # Index one the rules that came from rule set 1.
-    # And so on.
-    rulestack = list()
-    names = list()
+    """Rules and names will be lists of RuleSets or TokenSets.
+    These sets will represent the results of various iterations of
+    the algorithm. So index 0 of rules would be the first rule set
+    (seed rules) and 1 would be the first rules generated and used by the
+    algorithm itself. Index zero of names would be the names that came from
+    the seed rules. Index one the rules that came from rule set 1. And so on.
 
-    # Meant to store all rules that are ultimately used by the algorithm
-    allrules = set()
+    Args:
+        data (Data): Data object with atrributes of locations for data files.
+        options (Options): Options object with attributes of flags and
+            variables.
 
-    # Pulls things from configuration file
-    corpusname = data.corpus
-    rulesname = data.seed_rules
+    Returns:
+        None
+
+    Raises:
+        None
+    """
+
+    corpus_file = data.corpus
+    seed_rules_file = data.seed_rules
     iterations = options.iterations
-    maxrules = options.max_rules
+    max_rules = options.max_rules
 
-    # Load and prepare corpus data.
-    # Corpus is a TokenSet, which is a container for many Token items.
-    # Tokens represent individual words in the corpus, and contain left
-    #  and right context as well as annotations
-    corpus = loadCorpus(corpusname)
+    corpus = tokenize_corpus(corpus_file)
+    seed_rules = tokenize_seed_rules(seed_rules_file)
 
-    # Get the seed rules
-    seedrules = loadSeedRules(rulesname)
+    updatetokenstrength.main(corpus, seed_rules)
 
-    #apply them to the tokens in the corpus
-    updatetokenstrength.run(corpus, seedrules, options)
+    rule_list = list(seed_rules)
+    all_rules = seed_rules
 
-    #add them as the first generation of rules, and add them to the 'all rules' set
-    rulestack.append(seedrules)
-    allrules.union(seedrules)
+    new_names = namesFromRules(corpus, seed_rules)
+    name_list = list(new_names)
 
-    # Identify names via the seed rules
-    newNames = namesfromrules.run(corpus, seedrules, options)
-    names.append(newNames)
+    context_iter = False
 
-    contextualIteration = False
-
-    # Begin iterating.
     i = 0
     while i < iterations:
-
-        #detect the new rules
-        newRules = set()
-        rulesFound = 0
-        if contextualIteration:
-            print("iteration " + str(i + 1) + ": find contextual rules")
-            newRules = contextualfromnames.run(corpus, allrules, names[i],
-                                               maxrules, options)
-            rulesFound = len(list(newRules))
-            print("found " + str(rulesFound) + " new contextual rules!")
+        if context_iter:
+            print("iteration {}: find context rules".format(i + 1))
+            new_rules = contextualfromnames.main(corpus, all_rules,
+                                      name_list, max_rules)
+            rules_found = len(new_rules)
+            print("found {} new context rules!".format(rules_found))
+        
         else:
-            print("iteration " + str(i + 1) + ": find spelling")
-            newRules = spellingfromnames.run(corpus, allrules, names[i],
-                                             maxrules)
-            rulesFound = len(list(newRules))
-            print("found " + str(rulesFound) + " new spelling rules!")
+            print("iteration {}: find spelling rules".format(i + 1))
+            new_rules = spellingfromnames.main(corpus, all_rules,
+                                      name_list, max_rules)
+            rules_found = len(new_rules)
+            print("found {} new spelling rules!".format(rules_found))
 
-        #at this point in execution the new rules have had their strength ratings assigned (unless something broke)
+        updatetokenstrength.main(corpus, new_rules)
 
-        #update the name_probability ratings of all of the tokens using the new rules
-        #so, in light of the new rules, how does that effect all tokens chances of being a name?
-        updatetokenstrength.run(corpus, newRules, options)
+        rule_list.extend(list(new_rules))
+        all_rules = all_rules.union(new_rules)
 
-        #record the rules found in this iteration of the algorithm
-        rulestack.append(newRules)
+        new_names = namesFromRules(corpus, new_rules)
+        name_list.extend(list(new_names))
 
-        #update the list of all rules found
-        allrules.union(newRules)
-
-
-        # Get the names for the next iteration
-        newNames = namesfromrules.run(corpus, newRules, options)
-        names.append(newNames)
-
-        print("top " + str(rulesFound) + " rules found " +
-              str(len(newNames.tokens)) + " new names")
-
+        print("top {} rules found {} new names".format(
+            rules_found, len(new_names)))
 
         print("performance so far:")
         performanceAssessment(corpus, options)
 
         print("")
 
-
-        contextualIteration = not contextualIteration
+        context_iter = not context_iter
         i += 1
 
     print("rule performance:")
-    rulesStrengthAssessment(allrules, corpus, options)
+    rulesStrengthAssessment(all_rules, corpus)
 
-    # Really half assed output system, needs upgrading.
-
-    f = open("output.csv", 'wb')
+    f = open(data.output, 'wb')
 
     f.write("Rule,Rule Type,Strength\n".encode('utf-8'))
-    for rule in allrules:
+    for rule in all_rules:
         f.write("{0},{1},{2}\n".format(str(rule.contents), str(rule.type),
                 str(rule.strength)).encode('utf-8'))
 
