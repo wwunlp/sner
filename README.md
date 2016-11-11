@@ -31,6 +31,8 @@ routines.
 * `-mf` or `--mod-freq`: Modifier of rule frequency.
 * `-ms` or `--mod-str`: Modifier of rule strength.
 * `-at` or `--accept-threshold`: Name acceptance threshold.
+* `-al` or `--alpha`: Alpha value.
+* `-k` or `--k`: K value.
 
 * `-nn` or `--norm-num`: Enable the normalization  of numbers.
 * `-np` or `--norm-prof`: Enable the normalization of professions.

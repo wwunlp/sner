@@ -42,7 +42,11 @@ def add_args(parser):
                         type=float, required=False)
     parser.add_argument('-at', '--accept-threshold', help='Name acceptance '
                         'threshold', type=float, required=False)
+    parser.add_argument('-al', '--alpha', help='Alpha value', type=float,
+                        required=False)
+    parser.add_argument('-k', '--k', help='K value', type=float, required=False)
 
+    
     parser.add_argument('-nn', '--norm-num', help='Enable the nomralization '
                         'of numbers', type=bool, required=False)
     parser.add_argument('-np', '--norm-prof', help='Enable the normalization '
@@ -78,6 +82,8 @@ def main():
     mod_str = args.mod_str or config['mod-str'] or 1.0
     accept_threshold = args.accept_threshold or config['accept-threshold'] or \
         0.9
+    alpha = args.alpha or config['alpha'] or 0.1
+    k = args.k or config['k'] or 2.0
     
     norm_num = args.norm_num or config['norm-num'] or False
     norm_prof = args.norm_prof or config['norm-prof'] or False
@@ -87,7 +93,7 @@ def main():
     data = Data(corpus, attestations, seed_rules, output)
 
     options = Options(iterations, max_rules, mod_freq, mod_str,
-                      accept_threshold, norm_num, norm_prof,
+                      accept_threshold, alpha, k, norm_num, norm_prof,
                       norm_geo)
 
     if run== 'analysis':

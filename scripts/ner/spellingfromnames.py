@@ -35,14 +35,14 @@ def gramsToRules(kgrams, allrules):
     rules = set()
 
     for gram in kgrams:
-        rule = Rule(Rule.Types.spelling, gram, -1)
+        rule = Rule(Rule.Type.spelling, gram, -1)
         if not rule in allrules:
             rules.add(rule)
 
     return rules
 
 
-def main(corpus, allrules, names, maxrules):
+def main(corpus, allrules, names, maxrules, options):
     # Uses up to trigrams currently
     maxGram = 3
 
@@ -50,7 +50,7 @@ def main(corpus, allrules, names, maxrules):
     kgrams = getKgrams(names, maxGram)
     rules = gramsToRules(kgrams, allrules)
 
-    rulesperformance.main(corpus, rules)
+    rulesperformance.main(corpus, rules, options)
 
     rules = rulefilter.main(rules, maxrules)
 

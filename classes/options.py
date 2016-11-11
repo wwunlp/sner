@@ -14,7 +14,7 @@ class Options:
     """
 
     def __init__(self, iterations, max_rules, mod_freq, mod_str,
-                 accept_threshold, norm_num, norm_prof, norm_geo):
+                 accept_threshold, alpha, k, norm_num, norm_prof, norm_geo):
         """Sets the ``iterations``, ``max_rules``, ``name_tag``, ``norm_num``,
         ``norm_prof``, ``left_tag``, ``right_tag``, ``tablet``, and ``mode``
         attributes for the ``Options`` class.
@@ -41,6 +41,8 @@ class Options:
         self.mod_freq = mod_freq
         self.mod_str = mod_str
         self.accept_threshold = accept_threshold
+        self.alpha = alpha
+        self.k = k
         
         self.norm_num = norm_num
         self.norm_prof = norm_prof

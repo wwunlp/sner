@@ -12,7 +12,7 @@ def tokenize_corpus(corpus_loc):
         corpus (set): Set of Token objects.
 
     Raises:
-        TypeError
+        None
     """
 
     corpus_list = []
@@ -32,20 +32,6 @@ def tokenize_corpus(corpus_loc):
     # Each entry being a three element list, containing left context,
     # token, right context
 
-    def interpretTokenType(wordType):
-        if wordType == "PN":
-            return Token.Types.personal_name
-        elif wordType == "GN":
-            return Token.Types.geographic_name
-        elif wordType == "PF":
-            return Token.Types.profession
-        elif wordType == "-":
-            return Token.Types.none
-        else:
-            tb = sys.exc_info()[2]
-            raise TypeError("Unrecognized Word Type in corpus" +
-                            " file!").with_traceback(tb)
-
     rawIter = iter(corpus_list)
     line = next(rawIter)
     tabletID = line[0]
@@ -54,26 +40,25 @@ def tokenize_corpus(corpus_loc):
     #  (for instance if its annotated as a PN)
     # right context is assumed to be nothing,
     # and will be set later if otherwise
-    prevToken = Token(None, line[3], None, interpretTokenType(line[4]))
+    prevToken = Token(None, line[3], None, Token.get_type(line[4]))
 
     for line in rawIter:
         if(line[0] == tabletID):
-            token = Token(prevToken, line[3], None,
-                          interpretTokenType(line[4]))
+            token = Token(prevToken, line[3], None, Token.get_type(line[4]))
 
             prevToken.right_context = str(token)
-            Token.add(corpus, prevToken, None)
+            corpus.add(prevToken)
 
             prevToken = token
 
         else:
-            Token.add(corpus, prevToken, None)
+            corpus.add(prevToken)
 
             tabletID = line[0]
-            token = Token(None, line[3], None, interpretTokenType(line[4]))
+            token = Token(None, line[3], None, Token.get_type(line[4]))
             prevToken = token
 
-    Token.add(corpus, prevToken, None)
+    corpus.add(prevToken)
 
     return corpus
 
@@ -104,14 +89,14 @@ def tokenize_seed_rules(rulename):
         # Clean out the line returns as they will confuse the algorithm.
         line = line.replace('\n', '')
         ruledata = line.split(",")
-        ruletype = Rule.Types.unset
+        ruletype = Rule.Type.unset
 
         if ruledata[0] == "LEFT_CONTEXT":
-            ruletype = Rule.Types.left_context
+            ruletype = Rule.Type.left_context
         elif ruledata[0] == "RIGHT_CONTEXT":
-            ruletype = Rule.Types.right_context
+            ruletype = Rule.Type.right_context
         elif ruledata[0] == "SPELLING":
-            ruletype = Rule.Types.spelling
+            ruletype = Rule.Type.spelling
         else:
             print("ERROR: rule parsing failed, invalid type: " + ruledata[0])
             sys.exit()
@@ -120,12 +105,14 @@ def tokenize_seed_rules(rulename):
 
     return rules
 
-def performanceAssessment(corpus, options):
+
+def assess_performance(corpus, options):
     """Find all names that pass a certain probability threshold, these will be
     considered our results
     Args:
-        courpus ():
-        options ():
+        courpus (set): Set of Token objects
+        options (Options): Options object with attributes of flags and
+            variables.
 
     Returns:
         None
@@ -134,40 +121,45 @@ def performanceAssessment(corpus, options):
         None
     """
 
-    namethreshold = options.accept_threshold
-    namesfound = set()
+    name_threshold = options.accept_threshold
+    names_found = set()
+
+    print("performance so far:")
+
     for token in corpus:
-        if token.name_probability > namethreshold:
-            Token.add(namesfound, token, None)
+        if token.name_probability > name_threshold:
+            names_found.add(token)
 
-    totalresults = 0
-    accurateresults = 0
-    #sum the occurrences of all things in the nameset, add this to totalresults
-    #also scan for occurrences annotated as names and add those occurences to namecount
-    for token in namesfound:
-        totalresults += token.occurrences
-        if token.annotation == Token.Types.personal_name:
-            accurateresults += token.occurrences
+    total_results = 0
+    accurate_results = 0
 
-    totalnames = 0
-    #scan for all tokens annotated as names and sum, to find all name occurence
+    for token in names_found:
+        total_results += token.occurrences
+        if token.annotation == Token.Type.personal_name:
+            accurate_results += token.occurrences
+
+    total_names = 0
+
     for token in corpus:
-        if token.annotation == Token.Types.personal_name:
-            totalnames += token.occurrences
+        if token.annotation == Token.Type.personal_name:
+            total_names += token.occurrences
 
-    accuracy = accurateresults / totalresults
-    recall = accurateresults / totalnames
-    print("accuracy: " + str(100 * accuracy) + "%")
-    print("recall: " + str(100 * recall) + "%")
-    print("acceptance threshold: " + str(100 * namethreshold) + "%")
-    print("probability ratings off by " + str(100 * abs(namethreshold - accuracy)) + " points")
+    accuracy = accurate_results / total_results
+    recall = accurate_results / total_names
 
-def rulesStrengthAssessment(rules, corpus):
+    print("accuracy: {}%".format(100 * accuracy))
+    print("recall: {}%".format(100 * recall))
+    print("acceptance threshold: {}%".format(100 * name_threshold))
+    print("probability ratings off by {} ponts".format(
+        100 * abs(name_threshold - accuracy)
+    ))
+
+
+def assess_strength(rules, corpus):
     """
     Args:
         rules ():
         corpus ():
-        cfg ():
 
     Returns:
         None
@@ -176,67 +168,76 @@ def rulesStrengthAssessment(rules, corpus):
         None
     """
 
-    badrules = 0
-    totalspelling = 0
-    badspelling = 0
-    totalcontext = 0
-    badcontext = 0
+    bad_rules = 0
+    bad_context = 0
+    bad_spelling = 0
 
-    totaldelta = 0
+    total_context = 0
+    total_spelling = 0
+    total_delta = 0
 
+    print("rule performance:")
     print("calculating...", end='\r')
 
     for rule in rules:
         names = namesfromrule.main(corpus, rule)
-        realnames = 0
-        total = 0
+        real_names = 0
+        total_names = len(names)
         for token in names:
-            if token.annotation == Token.Types.personal_name:
-                realnames += 1
-                total += 1
-            else:
-                total += 1
+            if token.annotation == Token.Type.personal_name:
+                real_names += 1
 
-        truestrength = realnames/total
-        delta = abs(truestrength - rule.strength)
-        totaldelta += delta
+        true_strength = real_names / total_names
+        delta = abs(true_strength - rule.strength)
+        total_delta += delta
 
-        if rule.type == Rule.Types.spelling:
-            totalspelling += 1
+        if rule.type == Rule.Type.spelling:
+            total_spelling += 1
         else:
-            totalcontext += 1
+            total_context += 1
 
         if delta > 0.2:
-            badrules += 1
-            if rule.type == Rule.Types.spelling:
-                badspelling += 1
+            bad_rules += 1
+            if rule.type == Rule.Type.spelling:
+                bad_spelling += 1
             else:
-                badcontext += 1
+                bad_context += 1
 
     print("               ", end='\r')
+    print("percentage of bad rules: {}%".format(
+        100 * bad_rules / len(rules)
+    ))
+    print("percentage of bad context: {}%".format(
+        100 * bad_context / total_context
+    ))
+    print("percentage of bad spelling: {}%".format(
+        100 * bad_spelling / total_spelling
+    ))
+    print("average delta value: {}%".format(
+        100 * total_delta / len(rules)
+    ))
 
-    print("percentage of bad rules: " + str(100 * badrules/len(rules)) + "%")
-    print("percentage of bad context: " + str(100 * badcontext/totalcontext) + "%")
-    print("percentage of bad spelling: " + str(100 * badspelling/totalspelling) + "%")
-    print("average delta value: " + str(100 * totaldelta / len(rules)) + "%")
 
-
-def namesFromRules(corpus, rules):
+def get_names(corpus, rules):
     """Meant to use the provided ruleset to scan the corpus for names.
     It will then return the names in quesiton, which will be used
     to generate more rules.
 
+    Args:
+        corpus (set): Set of Token objects
+        rules (set): Set of Rule objects
+
+    Returns:
+        names (set): Set of Token objects
+
+    Raises:
+        None
     """
 
     names = set()
 
     for rule in rules:
         results = namesfromrule.main(corpus, rule)
-
-        # Can probably write an extend function that doesn't enforce
-        #  set properties.
-        # You can insert them without checking for redundancies because
-        # they already were checked.
         names = names.union(results)
 
     return names
@@ -275,7 +276,7 @@ def main(data, options):
     rule_list = list(seed_rules)
     all_rules = seed_rules
 
-    new_names = namesFromRules(corpus, seed_rules)
+    new_names = get_names(corpus, seed_rules)
     name_list = list(new_names)
 
     context_iter = False
@@ -285,14 +286,14 @@ def main(data, options):
         if context_iter:
             print("iteration {}: find context rules".format(i + 1))
             new_rules = contextualfromnames.main(corpus, all_rules,
-                                      name_list, max_rules)
+                                      name_list, max_rules, options)
             rules_found = len(new_rules)
             print("found {} new context rules!".format(rules_found))
-        
+
         else:
             print("iteration {}: find spelling rules".format(i + 1))
             new_rules = spellingfromnames.main(corpus, all_rules,
-                                      name_list, max_rules)
+                                      name_list, max_rules, options)
             rules_found = len(new_rules)
             print("found {} new spelling rules!".format(rules_found))
 
@@ -301,28 +302,24 @@ def main(data, options):
         rule_list.extend(list(new_rules))
         all_rules = all_rules.union(new_rules)
 
-        new_names = namesFromRules(corpus, new_rules)
+        new_names = get_names(corpus, new_rules)
         name_list.extend(list(new_names))
 
         print("top {} rules found {} new names".format(
             rules_found, len(new_names)))
 
-        print("performance so far:")
-        performanceAssessment(corpus, options)
+        assess_performance(corpus, options)
 
         print("")
 
         context_iter = not context_iter
         i += 1
 
-    print("rule performance:")
-    rulesStrengthAssessment(all_rules, corpus)
-
-    f = open(data.output, 'wb')
-
-    f.write("Rule,Rule Type,Strength\n".encode('utf-8'))
+    assess_strength(all_rules, corpus)
+    output = open(data.output, 'wb')
+    output.write("Rule,Rule Type,Strength\n".encode('utf-8'))
     for rule in all_rules:
-        f.write("{0},{1},{2}\n".format(str(rule.contents), str(rule.type),
+        output.write("{0},{1},{2}\n".format(str(rule.contents), str(rule.type),
                 str(rule.strength)).encode('utf-8'))
 
-    f.close()
+    output.close()

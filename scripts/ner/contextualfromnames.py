@@ -2,7 +2,7 @@ from classes import Rule, Token
 from scripts.ner import rulesperformance, rulefilter
 
 
-def main(corpus, existingrules, names, maxrules):
+def main(corpus, existingrules, names, maxrules, options):
     """This is meant to generate conextual rules from a set of identified
     name tokens. It needs the corpus as well as the name set in order to
     assess the performance of any rules it finds from the names
@@ -27,9 +27,9 @@ def main(corpus, existingrules, names, maxrules):
         #  later by scanning the whole corpus
 
         # Create left context rule
-        leftContext = Rule(Rule.Types.left_context, str(name.left_context), -1)
+        leftContext = Rule(Rule.Type.left_context, str(name.left_context), -1)
         # Create right context rule
-        rightContext = Rule(Rule.Types.right_context,
+        rightContext = Rule(Rule.Type.right_context,
                             str(name.right_context), -1)
 
         # No redundant rules allowed!
@@ -39,7 +39,7 @@ def main(corpus, existingrules, names, maxrules):
         if rightContext not in existingrules:
             newRules.add(rightContext)
 
-    rulesperformance.main(corpus, newRules)
+    rulesperformance.main(corpus, newRules, options)
 
     rules = rulefilter.main(newRules, maxrules)
 
