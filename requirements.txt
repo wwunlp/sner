@@ -1,1 +1,2 @@
 editdistance==0.3.1
+matplotlib==1.5.3

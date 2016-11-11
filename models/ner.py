@@ -1,6 +1,7 @@
 from classes import Rule, Token
 from scripts.ner import contextualfromnames, namesfromrule
 from scripts.ner import spellingfromnames, updatetokenstrength
+import matplotlib.pyplot as plt
 
 
 def tokenize_corpus(corpus_loc):
@@ -179,6 +180,10 @@ def assess_strength(rules, corpus):
     print("rule performance:")
     print("calculating...", end='\r')
 
+    x_vals = []
+    y_vals = []
+    rule_num = 1
+
     for rule in rules:
         names = namesfromrule.main(corpus, rule)
         real_names = 0
@@ -191,6 +196,10 @@ def assess_strength(rules, corpus):
         delta = abs(true_strength - rule.strength)
         total_delta += delta
 
+        x_vals.append(rule_num)
+        rule_num += 1
+        y_vals.append(delta)
+
         if rule.type == Rule.Type.spelling:
             total_spelling += 1
         else:
@@ -202,6 +211,7 @@ def assess_strength(rules, corpus):
                 bad_spelling += 1
             else:
                 bad_context += 1
+
 
     print("               ", end='\r')
     print("percentage of bad rules: {}%".format(
@@ -216,6 +226,12 @@ def assess_strength(rules, corpus):
     print("average delta value: {}%".format(
         100 * total_delta / len(rules)
     ))
+
+    plt.xlabel('Rules')
+    plt.ylabel('Delta')
+    plt.plot(x_vals, y_vals, 'ro')
+    plt.axis([min(x_vals), max(x_vals), min(y_vals), max(y_vals)])
+    plt.show()
 
 
 def get_names(corpus, rules):
