@@ -13,7 +13,7 @@ def main(ruleset, maxrules):
     """
 
     #sort the rules from best to worst (uses the __lt__ function defined in Rule class (in ruleset.py))
-    sortedlist = sorted(list(ruleset), reverse=True)
+    sortedlist = sorted(ruleset, reverse=True)
 
     #trim the list down to only the rules that will go on to the next iteration
     sortedlist = sortedlist[:maxrules]

@@ -9,14 +9,14 @@ class Token:
     This is meant to be used in conjunction with the TokenSet implemented below.
     """
 
-    Type = Enum('Types', 'unset none personal_name geographic_name profession')
+    Type = Enum('Types', 'unset none personal_name geographic_name profession number date')
     
     def __init__(self, left_context, token, right_context, annotation):
         self.left_context = left_context
         self.token = token       
         self.right_context = right_context
         self.annotation = annotation
-        self.applicable_rules = []       
+        self.applicable_rules = []
         self.occurrences = 1
         self.name_probability = 0
 
@@ -60,9 +60,15 @@ class Token:
 
         elif word_type == 'PF':
             return Token.Type.profession
+        
+        elif word_type == 'N':
+            return Token.Type.number
+        
+        elif word_type == 'D':
+            return Token.Type.date
 
         elif word_type == '-':
             return Token.Type.none
 
         else:
-            TypeError
+            raise TypeError("Unrecognized Word Type: " + word_type)

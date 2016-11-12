@@ -10,17 +10,11 @@ from scripts.ner import namesfromrule
 # Rate the strength of the individual rule passed in,
 # given all Tokens where the rule is true (identifiedNames)
 def rateRulePerformance(identifiedNames, rule, alpha, k):
-    alpha = 0.1
-    k = 2
-
     namesFound = 0
     total = 0
     for token in identifiedNames:
-        if token.annotation == Token.Type.personal_name:
-            namesFound += token.name_probability * token.occurrences
-            total += token.occurrences
-        else:
-            total += token.occurrences
+        namesFound += token.name_probability * token.occurrences
+        total += token.occurrences
 
     strength = (namesFound + alpha) / (total + k * alpha)
 
@@ -37,7 +31,7 @@ def main(corpus, rules, options):
     alpha = options.alpha
     k = options.k
     i = 1
-    length = len(list(rules))
+    length = len(rules)
 
     for rule in rules:
         names = namesfromrule.main(corpus, rule)

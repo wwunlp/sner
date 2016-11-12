@@ -6,7 +6,7 @@ def main(tokens, rules):
     """This will update the strength of all tokens it is given, using
         the rules it is given.
     Args:
-        tokens (set): Set object of Token objects.
+        tokens (TokenSet): Set object of Token objects.
         rules (set): Set object of Rule objects.
 
     Returns:

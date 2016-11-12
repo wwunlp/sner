@@ -31,24 +31,25 @@ def getKgrams(names, k):
     return grams
 
 
-def gramsToRules(kgrams, allrules):
+def gramsToRules(kgrams, allrules, iteration):
     rules = set()
 
     for gram in kgrams:
         rule = Rule(Rule.Type.spelling, gram, -1)
         if not rule in allrules:
             rules.add(rule)
+            rule.iteration = iteration
 
     return rules
 
 
-def main(corpus, allrules, names, maxrules, options):
+def main(corpus, allrules, names, maxrules, iteration, options):
     # Uses up to trigrams currently
     maxGram = 3
 
     # Get all possible spelling rules from the names passed in
     kgrams = getKgrams(names, maxGram)
-    rules = gramsToRules(kgrams, allrules)
+    rules = gramsToRules(kgrams, allrules, iteration)
 
     rulesperformance.main(corpus, rules, options)
 

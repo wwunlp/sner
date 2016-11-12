@@ -13,6 +13,7 @@ class Rule:
         self.contents = str(rule)
         self.strength = float(strength)
         self.occurrences = 1
+        self.iteration = -1
 
     def __eq__(self, other):
         if type(other) == type(self):

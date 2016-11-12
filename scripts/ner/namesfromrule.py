@@ -1,4 +1,4 @@
-from classes import Rule, Token
+from classes import Rule, Token, TokenSet
 
 
 def main(corpus, rule):
@@ -7,54 +7,42 @@ def main(corpus, rule):
     the code as 'names'.
 
     Args:
-        courpus (set): Set of Token objects.
+        courpus (TokenSet): Set of Token objects.
         rule (Rule): Rule object.
 
     Returns:
-        names (set): Set of Token objects.
+        names (TokenSet): Set of Token objects.
 
     Raises:
         TypeError
     """
 
-    names = set()
+    names = TokenSet()
 
     # How to handle a spelling rule
     def spelling(corpus, rule):
-        names = set()
+        names = TokenSet()
         for token in corpus:
             if rule.contents in str(token):
-                if token in names:
-                    token.occurences += 1
-                    rule.occurences += 1
-                else:
-                    names.add(token)
-        
+                names.add(token)
+                
         return names
 
     # How to handle a right context rule
     def leftContext(corpus, rule):
-        names = set()
+        names = TokenSet()
         for token in corpus:
             if str(token.left_context) == rule.contents:
-                if token in names:
-                    token.occurences += 1
-                    rule.occurences += 1
-                else:
-                    names.add(token)
+                names.add(token)
  
         return names
 
     # How to handle a right context rule
     def rightContext(corpus, rule):
-        names = set()
+        names = TokenSet()
         for token in corpus:
             if str(token.right_context) == rule.contents:
-                if token in names:
-                    token.occurences += 1
-                    rule.occurences += 1
-                else:
-                    names.add(token)
+                names.add(token)
  
         return names
 
