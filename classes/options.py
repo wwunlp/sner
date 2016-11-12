@@ -10,11 +10,13 @@ class Options:
         norm_tag (bool): Enable the nomralization  of numbers.
         norm_prof (bool): Enable the normalization of professions.
         norm_geo (bool): Enable the normalization of geographic names.
+        norm_date (bool): Enable the normalization of dates.
 
     """
 
     def __init__(self, iterations, max_rules, mod_freq, mod_str,
-                 accept_threshold, alpha, k, norm_num, norm_prof, norm_geo):
+                 accept_threshold, alpha, k, norm_num, norm_prof,
+                 norm_geo, norm_date):
         """Sets the ``iterations``, ``max_rules``, ``name_tag``, ``norm_num``,
         ``norm_prof``, ``left_tag``, ``right_tag``, ``tablet``, and ``mode``
         attributes for the ``Options`` class.
@@ -28,6 +30,7 @@ class Options:
             norm_tag (bool): Enable the nomralization  of numbers.
             norm_prof (bool): Enable the normalization of professions.
             norm_geo (bool): Enable the normalization of geographic names.
+            norm_date (bool): Enable the normalization of dates.
 
         Returns:
             None
@@ -47,5 +50,6 @@ class Options:
         self.norm_num = norm_num
         self.norm_prof = norm_prof
         self.norm_geo = norm_geo
+        self.norm_date = norm_date
 
 

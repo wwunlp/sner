@@ -90,8 +90,11 @@ def clean_line(line, normNum=True, normProf=True):
     line = re.sub(r'[=]{2}', '', line)
 
     # Replace numbers with 'number'
-    if normNum is True:
+    if normNum is True:        
         line = re.sub(r'\b(?<!-)(\d+)(?![\w-])', 'number', line)
+        line = re.sub(r'[-+]?\b\d+\b', 'number', line)
+         
+        #line = re.sub(r'\b([\-\.0-9]+)(?![\w-])', 'number', line)
 
     # Replace professions with 'profession'
     if normProf is True:

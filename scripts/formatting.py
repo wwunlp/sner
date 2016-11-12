@@ -19,7 +19,7 @@ def findKnown(data, options, knownPN, knownGN):
         name = utilities.clean_line(line[5].rstrip(), options.norm_num, options.norm_prof)
         name = name.lower()
         lineID = line[1]
-        lineID = re.sub("[L]", "", lineID)
+        lineID = re.sub("[L]", "", lineID)        
 
         if line[9].rstrip() == 'PN':
             if (name not in knownPN):
@@ -83,6 +83,7 @@ def main(data, options):
         # change to lineID
         lineID = line[4]
         lineID = re.sub("[L]", "", lineID)
+        lastWord = ""
         if "'" in lineID:
             lineID = re.sub("[']", "", lineID)
             lineID = "'" + lineID
@@ -105,4 +106,19 @@ def main(data, options):
                 if (wType != "-"):
                     print ("Warning, replacing name with profession!")
                 wType = "PF"
-            out.write("{},{},{},{},{}\n".format(tabletID, lineID, i, w, wType))  
+                
+            if 'number' in w:
+                if (wType != "-"):
+                    print ("Warning, overwriting a known type with number: ", w, " - ", wType)
+                wType = "N"
+                w = 'number'
+            if lastWord == "iti":
+                if (wType != "-"):
+                    print ("Warning, overwriting a known type with date: ", w, " - ", wType)
+                wType = "D"
+                if (options.norm_date):
+                    w = 'date'
+                
+            lastWord = w            
+            if not (i == 0 and (w == "" or w == "-" or w == "...")):
+                out.write("{},{},{},{},{}\n".format(tabletID, lineID, i, w, wType))  

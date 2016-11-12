@@ -53,8 +53,10 @@ def add_args(parser):
                         'of professions', type=bool, required=False)
     parser.add_argument('-ng', '--norm-geo', help='Enable the normalization '
                         'of geographic names', type=bool, required=False)
-
-
+    parser.add_argument('-nd', '--norm-date', help='Enable the normalization '
+                        'of dates', type=bool, required=False)
+    parser.add_argument('-na', '--norm-all', help='Enable the normalization '
+                        'of everything', type=bool, required=False)
 def main():
     """
     
@@ -85,16 +87,17 @@ def main():
     alpha = args.alpha or config['alpha'] or 0.1
     k = args.k or config['k'] or 2.0
     
-    norm_num = args.norm_num or config['norm-num'] or False
-    norm_prof = args.norm_prof or config['norm-prof'] or False
-    norm_geo = args.norm_geo or config['norm-geo'] or False
+    norm_num = args.norm_num or args.norm_all or config['norm-num'] or False
+    norm_prof = args.norm_prof or args.norm_all or config['norm-prof'] or False
+    norm_geo = args.norm_geo or args.norm_all or config['norm-geo'] or False
+    norm_date = args.norm_date or args.norm_all or config['norm-date'] or False
 
     
     data = Data(corpus, attestations, seed_rules, output)
 
     options = Options(iterations, max_rules, mod_freq, mod_str,
                       accept_threshold, alpha, k, norm_num, norm_prof,
-                      norm_geo)
+                      norm_geo, norm_date)
 
     if run== 'analysis':
         analysis.main(data, options)
