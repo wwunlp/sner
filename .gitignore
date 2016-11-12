@@ -6,13 +6,7 @@ data/
 results/
 
 # unsupervised-old
-*OUT*
-*runs*
-*output.csv
-*corpus*
-*pool*
-*rule*
-*test*
+/models/unsupervised-old/*
 
 # Virtualenv
 bin/
