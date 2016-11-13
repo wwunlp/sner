@@ -268,8 +268,17 @@ def assess_strength(rules, corpus, data):
 
     plt.xlabel('Rules')
     plt.ylabel('Delta')
+    plt.title('Plot of Delta per Rule')
     plt.plot(x_vals, y_vals, 'ro')
     plt.axis([min(x_vals), max(x_vals), min(y_vals), max(y_vals)])
+    plt.show()
+
+    sort_y = sorted(y_vals)
+    plt.xlabel('')
+    plt.ylabel('Delta')
+    plt.title('Delta Sorted')
+    plt.plot(x_vals, sort_y, 'ro')
+    plt.axis([min(x_vals), max(x_vals), min(sort_y), max(sort_y)])
     plt.show()
 
 
