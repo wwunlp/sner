@@ -212,9 +212,7 @@ def assess_strength(rules, corpus, data):
 
     rulefile = open(data.output, 'wb')
     rulefile.write("Iteration of Origin,Rule,Rule Type,Strength,Real Strength,Occurrences\n".encode('utf-8'))
-    
-    falsepositives = open(data.output,'wb')
-    
+
     x_vals = []
     y_vals = []
     rule_num = 1
