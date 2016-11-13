@@ -2,7 +2,8 @@ from classes import Rule, Token, TokenSet
 
 
 def main(corpus, rule):
-    """Takes the overall corpus as input, as well as a single Rule object.
+    """
+    Takes the overall corpus as input, as well as a single Rule object.
     Will return a Set of tokens satisfying the passed-in Rule, referred to in
     the code as 'names'.
 
@@ -15,6 +16,7 @@ def main(corpus, rule):
 
     Raises:
         TypeError
+
     """
 
     names = TokenSet()

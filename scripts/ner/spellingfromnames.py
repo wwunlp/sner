@@ -8,15 +8,25 @@ from scripts.ner import rulefilter, rulesperformance
 # Produces a list of monograms on up to k-grams
 def getKgrams(names, k):
     """
-    names is assumed to be a dictionary with keys representing names and values
-     their occurences
-    k is the max order of grams you wish to retrieve
-    -1 will return a list containing a dictionary of monograms
-    -2 will return a list with a dict of monograms followed by a dict of
-     bigrams
-    Example use for monogram, bigram, and trigrams:
+    Produces lists of grams, from monograms up to k-grams.
+    Duplicate found in /scripts/readnames.py
+    Example use to get monograms, birgams, and trigrams:
     getKgrams(getPNs(), 3)
+    Args:
+        names = dictionary of the form { Names : Occurrences }
+        k = Max k-gram you want to retrieve.
+            Special values of k = -1 returning dictionary of monograms.
+                          and k = -2 returning dictionary of monograms,
+                                  followed by a dictionary of bigrams.
+
+    Returns:
+        A dictionary of all grams up to order k
+
+    Raises:
+        None
+
     """
+
     grams = list()
 
     for name in names:

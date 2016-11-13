@@ -3,7 +3,8 @@ from scripts.ner import namesfromrule
 
 
 def main(tokens, rules):
-    """This will update the strength of all tokens it is given, using
+    """
+    This will update the strength of all tokens it is given, using
         the rules it is given.
     Args:
         tokens (TokenSet): Set object of Token objects.
@@ -14,6 +15,7 @@ def main(tokens, rules):
 
     Raises:
         ValueError
+
     """
 
     for rule in rules:
@@ -21,12 +23,13 @@ def main(tokens, rules):
 
         for token in applicableTokens:
             if rule not in token.applicable_rules:
-                # raise ValueError("attempted to apply same rule to a token twice!")
+                # Raise ValueError("attempted to apply same rule to a token twice!")
 
                 token.applicable_rules.append(rule)
 
-                #use statistical rules to calculate the new probability
-                #in other words, the probability that all other applicable rules in addition to the current one are wrong
+                # Use statistical rules to calculate the new probability
+                # In other words, the probability that all other applicable rules in addition
+                #  to the current one are wrong
                 initialprob = token.name_probability
                 
                 if ((initialprob < 0) and (initialprob > 1)):

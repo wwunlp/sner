@@ -3,15 +3,23 @@ from classes import Rule, Token
 
 def main(ruleset, maxrules):
     """
-    #determine which rules will be accepted by an iteration of the algorithm
+    Determine which rules will be accepted by an iteration of the algorithm
 
-    #sorts rules into the top n rules, where n = maxrules
-    #sorted by strength, ties broken by alphabetization
+    Sorts rules into the top n rules, where n = maxrules
+    Sorted by strength, ties broken by alphabetization
 
-    #cut the rules down to only the ones that will be accepted in the next iteration
+    Cut the rules down to only the ones that will be accepted in the next iteration
+    Args:
+        ruleset = set of all rules known
+        maxrules = integer value of maximum number of rules we can accept
+    Returns:
+        Updated ruleset with up to maxrules new rules.
+
+    Raises:
+        None
 
     """
-
+    
     #sort the rules from best to worst (uses the __lt__ function defined in Rule class (in ruleset.py))
     sortedlist = sorted(ruleset, reverse=True)
 

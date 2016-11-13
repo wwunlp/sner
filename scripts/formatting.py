@@ -7,9 +7,22 @@ import argparse
 
 def findKnown(data, options, knownPN, knownGN):
     """
-    Iterate through the Attenstations file for Personal and Geographical  names
-    and add the lineIDs in a list to the knownPN and knownGN dictionaries.
+    Iterates through the attenstations file for personal and geographical names
+     and adds the lineIDs in a list to the knownPN and knownGN dictionaries.
+    Args:
+        data (?)
+        options (?)
+        knownPN = { Personal name : line ID }, to be filled in.
+        knownGN = { Geographical name : line ID}, to be filled in.
+
+    Returns:
+        Updates knownPN and knownGN dictionaries with the lineIDs.
+
+    Raises:
+        None
+
     """
+
     file = codecs.open(data.attestations, 'r', encoding = 'utf-8')
     # find all of the names
     for line in file:
@@ -36,18 +49,25 @@ def findKnown(data, options, knownPN, knownGN):
 
 def main(data, options):
     """
-    Find all names in options.attestations file, and goes through each word in in the main 
-    options.corpus file to fill a new output file specified by options.output
-    The output will be a CSV file with the format:
-      TabletID, LineID, LocationInSentence, Word, Word Type
-    Word Types:  '-' for unknown
-                 'PN' to identify personal names.
-                 'GN' to identify geographical names. 
-                 'PF' to identify professions. 
+    Finds all names in options.attestations file, and goes through each word 
+      in the main options.corpus file to fill a new output file specified by
+      options.output
+    Args:
+        options.norm_num = True to normalize numbers
+        options.norm_prof = True to normalize professions
+        options.norm_geo = True to normalize geographical names
 
-    options.norm_num  = True to normalize numbers
-    options.norm_prof = True to normalize professions
-    options.norm_geo  = True to normalize geographical names
+    Returns:
+        .csv file with the format:
+            TabletID, LineID, LocationInSentence, Word, Word Type
+        Word Types: '-' for unknowns.
+                    'PN' to identify personal names.
+                    'GN' to identify geographical names.
+                    'PF' to identify professions.
+
+    Raises:
+        None
+
     """
     
     knownPN = {}
