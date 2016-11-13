@@ -19,6 +19,7 @@ def rateRulePerformance(identifiedNames, rule, alpha, k):
     strength = (namesFound + alpha) / (total + k * alpha)
 
     rule.strength = strength
+    rule.occurrences = len(identifiedNames)
 
 
 # Find all tokens that match a given rule

@@ -1,4 +1,4 @@
-from classes import Rule, Token, TokenSet
+from classes import Rule, Token
 
 
 def main(corpus, rule):
@@ -19,11 +19,11 @@ def main(corpus, rule):
 
     """
 
-    names = TokenSet()
+    names = set()
 
     # How to handle a spelling rule
     def spelling(corpus, rule):
-        names = TokenSet()
+        names = set()
         for token in corpus:
             if rule.contents in str(token):
                 names.add(token)
@@ -32,7 +32,7 @@ def main(corpus, rule):
 
     # How to handle a right context rule
     def leftContext(corpus, rule):
-        names = TokenSet()
+        names = set()
         for token in corpus:
             if str(token.left_context) == rule.contents:
                 names.add(token)
@@ -41,7 +41,7 @@ def main(corpus, rule):
 
     # How to handle a right context rule
     def rightContext(corpus, rule):
-        names = TokenSet()
+        names = set()
         for token in corpus:
             if str(token.right_context) == rule.contents:
                 names.add(token)

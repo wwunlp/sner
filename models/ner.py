@@ -1,4 +1,4 @@
-from classes import Rule, Token, TokenSet
+from classes import Rule, Token
 from scripts.ner import contextualfromnames, namesfromrule
 from scripts.ner import spellingfromnames, updatetokenstrength
 import matplotlib.pyplot as plt
@@ -31,7 +31,7 @@ def tokenize_corpus(corpus_loc):
 
     corpus_file.close()
 
-    corpus = TokenSet()
+    corpus = dict()
 
     # Convert the line into the appropriate format
     # Each entry being a three element list, containing left context,
@@ -61,20 +61,30 @@ def tokenize_corpus(corpus_loc):
             token = Token(prevToken, line[3], None, Token.get_type(line[4]))
 
             prevToken.right_context = str(token)
-            corpus.add(prevToken)
+            
+            if prevToken in corpus:
+                corpus[prevToken].occurrences += 1
+            else:
+                corpus[prevToken] = prevToken
 
             prevToken = token
 
         else:
-            corpus.add(prevToken)
+            if prevToken in corpus:
+                corpus[prevToken].occurrences += 1
+            else:
+                corpus[prevToken] = prevToken
 
             tabletID = line[0]
             token = Token(None, line[3], None, Token.get_type(line[4]))
             prevToken = token
 
-    corpus.add(prevToken)
-
-    return corpus
+    if prevToken in corpus:
+        corpus[prevToken].occurrences += 1
+    else:
+        corpus[prevToken] = prevToken
+        
+    return set(corpus.values())
 
 
 def tokenize_seed_rules(rulename):
@@ -140,7 +150,7 @@ def assess_performance(corpus, options):
     """
 
     name_threshold = options.accept_threshold
-    names_found = TokenSet()
+    names_found = set()
 
     print("performance so far:")
 
@@ -164,7 +174,9 @@ def assess_performance(corpus, options):
 
     precision = accurate_results / total_results
     recall = accurate_results / total_names
+    f1score = 2 * precision * recall / (precision + recall)
 
+    print("F1-score: {}%".format(100*f1score))
     print("precision: {}%".format(100 * precision))
     print("recall: {}%".format(100 * recall))
     print("acceptance threshold: {}%".format(100 * name_threshold))
@@ -192,12 +204,16 @@ def assess_strength(rules, corpus, data):
     total_context = 0
     total_spelling = 0
     total_delta = 0
+    
+    est_false_positives = 0
 
     print("rule performance:")
     print("calculating...", end='\r')
 
-    f = open(data.output, 'wb')
-    f.write("Iteration of Origin,Rule,Rule Type,Strength,Real Strength,Occurrences\n".encode('utf-8'))
+    rulefile = open(data.output, 'wb')
+    rulefile.write("Iteration of Origin,Rule,Rule Type,Strength,Real Strength,Occurrences\n".encode('utf-8'))
+    
+    falsepositives = open(data.output,'wb')
     
     x_vals = []
     y_vals = []
@@ -234,9 +250,9 @@ def assess_strength(rules, corpus, data):
             else:
                 bad_context += 1
 
-        f.write("{0},{1},{2},{3},{4},{5}\n".format(str(rule.iteration), str(rule.contents), str(rule.type), str(rule.strength), str(true_strength), str(rule.occurrences)).encode('utf-8'))
+        rulefile.write("{0},{1},{2},{3},{4},{5}\n".format(str(rule.iteration), str(rule.contents), str(rule.type), str(rule.strength), str(true_strength), str(rule.occurrences)).encode('utf-8'))
         
-    f.close()
+    rulefile.close()
 
     print("               ", end='\r')
     print("percentage of bad rules: {}%".format(
@@ -277,11 +293,11 @@ def get_names(corpus, rules):
 
     """
 
-    names = TokenSet()
+    names = set()
 
     for rule in rules:
         results = namesfromrule.main(corpus, rule)
-        names.extend(results)
+        names = names.union(results)
 
     return names
 
