@@ -3,7 +3,8 @@ from scripts.ner import rulesperformance, rulefilter
 
 
 def main(corpus, existingrules, names, maxrules, iteration, options):
-    """This is meant to generate conextual rules from a set of identified
+    """
+    This is meant to generate conextual rules from a set of identified
     name tokens. It needs the corpus as well as the name set in order to
     assess the performance of any rules it finds from the names
 
@@ -18,6 +19,7 @@ def main(corpus, existingrules, names, maxrules, iteration, options):
 
     Raises:
         None
+
     """
 
     newRules = set()

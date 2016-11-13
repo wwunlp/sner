@@ -20,6 +20,20 @@ rules = {}               # {rules : {namesperrule : occurrence}}
 
 
 def main(text, name):
+    """
+    Args:
+        text = line from corpus split into array split on ' '
+        name = the PN found in this line
+
+    Returns:
+        None (?)
+        Probably fills left_rules and right_rules dicts
+
+    Raises:
+        None
+
+    """
+
     text = text.split(' ')
     edit_distance = []
     for word in text:

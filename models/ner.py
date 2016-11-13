@@ -14,6 +14,7 @@ def tokenize_corpus(corpus_loc):
 
     Raises:
         None
+
     """
     
     try:
@@ -39,11 +40,20 @@ def tokenize_corpus(corpus_loc):
     rawIter = iter(corpus_list)
     line = next(rawIter)
     tabletID = line[0]
-    # Inputs here are: the left context for the token, the token itself,
-    # the right context, and then the type of the token
-    #  (for instance if its annotated as a PN)
-    # right context is assumed to be nothing,
-    # and will be set later if otherwise
+    
+    """
+    This is the token constructor.
+    Args:
+        The left context for the token, the token, right context, and token type
+        Right context assumed to be nothing, until set otherwise.
+
+    Returns:
+        The token adjacent to the current token. (?)
+
+    Raises:
+        None
+
+    """
     prevToken = Token(None, line[3], None, Token.get_type(line[4]))
 
     for line in rawIter:
@@ -68,7 +78,8 @@ def tokenize_corpus(corpus_loc):
 
 
 def tokenize_seed_rules(rulename):
-    """This function will read the seed rule file, and return the contents as
+    """
+    This function will read the seed rule file, and return the contents as
     a set.
     Args:
         rulename (str): Location of seed rules file.
@@ -78,7 +89,8 @@ def tokenize_seed_rules(rulename):
             seed rules file.
 
     Raises:
-        None
+        Error printed if unable to open rulename file.
+
     """
     rules = set()
 
@@ -111,7 +123,8 @@ def tokenize_seed_rules(rulename):
 
 
 def assess_performance(corpus, options):
-    """Find all names that pass a certain probability threshold, these will be
+    """
+    Find all names that pass a certain probability threshold, these will be
     considered our results
     Args:
         corpus (TokenSet): Set of Token objects
@@ -123,6 +136,7 @@ def assess_performance(corpus, options):
 
     Raises:
         None
+
     """
 
     name_threshold = options.accept_threshold
@@ -168,6 +182,7 @@ def assess_strength(rules, corpus, data):
 
     Raises:
         None
+
     """
 
     bad_rules = 0
@@ -244,7 +259,8 @@ def assess_strength(rules, corpus, data):
 
 
 def get_names(corpus, rules):
-    """Meant to use the provided ruleset to scan the corpus for names.
+    """
+    Meant to use the provided ruleset to scan the corpus for names.
     It will then return the names in quesiton, which will be used
     to generate more rules.
 
@@ -257,6 +273,7 @@ def get_names(corpus, rules):
 
     Raises:
         None
+
     """
 
     names = TokenSet()
@@ -269,7 +286,8 @@ def get_names(corpus, rules):
 
 
 def main(data, options):
-    """Rules and names will be lists of RuleSets or TokenSets.
+    """
+    Rules and names will be lists of RuleSets or TokenSets.
     These sets will represent the results of various iterations of
     the algorithm. So index 0 of rules would be the first rule set
     (seed rules) and 1 would be the first rules generated and used by the
@@ -286,6 +304,7 @@ def main(data, options):
 
     Raises:
         None
+
     """
 
     corpus_file = data.corpus

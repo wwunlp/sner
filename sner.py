@@ -9,6 +9,7 @@ import subprocess
 
 def add_args(parser):
     """
+    Adds arguments from the command line and interprets them as appropriate.
     Args:
         parser
 
@@ -17,6 +18,7 @@ def add_args(parser):
 
     Raises:
         None
+
     """
     
     parser.add_argument('-r', '--run', help='Run [analysis], [formatting], '
@@ -59,7 +61,15 @@ def add_args(parser):
                         'of everything', type=bool, required=False)
 def main():
     """
-    
+    Args:
+        File called sner.conf containing configuration specifications.
+
+    Returns:
+        None
+
+    Raises:
+        None
+
     """
 
     config_loc = os.environ.get('SNER_CONF') or 'sner.conf'
