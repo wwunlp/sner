@@ -148,13 +148,13 @@ def assess_performance(corpus, options):
         if token.annotation == Token.Type.personal_name:
             total_names += token.occurrences
 
-    accuracy = accurate_results / total_results
+    precision = accurate_results / total_results
     recall = accurate_results / total_names
 
-    print("precision: {}%".format(100 * accuracy))
+    print("precision: {}%".format(100 * precision))
     print("recall: {}%".format(100 * recall))
     print("acceptance threshold: {}%".format(100 * name_threshold))
-    #print("probability ratings off by {} ponts".format(100 * abs(name_threshold - accuracy)))
+    #print("probability ratings off by {} ponts".format(100 * abs(name_threshold - precision)))
 
 
 def assess_strength(rules, corpus, data):
@@ -211,6 +211,7 @@ def assess_strength(rules, corpus, data):
         else:
             total_context += 1
 
+        #if a rule is more than 20% from its true value, it is 'bad'
         if delta > 0.2:
             bad_rules += 1
             if rule.type == Rule.Type.spelling:
