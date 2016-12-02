@@ -1,20 +1,15 @@
-#!/usr/bin/python3
-
-# Mike Canoy
-# Authored     5/3/2016
-# Last Updated 5/9/2016
-
-import context
-import names
-import spelling
-import utilities
+from scripts import context, names, spelling, utilities
 import codecs
 import csv
 
 
-def main():
-    file = codecs.open('Garshana Dataset/Attestations_PNs.csv',
-                       'r', encoding='utf-16')
+def main(data, options):
+    """
+
+    """
+
+    file = codecs.open('data/Attestations_PNs.csv','r', encoding='utf-16')
+    
     for line in file:
         line = line.split(',')
         if line[9].rstrip() == 'PN':
@@ -26,16 +21,16 @@ def main():
                 names.personal[name] = 1
             context.main(text, name)
 
-    word_count, syll_count = utilities.get_counts()
+    word_count, syll_count = utilities.get_counts(data)
     rules_collection = [
             [context.left_rules,  word_count, 'Left'],
             [context.right_rules, word_count, 'Right']]
 
     # Do spelling analysis
-    spelling.main(syll_count)
+    spelling.main(data, syll_count)
 
     with open('results/context.csv', 'w', newline='',
-              encoding='utf-16') as csvfile:
+              encoding='utf-8') as csvfile:
         fieldnames = [
                 'Context',
                 'Rule',
@@ -58,7 +53,7 @@ def main():
                         'Percentage': str(percent)})
 
     with open('results/varients.csv', 'w', newline='',
-              encoding='utf-16') as csvfile:
+              encoding='utf-8') as csvfile:
         fieldnames = [
                 'Name',
                 'Varients']
@@ -71,7 +66,7 @@ def main():
                 'Varients': str(context.varients[name])})
 
     with open('results/namesperrule.csv', 'w', newline='',
-              encoding='utf-16') as csvfile:
+              encoding='utf-8') as csvfile:
         fieldnames = ['Rule', 'Name', 'Occurrences']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()

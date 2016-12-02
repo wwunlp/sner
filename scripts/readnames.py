@@ -1,19 +1,25 @@
-
-
-import codecs
+from scripts import utilities
 from collections import defaultdict
-import utilities
+import codecs
 import editdistance
 
 
 def getPersonalNames(csvFile):
     """
-    Find names in given csv file and returns them in a dictionary
-     with their counts
-    Assumes that the 5th value on each line is the actual name and
-    that the 9th value is an identifier for the type with "PN"
-     indicating a Personal name
+    Args:
+        csvfile = A csv file with the name on line[5] and line[9] is an identifier of its
+                  type, where we are looking for 'PN' indicating a personal name.
+        
+
+    Returns:
+        Puts found names from the csv file and returns them in a dictionary
+         of the form: { Name : Occurrences }
+
+    Raises:
+        None
+
     """
+
     names = defaultdict(int)
     try:
         open_file = codecs.open(csvFile, 'r', encoding='utf-16')
@@ -41,24 +47,34 @@ def getPersonalNames(csvFile):
     return names
 
 
-def getPNs():
+def getPNs(data):
     """
     Collects names in Garshana csv and returns them
     """
-    return getPersonalNames("Garshana Dataset/Attestations_PNs.csv")
+    return getPersonalNames(data.attestations)
 
 
 def getKgrams(names, k):
     """
-    names is assumed to be a dictionary with keys representing names
-     and values their occurences
-    k is the max order of grams you wish to retrieve
-    -1 will return a list containing a dictionary of monograms
-    -2 will return a list with a dict of monograms followed by
-     a dict of bigrams
-    Example use for monogram, bigram, and trigrams:
-    getKgrams(getPNs(), 3)
+    Args:
+        names = dictionary of the form { Names : Occurrences }
+        k = Max k-gram you want to retrieve.
+            Special values of k = -1 returning dictionary of monograms.
+                          and k = -2 returning dictionary of monograms,
+                                  followed by a dictionary of bigrams.
+
+        Example use to get all monograms, bigrams, and trigrams:
+        getKgrams(getPNs(), 3)
+
+
+    Returns:
+        A dictionary of all grams up to order k
+
+    Raises:
+        None
+
     """
+
     grams = [None] * k
 
     for i in range(0, k):
@@ -81,7 +97,7 @@ def testKgrams():
     A simple test to print off Trigrams and Quadgrams that
     occur more than once [note: duplicate names will trigger these]
     """
-    nameDict = getPNs()
+    nameDict = getPNs(data)
     # sampleNames = {"ab-ac-ad-ae" : 3, "ab-ae-ad" : 5, "ae-ac-ac-ad" : 1}
     testGrams = getKgrams(nameDict, 4)
     for i in range(2, 4):
