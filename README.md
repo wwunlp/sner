@@ -39,9 +39,9 @@ routines.
 * `-ng` or `--norm-geo`: Enable the normalization of geographic names.
 
 If an argument is not given, `sner` will check `sner.conf` before using the
-default value. The `sner.conf` uses `JSON` syntax. i.e. `--name-tag $PN$` would
-be `"name-tag": "$PN$"`.If you move `sner.conf` from the root of the
-repository, you can set the enviroment variable `SNER_CONF` to the new
-location of `sner.conf`.
+default value. The `sner.conf` uses `JSON` syntax. i.e. `--corpus
+data/corpus.csv` would be `"corpus": "data/corpus.csv"`.If you move `sner.conf`
+from the root of the repository, you can set the enviroment variable
+`SNER_CONF` to the new location of `sner.conf`.
 
 [virtualenv]: https://virtualenv.pypa.io/en/stable/
