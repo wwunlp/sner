@@ -22,9 +22,9 @@ def add_args(parser):
     """
     
     parser.add_argument('-r', '--run', help='Run [analysis], [formatting], '
-                        '[unsupervised-old], or [ner] routines',
+                        'or [ner] routines',
                         required=False, choices=['analysis', 'formatting', 
-                        'unsupervised-old', 'ner'])
+                        'ner'])
     parser.add_argument('-c', '--corpus', help='Location of corpus file',
                         required=False)
     parser.add_argument('-a', '--attestations', help='Location of attestations '
@@ -113,8 +113,6 @@ def main():
         analysis.main(data, options)
     elif run == 'formatting':
         formatting.main(data, options)
-    elif run == 'unsupervised-old':
-        os.chdir('models/unsupervised-old/')
         subprocess.run('./run.sh')
     elif run == 'ner':
         ner.main(data, options)
