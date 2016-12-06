@@ -2,7 +2,7 @@
 ---
 ## Installation
 ```
-pip3 install git+https://gitlab.cs.wwu.edu/canoym/sumerian.git@mike
+pip3 install git+https://gitlab.cs.wwu.edu/canoym/sumerian.git@master
 ```
 If you are not in a [virtualenv] you may need to use `pip3` with `sudo` or
 `--user`.
