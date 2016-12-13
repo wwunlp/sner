@@ -1,0 +1,4 @@
+Rule Type,Rule,Strength
+SPELLING,bb,1.0
+LEFT_CONTEXT,aa-aa,1.0
+RIGHT_CONTEXT,cc-cc,1.0
