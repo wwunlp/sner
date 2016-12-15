@@ -19,7 +19,7 @@ line. If you cloned the repo, you can run `python3 sner.py` from within the
 repo.
 
 ## Options and Arguments
-* `-r` or `--run`: Run `analysis`, `formatting`, or `ner`
+* `-r` or `--run`: Run `analysis`, `formatting`, `testing`, or `ner`
 routines.
 * `-c` or `--corpus`: Location of corpus file.
 * `-a` or `--attestations`: Location of attestations file.

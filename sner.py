@@ -3,7 +3,9 @@
 import argparse
 import json
 import os
+import pytest
 import subprocess
+import sys
 from classes import Data, Options
 from models import ner
 from scripts import analysis, formatting
@@ -24,9 +26,9 @@ def add_args(parser):
     """
 
     parser.add_argument('-r', '--run', help='Run [analysis], [formatting], '
-                        'or [ner] routines',
+                        '[testing], or [ner] routines',
                         required=False, choices=['analysis', 'formatting',
-                                                 'ner'])
+                                                 'testing', 'ner'])
     parser.add_argument('-c', '--corpus', help='Location of corpus file',
                         required=False)
     parser.add_argument('-a', '--attestations', help='Location of attestations '
@@ -118,6 +120,8 @@ def main():
         subprocess.run('./run.sh')
     elif run == 'ner':
         ner.main(data, options)
+    elif run == 'testing':
+        pytest.main(['tests/'])
 
 if __name__ == '__main__':
     main()
