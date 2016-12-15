@@ -10,7 +10,8 @@ If you are not in a [virtualenv] you may need to use `pip3` with `sudo` or
 If you'd rather not use `pip3`, you can clone the repo.
 ```
 git clone https://gitlab.cs.wwu.edu/canoym/sumerian.git
-pip3 install editdistance matplotlib
+cd sumerian/
+pip3 install .
 ```
 
 ## Usage

@@ -8,6 +8,11 @@ requirements_path = os.path.join(here, 'requirements.txt')
 install_requirements = parse_requirements(requirements_path, session=False)
 requirements = [str(ir.req) for ir in install_requirements]
 
+dev_requirements_path = os.path.join(here, 'dev-requirements.txt')
+dev_install_requirements = parse_requirements(dev_requirements_path, session=False)
+dev_requirements = [str(ir.req) for ir in dev_install_requirements]
+
+
 setup(
     name='sner',
     version='0.1.0',
@@ -26,5 +31,8 @@ setup(
         'console_scripts': [
             'sner=sner:main',
         ]
+    },
+    extras_require={
+        'develop': dev_requirements,
     },
 )
