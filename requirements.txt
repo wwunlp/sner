@@ -2,4 +2,3 @@ editdistance==0.3.1
 matplotlib==1.5.3
 numpy==1.11.2
 pytest==3.0.5
-sphinx==1.5

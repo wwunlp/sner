@@ -1,4 +1,9 @@
-"""Sumerian Named Entity Recognition"""
+"""
+Sumerian Named Entity Recognition: sner.py
+
+This file bootstraps the program, parsing arguments and configuration file.
+Also offers interface for our analysis and formatting tools and test functions.
+"""
 
 import argparse
 import json
@@ -14,6 +19,7 @@ from scripts import analysis, formatting
 def add_args(parser):
     """
     Adds arguments from the command line and interprets them as appropriate.
+    
     Args:
         parser
 
@@ -65,8 +71,11 @@ def add_args(parser):
                         'of everything', type=bool, required=False)
 def main():
     """
+    Collects arguments and configurations, or sets defaults.
+    Calls either the NER, analysis, formatting, or testing routines.
+    
     Args:
-        File called sner.conf containing configuration specifications.
+        None
 
     Returns:
         None
