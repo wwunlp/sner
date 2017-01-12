@@ -9,8 +9,6 @@ import argparse
 import json
 import os
 import pytest
-import subprocess
-import sys
 from classes import Data, Options
 from models import ner
 from scripts import analysis, formatting
@@ -19,7 +17,7 @@ from scripts import analysis, formatting
 def add_args(parser):
     """
     Adds arguments from the command line and interprets them as appropriate.
-    
+
     Args:
         parser
 
@@ -35,14 +33,15 @@ def add_args(parser):
                         '[testing], or [ner] routines',
                         required=False, choices=['analysis', 'formatting',
                                                  'testing', 'ner'])
-    parser.add_argument('-c', '--corpus', help='Location of corpus file',
+    parser.add_argument('-c', '--corpus', help='Path to corpus file',
                         required=False)
-    parser.add_argument('-a', '--attestations', help='Location of attestations '
+    parser.add_argument('-a', '--attestations', help='Path to attestations '
                         'file', required=False)
-    parser.add_argument('-sr', '--seed-rules', help='Location of seed rules '
-                        'file', required=False)
-    parser.add_argument('-o', '--output', help='Location of output file',
+    parser.add_argument('-sr', '--seed-rules', help='Path to seed rules file',
                         required=False)
+    parser.add_argument('-o', '--output', help='Path to output file',
+                        required=False)
+    parser.add_argument('-l', '--log', help='Path to log file', required=False)
 
     parser.add_argument('-i', '--iterations', help='Number of iterations',
                         type=int, required=False)
@@ -73,7 +72,7 @@ def main():
     """
     Collects arguments and configurations, or sets defaults.
     Calls either the NER, analysis, formatting, or testing routines.
-    
+
     Args:
         None
 
@@ -85,8 +84,8 @@ def main():
 
     """
 
-    config_loc = os.environ.get('SNER_CONF') or 'sner.conf'
-    config_file = open(config_loc)
+    config_path = os.environ.get('SNER_CONF') or 'sner.conf'
+    config_file = open(config_path)
     config = json.load(config_file)
 
     parser = argparse.ArgumentParser()
@@ -100,6 +99,7 @@ def main():
     seed_rules = args.seed_rules or config['seed-rules'] or \
         'data/seed_rules.csv'
     output = args.output or config['output'] or 'data/output.csv'
+    log = args.log or config['log'] or 'data/log.csv'
 
     iterations = args.iterations or config['iterations'] or 5
     max_rules = args.max_rules or config['max-rules'] or 5
@@ -116,7 +116,7 @@ def main():
     norm_date = args.norm_date or args.norm_all or config['norm-date'] or False
 
 
-    data = Data(corpus, attestations, seed_rules, output)
+    data = Data(corpus, attestations, seed_rules, output, log)
 
     options = Options(iterations, max_rules, mod_freq, mod_str,
                       accept_threshold, alpha, k, norm_num, norm_prof,

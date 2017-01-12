@@ -1,3 +1,4 @@
+"""Data"""
 class Data:
     """Collection of locations for data files.
 
@@ -8,7 +9,7 @@ class Data:
         output (str): Location of output file.
     """
 
-    def __init__(self, corpus, attestations, seed_rules, output):
+    def __init__(self, corpus, attestations, seed_rules, output, log):
         """Sets the ``corpus``, ``attestations``, ``seed_rules``, and
         ``output`` attributes for the ``Data`` class.
 
@@ -17,7 +18,7 @@ class Data:
             attestations (str): Location of attestations file.
             seed_rules (str): Location of seed rules file.
             output (str): Location of output file.
-            
+
         Returns:
             None
 
@@ -29,4 +30,4 @@ class Data:
         self.attestations = attestations
         self.seed_rules = seed_rules
         self.output = output
-
+        self.log = log

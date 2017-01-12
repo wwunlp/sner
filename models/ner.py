@@ -209,23 +209,18 @@ def get_new_names(corpus, names, rules):
     return new_names
 
 
-def print_precision_and_recall(corpus, name_set):
+def print_precision_and_recall(selected_elements, relevant_elements, i, log):
     """
     print precision and recall
     """
 
     positives = 0.0
     true_positives = 0.0
-    relevant_elements = 0.0
     precision = 0.0
     recall = 0.0
     f1_score = 0.0
 
-    for token in corpus:
-        if token.type == Token.Type.personal_name:
-            relevant_elements += 1.0
-
-    for token in name_set:
+    for token in selected_elements:
         positives += 1.0
         if token.type == Token.Type.personal_name:
             true_positives += 1.0
@@ -248,6 +243,10 @@ def print_precision_and_recall(corpus, name_set):
     print("Precision: {:06.4f}%".format(precision))
     print("Recall:    {:06.4f}%".format(recall))
     print("F1 Score:  {:06.4f}\n".format(f1_score))
+
+    log.loc[i, 'Precision'] = precision
+    log.loc[i, 'Recall'] = recall
+    log.loc[i, 'F1 Score'] = f1_score
 
 
 def main(data, options):
@@ -277,6 +276,16 @@ def main(data, options):
     iterations = options.iterations
     max_rules = options.max_rules
 
+    log_cols = {
+        'Iteration Type' : [],
+        'New Rules'      : [],
+        'New Names'      : [],
+        'Precision'      : [],
+        'Recall'         : [],
+        'F1 Score'       : []
+    }
+    log = pd.DataFrame(data=log_cols)
+
     corpus = tokenize_corpus(corpus_path)
     seed_rules = import_seed_rules(seed_rules_path)
     updatetokenstrength.main(corpus, seed_rules)
@@ -287,6 +296,11 @@ def main(data, options):
     name_set = set()
     new_names = get_new_names(corpus, name_set, seed_rules)
     name_set = name_set.union(new_names)
+
+    relevant_elements = 0.0
+    for token in corpus:
+        if token.type == Token.Type.personal_name:
+            relevant_elements += 1.0
 
     for i in range(1, iterations + 1):
         if i % 2 == 0:
@@ -310,6 +324,10 @@ def main(data, options):
         print("top {} rules found {} new names".format(
             len(new_rules), len(new_names)))
 
-        print_precision_and_recall(corpus, name_set)
+        log.loc[i, 'Iteration Type'] = iter_type
+        log.loc[i, 'New Rules'] = len(new_rules)
+        log.loc[i, 'New Names'] = len(new_names)
+        print_precision_and_recall(name_set, relevant_elements, i, log)
 
+    log.to_csv(path_or_buf=data.log)
     assess_strength(rule_set, corpus, data)
