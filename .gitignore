@@ -1,12 +1,9 @@
-# Config files
+# Config file
 sner.conf
 
 # Data files
 data/
 results/
-
-# unsupervised-old
-/models/unsupervised-old/*
 
 # Virtualenv
 bin/

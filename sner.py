@@ -126,7 +126,6 @@ def main():
         analysis.main(data, options)
     elif run == 'formatting':
         formatting.main(data, options)
-        subprocess.run('./run.sh')
     elif run == 'ner':
         ner.main(data, options)
     elif run == 'testing':

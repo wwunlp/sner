@@ -1,3 +1,4 @@
+"""Token"""
 from enum import Enum
 
 
@@ -9,38 +10,35 @@ class Token:
     This is meant to be used in conjunction with the TokenSet implemented below.
     """
 
-    Type = Enum('Types', 'unset none personal_name geographic_name profession number date')
-    
-    def __init__(self, left_context, token, right_context, annotation):
+    Type = Enum('Types', 'none personal_name geographic_name profession number date')
+
+    def __init__(self, left_context, word, right_context, token_type):
         self.left_context = left_context
-        self.token = token       
+        self.word = str(word)
         self.right_context = right_context
-        self.annotation = annotation
-        self.applicable_rules = []
-        self.occurrences = 1
-        self.name_probability = 0
+        self.type = token_type
+        self.rules = set()
+        self.name_probability = 0.0
+
+    def __hash__(self):
+        return id(self)
 
     def __eq__(self, other):
-        if type(self) is type(other):
-            return self.key() == other.key()
-        else:
-            return False
+        return self.word == other.word
 
     def __nq__(self, other):
         return not self.__eq__(other)
 
-    def __hash__(self):
-        return hash(self.token + str(self.left_context) +
-                    str(self.right_context) + str(self.annotation.value))
-
     def __str__(self):
-        return self.token
+        return "Token(left_context={}, word={}, right_context={}, {})".format(
+            self.left_context,
+            self.word,
+            self.right_context,
+            self.type
+        )
 
-    def key(self):
-        return ((self.token + str(self.left_context) +
-                str(self.right_context)), self.annotation.value)
-    
-    def get_type(word_type):
+    @classmethod
+    def find_type(cls, token_type):
         """
         Args:
             word_type (str): Word type from corpus
@@ -52,22 +50,22 @@ class Token:
             TypeError
         """
 
-        if word_type == 'PN':
+        if token_type == 'PN':
             return Token.Type.personal_name
 
-        elif word_type == 'GN':
+        elif token_type == 'GN':
             return Token.Type.geographic_name
 
-        elif word_type == 'PF':
+        elif token_type == 'PF':
             return Token.Type.profession
-        
-        elif word_type == 'N':
+
+        elif token_type == 'N':
             return Token.Type.number
-        
-        elif word_type == 'D':
+
+        elif token_type == 'D':
             return Token.Type.date
 
-        elif word_type == '-':
+        elif token_type == '-':
             return Token.Type.none
 
         else:

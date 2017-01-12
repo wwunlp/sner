@@ -1,93 +1,51 @@
+"""NER Model"""
 from classes import Rule, Token
 from scripts.ner import contextualfromnames, namesfromrule
 from scripts.ner import spellingfromnames, updatetokenstrength
 import matplotlib.pyplot as plt
-from enum import Enum
+import pandas as pd
 
-def tokenize_corpus(corpus_loc):
+
+def tokenize_corpus(corpus_path):
     """
     Args:
-        corpus_loc (str): Location of corpus file.
+        corpus_path (str): Location of corpus file.
 
     Returns:
-        corpus (TokenSet): Set of Token objects.
+        corpus (set): Set of Token objects.
 
     Raises:
         None
 
     """
-    
-    try:
-        corpus_file = open(corpus_loc, 'r')
-    except:
-        raise IOError("ERROR: Unable to open file: " + rulename)
-    
-    corpus_list = []
-    
-    next(corpus_file) # Skip headers
-    for line in corpus_file:
-        line = line.replace('\n', '')
-        corpus_list.append(line.split(','))
 
-    corpus_file.close()
+    corpus = set()
 
-    corpus = dict()
+    cols = ['Tablet ID', 'Line Number', 'Word Number', 'Word', 'Word Type']
 
-    # Convert the line into the appropriate format
-    # Each entry being a three element list, containing left context,
-    # token, right context
-
-    rawIter = iter(corpus_list)
-    line = next(rawIter)
-    tabletID = line[0]
-    
-    """
-    This is the token constructor.
-    Args:
-        The left context for the token, the token, right context, and token type
-        Right context assumed to be nothing, until set otherwise.
-
-    Returns:
-        The token adjacent to the current token. (?)
-
-    Raises:
-        None
-
-    """
-    prevToken = Token(None, line[3], None, Token.get_type(line[4]))
-
-    for line in rawIter:
-        if(line[0] == tabletID):
-            token = Token(prevToken, line[3], None, Token.get_type(line[4]))
-
-            prevToken.right_context = str(token)
-            
-            if prevToken in corpus:
-                corpus[prevToken].occurrences += 1
-            else:
-                corpus[prevToken] = prevToken
-
-            prevToken = token
-
+    data = pd.read_csv(corpus_path, names=cols, header=0)
+    for i in range(len(data) - 1):
+        if data.loc[i, 'Word Number'] > 0:
+            left_context = data.loc[i - 1, 'Word']
         else:
-            if prevToken in corpus:
-                corpus[prevToken].occurrences += 1
-            else:
-                corpus[prevToken] = prevToken
+            left_context = None
 
-            tabletID = line[0]
-            token = Token(None, line[3], None, Token.get_type(line[4]))
-            prevToken = token
+        word = data.loc[i, 'Word']
 
-    if prevToken in corpus:
-        corpus[prevToken].occurrences += 1
-    else:
-        corpus[prevToken] = prevToken
-        
-    return set(corpus.values())
+        if data.loc[i, 'Line Number'] == data.loc[i + 1, 'Line Number']:
+            right_context = data.loc[i + 1, 'Word']
+        else:
+            right_context = None
+
+        word_type = Token.find_type(data.loc[i, 'Word Type'])
+
+        token = Token(left_context, word, right_context, word_type)
+        corpus.add(token)
+
+    return corpus
 
 
-def tokenize_seed_rules(rulename):
+def import_seed_rules(seed_rules_path):
     """
     This function will read the seed rule file, and return the contents as
     a set.
@@ -102,85 +60,21 @@ def tokenize_seed_rules(rulename):
         Error printed if unable to open rulename file.
 
     """
-    rules = set()
 
-    try:
-        rulefile = open(rulename, "r")
-    except:
-        raise IOError("ERROR: Unable to open file: " + rulename)
+    seed_rules = set()
 
-    # Skip the first line since its column identifiers.
-    next(rulefile)
-    for line in rulefile:
-        # Clean out the line returns as they will confuse the algorithm.
-        line = line.replace('\n', '')
-        ruledata = line.split(",")
-        ruletype = Rule.Type.unset
+    cols = ['Rule Type', 'Rule', 'Strength']
 
-        if ruledata[0] == "LEFT_CONTEXT":
-            ruletype = Rule.Type.left_context
-        elif ruledata[0] == "RIGHT_CONTEXT":
-            ruletype = Rule.Type.right_context
-        elif ruledata[0] == "SPELLING":
-            ruletype = Rule.Type.spelling
-        else:
-            print("ERROR: rule parsing failed, invalid type: " + ruledata[0])
-            sys.exit()
+    data = pd.read_csv(seed_rules_path, names=cols, header=0)
+    for i in range(len(data) - 1):
+        rule_type = Rule.find_type(data.loc[i, 'Rule Type'])
+        rule = data.loc[i, 'Rule']
+        strength = data.loc[i, 'Strength']
 
-        rules.add(Rule(ruletype, ruledata[1], float(ruledata[2])))
+        rule = Rule(rule_type, rule, strength)
+        seed_rules.add(rule)
 
-    return rules
-
-
-def assess_performance(corpus, options):
-    """
-    Find all names that pass a certain probability threshold, these will be
-    considered our results
-    Args:
-        corpus (TokenSet): Set of Token objects
-        options (Options): Options object with attributes of flags and
-            variables.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    """
-
-    name_threshold = options.accept_threshold
-    names_found = set()
-
-    print("performance so far:")
-
-    for token in corpus:
-        if token.name_probability > name_threshold:
-            names_found.add(token)
-
-    total_results = 0
-    accurate_results = 0
-
-    for token in names_found:
-        total_results += token.occurrences
-        if token.annotation == Token.Type.personal_name:
-            accurate_results += token.occurrences
-
-    total_names = 0
-
-    for token in corpus:
-        if token.annotation == Token.Type.personal_name:
-            total_names += token.occurrences
-
-    precision = accurate_results / total_results
-    recall = accurate_results / total_names
-    f1score = 2 * precision * recall / (precision + recall)
-
-    print("F1-score: {}%".format(100*f1score))
-    print("precision: {}%".format(100 * precision))
-    print("recall: {}%".format(100 * recall))
-    print("acceptance threshold: {}%".format(100 * name_threshold))
-    #print("probability ratings off by {} ponts".format(100 * abs(name_threshold - precision)))
+    return seed_rules
 
 
 def assess_strength(rules, corpus, data):
@@ -220,14 +114,17 @@ def assess_strength(rules, corpus, data):
     for rule in rules:
         names = namesfromrule.main(corpus, rule)
         real_names = 0
-        total_names = 0
+        total_names = len(names)
         
         for token in names:
-            if token.annotation == Token.Type.personal_name:
-                real_names += rule.occurrences
-            total_names += rule.occurrences
+            if token.type == Token.Type.personal_name:
+                real_names += 1
 
-        true_strength = real_names / total_names
+        if total_names == 0:
+            true_strength = 0
+        else:
+            true_strength = real_names / total_names
+        
         delta = abs(true_strength - rule.strength)
         total_delta += delta
 
@@ -253,16 +150,16 @@ def assess_strength(rules, corpus, data):
     rulefile.close()
 
     print("               ", end='\r')
-    print("percentage of bad rules: {}%".format(
+    print("percentage of bad rules:    {}%".format(
         100 * bad_rules / len(rules)
     ))
-    print("percentage of bad context: {}%".format(
+    print("percentage of bad context:  {}%".format(
         100 * bad_context / total_context
     ))
     print("percentage of bad spelling: {}%".format(
         100 * bad_spelling / total_spelling
     ))
-    print("average delta value: {}%".format(
+    print("average delta value:        {}%".format(
         100 * total_delta / len(rules)
     ))
 
@@ -282,31 +179,75 @@ def assess_strength(rules, corpus, data):
     plt.show()
 
 
-def get_names(corpus, rules):
+def get_new_names(corpus, names, rules):
     """
     Meant to use the provided ruleset to scan the corpus for names.
     It will then return the names in quesiton, which will be used
     to generate more rules.
 
     Args:
-        corpus (TokenSet): Set of Token objects
+        corpus (set): Set of Token objects
+        names (set): Set of Token objects
         rules (set): Set of Rule objects
 
     Returns:
-        names (TokenSet): Set of Token objects
+        new_names (set): Set of Token objects
 
     Raises:
         None
 
     """
 
-    names = set()
+    new_names = set()
 
     for rule in rules:
         results = namesfromrule.main(corpus, rule)
-        names = names.union(results)
+        for name in results:
+            if name not in names:
+                new_names.add(name)
 
-    return names
+    return new_names
+
+
+def print_precision_and_recall(corpus, name_set):
+    """
+    print precision and recall
+    """
+
+    positives = 0.0
+    true_positives = 0.0
+    relevant_elements = 0.0
+    precision = 0.0
+    recall = 0.0
+    f1_score = 0.0
+
+    for token in corpus:
+        if token.type == Token.Type.personal_name:
+            relevant_elements += 1.0
+
+    for token in name_set:
+        positives += 1.0
+        if token.type == Token.Type.personal_name:
+            true_positives += 1.0
+
+    if positives == 0.0:
+        precision = 0.0
+    else:
+        precision = true_positives / positives * 100
+
+    if relevant_elements == 0.0:
+        recall = 0.0
+    else:
+        recall = true_positives / relevant_elements * 100
+
+    if precision + recall == 0.0:
+        f1_score = 0.0
+    else:
+        f1_score = 2.0 * precision * recall / (precision + recall)
+
+    print("Precision: {:06.4f}%".format(precision))
+    print("Recall:    {:06.4f}%".format(recall))
+    print("F1 Score:  {:06.4f}\n".format(f1_score))
 
 
 def main(data, options):
@@ -331,56 +272,44 @@ def main(data, options):
 
     """
 
-    corpus_file = data.corpus
-    seed_rules_file = data.seed_rules
+    corpus_path = data.corpus
+    seed_rules_path = data.seed_rules
     iterations = options.iterations
     max_rules = options.max_rules
 
-    corpus = tokenize_corpus(corpus_file)
-    seed_rules = tokenize_seed_rules(seed_rules_file)
-
+    corpus = tokenize_corpus(corpus_path)
+    seed_rules = import_seed_rules(seed_rules_path)
     updatetokenstrength.main(corpus, seed_rules)
 
-    rule_list = list(seed_rules)
-    all_rules = seed_rules
+    rule_set = set()
+    rule_set = rule_set.union(seed_rules)
 
-    new_names = get_names(corpus, seed_rules)
-    name_list = list(new_names)
+    name_set = set()
+    new_names = get_new_names(corpus, name_set, seed_rules)
+    name_set = name_set.union(new_names)
 
-    context_iter = False
-
-    i = 0
-    while i < iterations:
-        if context_iter:
-            print("iteration {}: find context rules".format(i + 1))
-            new_rules = contextualfromnames.main(corpus, all_rules,
-                                      name_list, max_rules, i, options)
-            rules_found = len(new_rules)
-            print("found {} new context rules!".format(rules_found))
-
+    for i in range(1, iterations + 1):
+        if i % 2 == 0:
+            iter_type = 'context'
+            get_new_rules = contextualfromnames.main
         else:
-            print("iteration {}: find spelling rules".format(i + 1))
-            new_rules = spellingfromnames.main(corpus, all_rules,
-                                      name_list, max_rules, i, options)
-            rules_found = len(new_rules)
-            print("found {} new spelling rules!".format(rules_found))
+            iter_type = 'spelling'
+            get_new_rules = spellingfromnames.main
 
-        updatetokenstrength.main(corpus, new_rules)
+        print("Iteration {}: find {} rules".format(i, iter_type))
+        new_rules = get_new_rules(
+            corpus, rule_set, name_set, max_rules, i, options)
+        print("Found {} new {} rules".format(len(new_rules), iter_type))
 
-        rule_list.extend(list(new_rules))
-        all_rules = all_rules.union(new_rules)
+        rule_set = rule_set.union(new_rules)
+        updatetokenstrength.main(corpus, rule_set)
 
-        new_names = get_names(corpus, new_rules)
-        name_list.extend(list(new_names))
+        new_names = get_new_names(corpus, name_set, new_rules)
+        name_set = name_set.union(new_names)
 
         print("top {} rules found {} new names".format(
-            rules_found, len(new_names)))
+            len(new_rules), len(new_names)))
 
-        assess_performance(corpus, options)
+        print_precision_and_recall(corpus, name_set)
 
-        print("")
-
-        context_iter = not context_iter
-        i += 1
-
-    assess_strength(all_rules, corpus, data)
+    assess_strength(rule_set, corpus, data)

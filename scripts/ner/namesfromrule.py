@@ -1,4 +1,5 @@
-from classes import Rule, Token
+"""Names from rule."""
+from classes import Rule
 
 
 def main(corpus, rule):
@@ -8,11 +9,11 @@ def main(corpus, rule):
     the code as 'names'.
 
     Args:
-        courpus (TokenSet): Set of Token objects.
+        corpus (set): Set of Token objects.
         rule (Rule): Rule object.
 
     Returns:
-        names (TokenSet): Set of Token objects.
+        names (set): Set of Token objects.
 
     Raises:
         TypeError
@@ -21,46 +22,30 @@ def main(corpus, rule):
 
     names = set()
 
-    # How to handle a spelling rule
-    def spelling(corpus, rule):
-        names = set()
+    if rule.type == Rule.Type.left_context:
         for token in corpus:
-            if rule.contents in str(token):
+            if rule.contents == token.left_context:
                 names.add(token)
-                
-        return names
+                token.rules.add(rule)
 
-    # How to handle a right context rule
-    def leftContext(corpus, rule):
-        names = set()
-        for token in corpus:
-            if str(token.left_context) == rule.contents:
-                names.add(token)
- 
-        return names
-
-    # How to handle a right context rule
-    def rightContext(corpus, rule):
-        names = set()
-        for token in corpus:
-            if str(token.right_context) == rule.contents:
-                names.add(token)
- 
-        return names
-
-    # Decide how to handle the passed-in rule
-    if rule.type == Rule.Type.spelling:
-        names = spelling(corpus, rule)
-    elif rule.type == Rule.Type.left_context:
-        names = leftContext(corpus, rule)
     elif rule.type == Rule.Type.right_context:
-        names = rightContext(corpus, rule)
-    elif rule.rytpe == Rule.Type.unset:
-        tb = sys.exc_info()[2]
+        for token in corpus:
+            if rule.contents == token.right_context:
+                names.add(token)
+                token.rules.add(rule)
+
+    elif rule.type == Rule.Type.spelling:
+        for token in corpus:
+            if rule.contents in token.word:
+                names.add(token)
+                token.rules.add(rule)
+
+    elif rule.type == Rule.Type.unset:
         raise TypeError("improperly initialized rule within ruleset: " +
-                        rule.contents + ", type unset").with_traceback(tb)
+                        rule.contents + ", type unset")
+
     else:
-        print("unrecognized rule type found in nameFromRule: " +
-              rule.content + ", of type: " + rule.type)
+        raise TypeError("unrecognized rule type found in nameFromRule: " +
+                        rule.content + ", of type: " + rule.type)
 
     return names

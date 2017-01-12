@@ -19,30 +19,27 @@ def main(tokens, rules):
     """
 
     for rule in rules:
-        applicableTokens = namesfromrule.main(tokens, rule)
+        names = namesfromrule.main(tokens, rule)
 
-        for token in applicableTokens:
-            if rule not in token.applicable_rules:
-                # Raise ValueError("attempted to apply same rule to a token twice!")
+        for name in names:
+            # Raise ValueError("attempted to apply same rule to a token twice!")
 
-                token.applicable_rules.append(rule)
+            # Use statistical rules to calculate the new probability
+            # In other words, the probability that all other applicable rules in addition
+            #  to the current one are wrong
+            initialprob = name.name_probability
+            
+            if ((initialprob < 0) and (initialprob > 1)):
+                raise ValueError("Token \"" + str(name) + "\" has impossible name probability (v < 0 or v > 1): " + str(initialprob))
+            
+            addedprob = rule.strength
+            
+            if ((addedprob < 0) and (addedprob > 1)):
+                raise ValueError("Rule \"" + str(rule) + "\" has impossible strength rating (str < 0 or str > 1): " + str(addedprob))
 
-                # Use statistical rules to calculate the new probability
-                # In other words, the probability that all other applicable rules in addition
-                #  to the current one are wrong
-                initialprob = token.name_probability
-                
-                if ((initialprob < 0) and (initialprob > 1)):
-                    raise ValueError("Token \"" + str(token) + "\" has impossible name probability (v < 0 or v > 1): " + str(initialprob))
-                
-                addedprob = rule.strength
-                
-                if ((addedprob < 0) and (addedprob > 1)):
-                    raise ValueError("Rule \"" + str(rule) + "\" has impossible strength rating (str < 0 or str > 1): " + str(addedprob))
+            newprob = 1 - ((1 - initialprob) * (1 - addedprob))
+            
+            if ((newprob < 0) and (newprob > 1)):
+                raise ValueError("Generated impossible name probability: " + str(newprob))
 
-                newprob = 1 - ((1 - initialprob) * (1 - addedprob))
-                
-                if ((newprob < 0) and (newprob > 1)):
-                    raise ValueError("Generated impossible name probability: " + str(newprob))
-
-                token.name_probability = newprob
+            name.name_probability = newprob

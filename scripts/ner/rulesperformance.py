@@ -9,17 +9,17 @@ from scripts.ner import namesfromrule
 
 # Rate the strength of the individual rule passed in,
 # given all Tokens where the rule is true (identifiedNames)
-def rateRulePerformance(identifiedNames, rule, alpha, k):
-    namesFound = 0
-    total = 0
-    for token in identifiedNames:
-        namesFound += token.name_probability * token.occurrences
-        total += token.occurrences
+def rateRulePerformance(results, rule, alpha, k, accept_threshold):
+    total = len(results)
+    name_count = 0
+    for token in results:
+        if token.name_probability > accept_threshold:
+            name_count += 1
 
-    strength = (namesFound + alpha) / (total + k * alpha)
+    strength = (name_count + alpha) / (total + k * alpha)
 
     rule.strength = strength
-    rule.occurrences = len(identifiedNames)
+    rule.occurrences = total
 
 
 # Find all tokens that match a given rule
@@ -51,10 +51,11 @@ def main(corpus, rules, options):
     k = options.k
     i = 1
     length = len(rules)
+    accept_threshold = options.accept_threshold
 
     for rule in rules:
         names = namesfromrule.main(corpus, rule)
-        rateRulePerformance(names, rule, alpha, k)
+        rateRulePerformance(names, rule, alpha, k, accept_threshold)
 
         # Print progress information
         print("Rating rule performance, progress: " + str(i) + "/" +
