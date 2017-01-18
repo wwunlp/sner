@@ -13,8 +13,8 @@ def getKgrams(names, k):
     Example use to get monograms, birgams, and trigrams:
     getKgrams(getPNs(), 3)
     Args:
-        names = dictionary of the form { Names : Occurrences }
-        k = Max k-gram you want to retrieve.
+        names (dict) = dictionary of the form { Names : Occurrences }
+        k (int) = Max k-gram you want to retrieve.
             Special values of k = -1 returning dictionary of monograms.
                           and k = -2 returning dictionary of monograms,
                                   followed by a dictionary of bigrams.
@@ -54,6 +54,26 @@ def gramsToRules(kgrams, allrules, iteration):
 
 
 def main(corpus, allrules, names, maxrules, iteration, options):
+    """
+    Produces lists of grams, from monograms up to k-grams.
+    Duplicate found in /scripts/readnames.py
+    Example use to get monograms, birgams, and trigrams:
+    getKgrams(getPNs(), 3)
+    Args:
+        corpus (set) = set of all tokens in the corpus
+        allrules (set) = set of all rules in the corpus
+		names (set) = set of tokens that will be used to generate new spelling rules
+        maxrules (int) = maximum number of rules to be accepted with each iteration
+        iteration (int) = what iteration are we currently on?
+        options (Options) = collection of configuration data
+
+    Returns:
+        Set of spelling rules generated from names
+
+    Raises:
+        None
+
+    """
     # Uses up to trigrams currently
     maxGram = 3
 

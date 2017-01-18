@@ -9,11 +9,11 @@ def main(corpus, rule):
     the code as 'names'.
 
     Args:
-        corpus (set): Set of Token objects.
-        rule (Rule): Rule object.
+        corpus (set): Set of all Token objects in the corpus.
+        rule (Rule): Rule object used to identify results.
 
     Returns:
-        names (set): Set of Token objects.
+        names (set): Set of Token objects that match the passed in Rule.
 
     Raises:
         TypeError

@@ -8,12 +8,11 @@ def main(ruleset, maxrules):
     Sorts rules into the top n rules, where n = maxrules
     Sorted by strength, ties broken by alphabetization
 
-    Cut the rules down to only the ones that will be accepted in the next iteration
     Args:
         ruleset = set of all rules known
         maxrules = integer value of maximum number of rules we can accept
     Returns:
-        Updated ruleset with up to maxrules new rules.
+        The set of rules that are to be accepted by the next iteration.
 
     Raises:
         None

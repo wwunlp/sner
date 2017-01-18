@@ -3,8 +3,14 @@ from enum import Enum
 
 
 class Rule:
-    """
-    Rule
+    """Object representing a rule that is used to identify names within the corpus
+
+    Attributes:
+        type (Enum): What variety of rule is this (spelling, context, etc)
+        contents (str): Data that defines the rule
+        strength (float): Percent chance that any token this rule applies to is a name
+        occurrences (int): Number of tokens this rule applies to
+		iteration (int): The iteration in which this rule was generated
     """
 
     Type = Enum('Types', 'unset spelling left_context right_context')

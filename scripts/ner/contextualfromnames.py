@@ -9,12 +9,12 @@ def main(corpus, rules, names, max_rules, iteration, options):
     assess the performance of any rules it finds from the names
 
     Args:
-        corpus (set): Set of Token objects.
-        rules (set): Set of Rule objects.
-        names (set): Set of Token objects.
-        max_rules (int): int of max rules.
-        iteration (int): 
-        options (Options):
+        corpus (set): Set of all Token objects in the corpus.
+        rules (set): Set of all Rule objects that have been found so far.
+        names (set): Set of Token objects to derive new context rules from.
+        max_rules (int): maximum number of rules to be accepted each iteration.
+        iteration (int): what iteration is the algorithm currently on?
+        options (Options): collection of configuration options
 
     Returns:
         new_rules (set): Set of Rule objects.

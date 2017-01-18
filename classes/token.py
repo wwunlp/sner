@@ -7,7 +7,14 @@ class Token:
     This represents a given 'token' in the corpus.
     It represents a combination of left context, right context, and the word itself.
     Any identical tokens will be combined into pre-existing ones.
-    This is meant to be used in conjunction with the TokenSet implemented below.
+	
+	Attributes:
+        left_context (str): contents of token to the left of this token
+        word (str): this token as a string
+        right_context (str): contents of token to the right of this token
+		type (Enum): what kind of data does this token represent? (personal name, date, etc)
+		rules (set): set of Rule objects that apply to this token
+        name_probability (float): percent chance that this token represents a name
     """
 
     Type = Enum('Types', 'none personal_name geographic_name profession number date')

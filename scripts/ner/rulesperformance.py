@@ -33,7 +33,7 @@ def main(corpus, rules, options):
     Finds all tokens that match a given rule, using that to rate the rules
     performance. Rates rule performance by totalling up the tokens that 
     match the rule, and comparing that to how many of the tokens in that set
-    are marked as a PN.
+    are considered to be a PN.
     Args:
         corpus = Set of all lines from the corpus.
         rules = RuleSet object of all currently used rules.
