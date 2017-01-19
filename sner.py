@@ -11,7 +11,7 @@ import os
 import pytest
 from classes import Data, Options
 from models import ner
-from scripts import analysis, formatting
+from scripts import analysis, formatting, corpus_export
 
 
 def add_args(parser):
@@ -30,10 +30,10 @@ def add_args(parser):
     """
 
     parser.add_argument('-r', '--run', help='Run [analysis], [formatting], '
-                        '[testing], or [ner] routines',
+                        '[testing], [export], or [ner] routines',
                         required=False, choices=['analysis', 'formatting',
-                                                 'testing', 'ner'])
-    parser.add_argument('-c', '--corpus', help='Path to corpus file',
+                                                 'testing', 'ner', 'export'])
+    parser.add_argument('-c', '--corpus', help='Location of corpus file',
                         required=False)
     parser.add_argument('-a', '--attestations', help='Path to attestations '
                         'file', required=False)
@@ -126,6 +126,8 @@ def main():
         analysis.main(data, options)
     elif run == 'formatting':
         formatting.main(data, options)
+    elif run == 'export':
+        corpus_export.main(data, options)
     elif run == 'ner':
         ner.main(data, options)
     elif run == 'testing':
