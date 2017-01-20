@@ -327,7 +327,12 @@ def main(data, options):
         if token.type == Token.Type.personal_name:
             relevant_elements += 1.0
 
-    display.start()
+    display.start(
+        "Starting Model:\n   {} iterations, {} max rules".format(
+            iterations,
+            max_rules
+        )
+    )
     for i in range(1, iterations + 1):
         if i % 2 == 0:
             iter_type = 'context'
@@ -348,6 +353,7 @@ def main(data, options):
             display
         )
 
+        print(" " * 72, end='\r')
         print("Found {} new {} rules".format(len(new_rules), iter_type))
 
         rule_set = rule_set.union(new_rules)
