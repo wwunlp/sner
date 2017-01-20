@@ -28,7 +28,7 @@ def rateRulePerformance(results, rule, alpha, k, accept_threshold):
 # and comparing that to how many of the tokens in that set are marked as a PN
 
 
-def main(corpus, rules, options):
+def main(corpus, rules, options, iteration, display):
     """
     Finds all tokens that match a given rule, using that to rate the rules
     performance. Rates rule performance by totalling up the tokens that 
@@ -46,21 +46,18 @@ def main(corpus, rules, options):
         None
 
     """
-    
+
     alpha = options.alpha
     k = options.k
-    i = 1
-    length = len(rules)
     accept_threshold = options.accept_threshold
 
+    i = 0
     for rule in rules:
         names = namesfromrule.main(corpus, rule)
         rateRulePerformance(names, rule, alpha, k, accept_threshold)
 
-        # Print progress information
-        print("Rating rule performance, progress: " + str(i) + "/" +
-              str(length) + 20 * ' ', end='\r')
         i += 1
-
-    # Erase the last progress report
-    print(' ' * 50, end='\r')
+        display.update_progress_bar(
+            (len(rules) * (iteration - 1)) + i,
+            len(rules) * options.iterations
+        )

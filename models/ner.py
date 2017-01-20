@@ -1,12 +1,12 @@
 """NER Model"""
-from classes import Rule, Token
+from classes import Display, Rule, Token
 from scripts.ner import contextualfromnames, namesfromrule
 from scripts.ner import spellingfromnames, updatetokenstrength
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def tokenize_corpus(corpus_path):
+def import_corpus(corpus_path, display):
     """
     Args:
         corpus_path (str): Location of corpus file.
@@ -42,10 +42,12 @@ def tokenize_corpus(corpus_path):
         token = Token(left_context, word, right_context, word_type)
         corpus.add(token)
 
+        display.update_progress_bar(i + 1, len(data))
+
     return corpus
 
 
-def import_seed_rules(seed_rules_path):
+def import_seed_rules(seed_rules_path, display):
     """
     This function will read the seed rule file, and return the contents as
     a set.
@@ -70,9 +72,10 @@ def import_seed_rules(seed_rules_path):
         rule_type = Rule.find_type(data.loc[i, 'Rule Type'])
         rule = data.loc[i, 'Rule']
         strength = data.loc[i, 'Strength']
-
         rule = Rule(rule_type, rule, strength)
         seed_rules.add(rule)
+
+        display.update_progress_bar(i + 1, len(data))
 
     return seed_rules
 
@@ -98,14 +101,22 @@ def assess_strength(rules, corpus, data):
     total_context = 0
     total_spelling = 0
     total_delta = 0
-    
+
     est_false_positives = 0
 
     print("rule performance:")
     print("calculating...", end='\r')
 
-    rulefile = open(data.output, 'wb')
-    rulefile.write("Iteration of Origin,Rule,Rule Type,Strength,Real Strength,Occurrences\n".encode('utf-8'))
+    i = 0
+    cols = {
+        'Iteration'     : [],
+        'Rule'          : [],
+        'Type'          : [],
+        'Strength'      : [],
+        'True Strength' : [],
+        'Occurrences'   : []
+    }
+    output = pd.DataFrame(data=cols)
 
     x_vals = []
     y_vals = []
@@ -115,7 +126,7 @@ def assess_strength(rules, corpus, data):
         names = namesfromrule.main(corpus, rule)
         real_names = 0
         total_names = len(names)
-        
+
         for token in names:
             if token.type == Token.Type.personal_name:
                 real_names += 1
@@ -124,7 +135,7 @@ def assess_strength(rules, corpus, data):
             true_strength = 0
         else:
             true_strength = real_names / total_names
-        
+
         delta = abs(true_strength - rule.strength)
         total_delta += delta
 
@@ -145,9 +156,15 @@ def assess_strength(rules, corpus, data):
             else:
                 bad_context += 1
 
-        rulefile.write("{0},{1},{2},{3},{4},{5}\n".format(str(rule.iteration), str(rule.contents), str(rule.type), str(rule.strength), str(true_strength), str(rule.occurrences)).encode('utf-8'))
-        
-    rulefile.close()
+        i += 1
+        output.loc[i, 'Iteration']     = rule.iteration
+        output.loc[i, 'Rule']          = rule.contents
+        output.loc[i, 'Type']          = rule.type.name
+        output.loc[i, 'Strength']      = rule.strength
+        output.loc[i, 'True Strength'] = true_strength
+        output.loc[i, 'Occurrences']   = rule.occurrences
+
+    output.to_csv(path_or_buf=data.output)
 
     print("               ", end='\r')
     print("percentage of bad rules:    {}%".format(
@@ -286,8 +303,16 @@ def main(data, options):
     }
     log = pd.DataFrame(data=log_cols)
 
-    corpus = tokenize_corpus(corpus_path)
-    seed_rules = import_seed_rules(seed_rules_path)
+    display = Display()
+
+    display.start("Importing Corpus: {}".format(corpus_path))
+    corpus = import_corpus(corpus_path, display)
+    display.finish()
+
+    display.start("Importing Seed Rules: {}".format(seed_rules_path))
+    seed_rules = import_seed_rules(seed_rules_path, display)
+    display.finish()
+
     updatetokenstrength.main(corpus, seed_rules)
 
     rule_set = set()
@@ -302,6 +327,7 @@ def main(data, options):
         if token.type == Token.Type.personal_name:
             relevant_elements += 1.0
 
+    display.start()
     for i in range(1, iterations + 1):
         if i % 2 == 0:
             iter_type = 'context'
@@ -311,8 +337,17 @@ def main(data, options):
             get_new_rules = spellingfromnames.main
 
         print("Iteration {}: find {} rules".format(i, iter_type))
+
         new_rules = get_new_rules(
-            corpus, rule_set, name_set, max_rules, i, options)
+            corpus,
+            rule_set,
+            name_set,
+            max_rules,
+            i,
+            options,
+            display
+        )
+
         print("Found {} new {} rules".format(len(new_rules), iter_type))
 
         rule_set = rule_set.union(new_rules)
@@ -329,5 +364,6 @@ def main(data, options):
         log.loc[i, 'New Names'] = len(new_names)
         print_precision_and_recall(name_set, relevant_elements, i, log)
 
+    display.finish()
     log.to_csv(path_or_buf=data.log)
     assess_strength(rule_set, corpus, data)
