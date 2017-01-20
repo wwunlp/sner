@@ -302,6 +302,5 @@ def writeKey():
         out.write("\n")
                 
 
-    
-
-
+if __name__ == '__main__':    
+    main()

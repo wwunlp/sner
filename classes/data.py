@@ -9,7 +9,8 @@ class Data:
         output (str): Location of output file.
     """
 
-    def __init__(self, corpus, attestations, seed_rules, output, log):
+    def __init__(self, corpus, attestations, seed_rules,
+                 train, dev, test, output, log):
         """Sets the ``corpus``, ``attestations``, ``seed_rules``, and
         ``output`` attributes for the ``Data`` class.
 
@@ -29,5 +30,8 @@ class Data:
         self.corpus = corpus
         self.attestations = attestations
         self.seed_rules = seed_rules
+        self.train = train
+        self.dev = dev
+        self.test = test
         self.output = output
         self.log = log
