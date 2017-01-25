@@ -407,18 +407,18 @@ def writeLine(options, line, out_features, out_target, out_key, known_pn, known_
         if not (i == 0 and (w == "" or w == "-" or w == "...")):
             if (i > 0 and i < len(words) -1):
                 # write last word
-                out_target.write(last_tablet + ", " + last_line_id + ", " + last_index + ", " + last_word)
+                out_key.write("{0}, {1}, {2}, {3}\n".format(last_tablet, last_line_id, last_index, last_word))
                 writeSparse(out_features, last_word_2, last_word, w, x_index)
                 writeTarget(out_target, last_name, last_geo)
                 x_index += 1
             elif i == len(words) -1:
                 #write last word
-                out_target.write(last_tablet + ", " + last_line_id + ", " + last_index + ", " + last_word)
+                out_key.write("{0}, {1}, {2}, {3}\n".format(last_tablet, last_line_id, last_index, last_word))
                 writeSparse(out_features, last_word_2, last_word, w, x_index)
                 writeTarget(out_target, last_name, last_geo)
                 x_index += 1
                 #write current word
-                out_target.write(tablet_id + ", " + line_id + ", " + i + ", " + w)
+                out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, w))
                 writeSparse(out_features, last_word, w, "", x_index)                    
                 writeTarget(out_target, w_type == "PN", w_type == "GN")
                 x_index += 1
