@@ -53,9 +53,161 @@ def findKnown(data, options, known_pn, known_gn):
             
 
 
-left_features =  ['dumu','giri3', 'iti']
-right_features = ['lugal-e','nubanda3']
-spelling_features = ['ba-ni', 'a-da', 'a-na']
+left_features =  ['dumu','giri3', 'iti',
+                  'u3',
+                  'arad2',
+                  'gurum2',
+                  'en-nu',
+                  'zi-ga',
+                  'igi',
+                  'im-sumur',
+                  'in-u',
+                  'du-u2-um',
+                  'i7',
+                  'gu2-gal',
+                  'a2-bi',
+                  'a-ga2-ri-na',
+                  'puzur4-a-ku-um',
+                  'tu7',
+                  'nig2-gu2-na',
+                  '{giš}garigx',
+                  'nig2-lam2',
+                  'sag',
+                  'ki-a-nag',
+                  '{tug2}nig2-lam2-ab',
+                  '{na4}profession',
+                  '{gi}dur-gazi',
+                  'nig2-kas7',
+                  'bara2',
+                  'i3-giš-bara2',
+                  'kaskal',
+                  'gar3-da-hi-še3',
+                  'kab2',
+                  'tug2-ba',
+                  '{giš}u3-suh5-sig',
+                  '{gi}ma-an-sim',
+                  'nig2-ar3-ra',
+                  '{gi}gur5',
+                  'udug',
+                  '{tug2}bar-dul5-ab']
+
+right_features = ['lugal-e','nubanda3',
+                  'dub-sar',
+                  'arad2-zu',
+                  'ašgab',
+                  'nu-banda3',
+                  'a-zu',
+                  'e2-šim×gar',
+                  'al-tar',
+                  'a2-ag2-ga2',
+                  'geme2-arad2',
+                  'al-nag4-ga2',
+                  '{d}nin-{d}si4-an-na',
+                  '1-kam',
+                  '2-kam',
+                  'a-ra2',
+                  'e2-uš-bar',
+                  'lu2-kin-gi4-a',
+                  'e2-da-na{ki}-še3',
+                  '3-kam',
+                  'ba-ra-šeg6',
+                  '{dug}utul2',
+                  'e2-kišib-ba-še3',
+                  'ša3-du',
+                  'hun-ga2-e-ne',
+                  'ka',
+                  'ga2-nun-še3',
+                  'ki-a-nag',
+                  'ki-mu-ra',
+                  'si-ga',
+                  'e2-uš-bar-še3',
+                  '4-kam',
+                  'diri-ga',
+                  'kurušda',
+                  'alan',
+                  '1-sila3',
+                  'ma-ma-šar-ra-at',
+                  'za3-gu2-la2',
+                  'du11-ga',
+                  '{d}šu-{d}suen-e-te-el2-ka-{d}en-lil2',
+                  'lu2-kas4',
+                  'šuš3']
+
+spelling_features = ['i3-li',
+                     'i3-li2',
+                     'kab-ta',
+                     'kab-ta2',
+                     'a-ra',
+                     'ra-a',
+                     'a-bi',
+                     '{d}nin-kar',
+                     'ra-am',
+                     'kar3',
+                     'ta2-kar3',
+                     'am-i3',
+                     'ra-am-i3',
+                     'na-ah',
+                     'sig5',
+                     'ah-i3-li2',
+                     'na-ah-i3',
+                     'ah-i3',
+                     'na-ra',
+                     'na-ra-am',
+                     'li2-a',
+                     'bi2-a',
+                     'a-li2',
+                     'li2-i3',
+                     'a-me',
+                     'ar3-ra',
+                     'nig2-ar3',
+                     'nig2-ar3-ra',
+                     'ra-sig5',
+                     'ar3-ra-sig5',
+                     'ba-ba',
+                     'li2-bi',
+                     'la-ni',
+                     'sa2-a',
+                     'bi-la',
+                     'ra-ni',
+                     'bi-la-ni',
+                     'li2-bi-la',
+                     'at-i3',
+                     'ki-sa2',
+                     'ta2-ki',
+                     'si-ru',
+                     'si-ru-um',
+                     'li2-um',
+                     'li2-an.dul3',
+                     'duru5-sig5',
+                     'li2-aš-ra',
+                     'aš-ra-ni',
+                     'aš-ra',
+                     'li2-aš',
+                     'ki-ru',
+                     'ta2-ki-ru',
+                     'ki-ru-um',
+                     'ba-ra',
+                     'gašam-e',
+                     'gašam-e-ne',
+                     'ba-ak',
+                     'duru5-kab-bi',
+                     'kab-bi',
+                     'duru5-kab',
+                     'li2-um{ki}',
+                     'ur2-i3',
+                     'uz-ra-ni',
+                     'za-gar3',
+                     'sa2-ab',
+                     'li2-uz-ra',
+                     'li2-uz',
+                     'uz-ra',
+                     'ši-ru',
+                     'bi2-za',
+                     'gur11',
+                     'u4-11',
+                     'li2-tu',
+                     'ga-li2']
+
 known_symbols = []
 
 x_index = 0
@@ -143,6 +295,7 @@ def main(data, options):
 
     out_features = open('data/features_train.sparseX', "w")
     out_target = open('data/target_train.RT', "w")
+    out_key = open('data/target_train.KEY', "w")
 
     lines = file2.read().splitlines()
     end_train =  len(lines) * 0.3
@@ -151,35 +304,37 @@ def main(data, options):
     
     while len(lines) > end_train:
         line = random.choice(lines)
-        writeLine(options, line, out_features, out_target, known_pn, known_gn)
+        writeLine(options, line, out_features, out_target, out_key, known_pn, known_gn)
         lines.remove(line)
 
     out_features.close()
     out_target.close()
     out_features = open('data/features_dev.sparseX', "w")
     out_target = open('data/target_dev.RT', "w")
+    out_key = open('data/target_dev.KEY', "w")
     x_index = 0
     
     while len(lines) > end_dev:
         line = random.choice(lines)
-        writeLine(options, line, out_features, out_target, known_pn, known_gn)
+        writeLine(options, line, out_features, out_target, out_key, known_pn, known_gn)
         lines.remove(line)
 
     out_features.close()
     out_target.close()
     out_features = open('data/features_test.sparseX', "w")
     out_target = open('data/target_test.RT', "w")
+    out_key = open('data/target_test.KEY', "w")
     x_index = 0
     
     while len(lines) > 0:
         line = random.choice(lines)
-        writeLine(options, line, out_features, out_target, known_pn, known_gn)
+        writeLine(options, line, out_features, out_target, out_key, known_pn, known_gn)
         lines.remove(line)
     
     writeKey()
 
 
-def writeLine(options, line, out_features, out_target, known_pn, known_gn):
+def writeLine(options, line, out_features, out_target, out_key, known_pn, known_gn):
     global x_index
     line = line.split(',')
     if len(line) < 8:
@@ -207,6 +362,10 @@ def writeLine(options, line, out_features, out_target, known_pn, known_gn):
     line_id = re.sub("[L]", "", line_id)
     last_word = ""
     last_word_2 = ""
+    last_line_id = ""
+    last_tablet = ""
+    last_index = -1
+    
     last_name = False
     last_geo = False
         
@@ -248,21 +407,28 @@ def writeLine(options, line, out_features, out_target, known_pn, known_gn):
         if not (i == 0 and (w == "" or w == "-" or w == "...")):
             if (i > 0 and i < len(words) -1):
                 # write last word
+                out_target.write(last_tablet + ", " + last_line_id + ", " + last_index + ", " + last_word)
                 writeSparse(out_features, last_word_2, last_word, w, x_index)
                 writeTarget(out_target, last_name, last_geo)
                 x_index += 1
             elif i == len(words) -1:
                 #write last word
+                out_target.write(last_tablet + ", " + last_line_id + ", " + last_index + ", " + last_word)
                 writeSparse(out_features, last_word_2, last_word, w, x_index)
                 writeTarget(out_target, last_name, last_geo)
                 x_index += 1
                 #write current word
+                out_target.write(tablet_id + ", " + line_id + ", " + i + ", " + w)
                 writeSparse(out_features, last_word, w, "", x_index)                    
                 writeTarget(out_target, w_type == "PN", w_type == "GN")
                 x_index += 1
                     
         last_word_2 = last_word
         last_word = w
+        last_line_id = line_id
+        last_tablet = tablet_id
+        last_index = i
+        
         if w_type == "PN":
             last_name = True
         else:
@@ -286,12 +452,15 @@ def writeKey():
     offset = 0
     
     for i in range(len(left_features)):
+        out.write("[L]")
         out.write(left_features[i])
         out.write("\n")
     for i in range(len(right_features)):
+        out.write("[R]")
         out.write(right_features[i])
         out.write("\n")
     for i in range(len(spelling_features)):
+        out.write("[S]")
         out.write(spelling_features[i])
         out.write("\n")
 
