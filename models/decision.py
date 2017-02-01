@@ -95,13 +95,16 @@ def runModel(hyperparams):
     output.close()
 
 
+    
+    numpy.savetxt('data/dev_prediction.RT', prediction, delimiter=',',fmt='%d')
+
     # Export Tree to generate an image
     # 
-    #with open("data/decModel.dot", 'w') as f:
-    #    with open("data/features.KEY", "r") as f2:
-    #        feature_labels = f2.read().splitlines()
-    #        class_labels = ("NotName", "PersonalName", "GeoName")
-    #        f = tree.export_graphviz(model, out_file=f, feature_names=feature_labels, class_names=class_labels)
+    with open("data/decModel.dot", 'w') as f:
+        with open("data/features.KEY", "r") as f2:
+            feature_labels = f2.read().splitlines()
+            class_labels = ("NotName", "PersonalName", "GeoName")
+            f = tree.export_graphviz(model, out_file=f, feature_names=feature_labels, class_names=class_labels)
             
     #A = numpy.loadtxt("data/features_test.sparseX", ndmin=2)
     #I = A[:, 0]
@@ -115,18 +118,18 @@ def runModel(hyperparams):
 
 def genHyper():
     hyperparams = {
-        'criterion' : random.choice(['gini', 'entropy']),
-        'splitter' : random.choice(['best', 'random']),
-        'max_features' : random.choice([None, 'auto', 'sqrt', 'log2', random.randrange(100, 999)]),
-        'max_depth' : random.choice([None, random.randrange(3, 100, step=1)]),
-        'min_samples_split' : random.randrange(1, 25, step=1),
-        'max_leaf_nodes' : random.choice([None, random.randrange(50, 500, step=1)]),        
-        'min_samples_leaf' : random.choice([1, random.randrange(1, 25, step=1)])
+        'criterion' : 'gini', # random.choice(['gini', 'entropy']),
+        'splitter' : 'best', #random.choice(['best', 'random']),
+        'max_features' : None, #random.choice([None, 'auto', 'sqrt', 'log2', random.randrange(100, 999)]),
+        'max_depth' : None, #random.choice([None, random.randrange(3, 100, step=1)]),
+        'min_samples_split' : 2, #random.randrange(1, 25, step=1),
+        'max_leaf_nodes' : None, #random.choice([None, random.randrange(50, 500, step=1)]),        
+        'min_samples_leaf' : 1, #random.choice([1, random.randrange(1, 25, step=1)])
         }
     return hyperparams
 
-while True:
-    runModel(genHyper())
+
+runModel(genHyper())
 
 
 #numpy.savetxt("predictions_random_forest.txt", prediction, fmt='%.5f')

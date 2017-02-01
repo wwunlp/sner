@@ -98,6 +98,9 @@ def runModel(hyperparams):
     output = open(outputfile, 'a')
     output.write(result)
     output.close()
+
+
+    numpy.savetxt('data/dev_prediction.RT', prediction, delimiter=',',fmt='%d')
     
     #A = numpy.loadtxt("data/features_test.sparseX", ndmin=2)
     #I = A[:, 0]
@@ -112,19 +115,19 @@ def runModel(hyperparams):
 
 def genHyper():
     hyperparams = {
-        'n_est' : random.randrange(30, 500, step=10),
-        'criterion' : random.choice(['gini', 'entropy']),
-        'max_features' : random.choice([None, 'auto', 'sqrt', 'log2', random.randrange(100, 999)]),
-        'max_depth' : random.choice([None, random.randrange(3, 100, step=1)]),
-        'min_samples_split' : random.randrange(1, 25, step=1),
-        'max_leaf_nodes' : random.choice([None, random.randrange(50, 500, step=1)]),        
-        'min_samples_leaf' : random.choice([1, random.randrange(1, 25, step=1)])
+        'n_est' : 480, #random.randrange(30, 500, step=10),
+        'criterion' : 'entropy', #random.choice(['gini', 'entropy']),
+        'max_features' : None, #random.choice([None, 'auto', 'sqrt', 'log2', random.randrange(100, 999)]),
+        'max_depth' : None, #random.choice([None, random.randrange(3, 100, step=1)]),
+        'min_samples_split' : 4, #random.randrange(1, 25, step=1),
+        'max_leaf_nodes' : None, #random.choice([None, random.randrange(50, 500, step=1)]),        
+        'min_samples_leaf' : 1 #random.choice([1, random.randrange(1, 25, step=1)])
         }
     return hyperparams
 
 
-while True:
-    runModel(genHyper())
+#while True:
+runModel(genHyper())
 
 
 
