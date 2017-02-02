@@ -5,6 +5,9 @@ import re
 import argparse
 import random
 
+
+uniqueNames = True
+
 # To run: 
 # python3 sner.py -r export -nn True -np True 
 
@@ -213,7 +216,8 @@ spelling_features = ['i3-li',
 
 known_symbols = []
 
-x_index = 0
+test_names = set()
+dev_names = set()
 
 def writeSparse(out_features, word_left, word_middle, word_right, x_index):
     """
@@ -288,12 +292,10 @@ def main(config):
         None
 
     """
-
     path = config['path']
     corpus = config['corpus']
 
 
-    global x_index
     known_pn = {}
     known_gn = {}
     findKnown(config, known_pn, known_gn)
@@ -301,57 +303,67 @@ def main(config):
     # iterate each line in Garshana Text and output to specified file
     file2 = codecs.open(path + corpus, 'r', encoding = 'utf-8')
 
-    out_features = open(path + 'features_train.sparseX', "w")
-    out_target = open(path + 'target_train.RT', "w")
-    out_key = open(path + 'target_train.KEY', "w")
+  
 
     lines = file2.read().splitlines()
-    end_train =  len(lines) * 0.3
-    end_dev = len(lines) * 0.0
-    x_index = 0
-    
-    while len(lines) > end_train:
-        line = random.choice(lines)
-        writeLine(config, line, out_features, out_target, out_key, known_pn, known_gn)
-        lines.remove(line)
+    end_train =  len(lines) * 0.7
+    end_dev = len(lines) * 0.3
+    end_test = len(lines) * 0
 
-    out_features.close()
-    out_target.close()
-    out_features = open(path + 'features_dev.sparseX', "w")
-    out_target = open(path + 'target_dev.RT', "w")
-    out_key = open(path + 'target_dev.KEY', "w")
-    x_index = 0
-    
-    while len(lines) > end_dev:
-        line = random.choice(lines)
-        writeLine(config, line, out_features, out_target, out_key, known_pn, known_gn)
-        lines.remove(line)
+    out_features = open('data/features_train.sparseX', "w")
+    out_target = open('data/target_train.RT', "w")
+    out_key = open('data/target_train.KEY', "w")
 
-    out_features.close()
-    out_target.close()
-    out_features = open(path + 'features_test.sparseX', "w")
-    out_target = open(path + 'target_test.RT', "w")
-    out_key = open(path + 'target_test.KEY', "w")
+    out_features2 = open('data/features_dev.sparseX', "w")
+    out_target2 = open('data/target_dev.RT', "w")
+    out_key2 = open('data/target_dev.KEY', "w")
+
+    out_features3 = open('data/features_test.sparseX', "w")
+    out_target3 = open('data/target_test.RT', "w")
+    out_key3 = open('data/target_test.KEY', "w")
+
+
     x_index = 0
+    x_index2 = 0
+    x_index3 = 0
+
+    train_lines = 0
+    dev_lines = 0
+    test_lines = 0
+
     
     while len(lines) > 0:
-        line = random.choice(lines)
-        writeLine(config, line, out_features, out_target, out_key, known_pn, known_gn)
-        lines.remove(line)
+        if (train_lines < end_train or (dev_lines >= end_dev and test_lines >= end_test)):
+            line = random.choice(lines)
+            x_index = writeLine(x_index, config, line, out_features, out_target, out_key, known_pn, known_gn, True)
+            lines.remove(line)
+            train_lines += 1
+        if (dev_lines < end_dev and len(lines) > 0):
+            line = random.choice(lines)
+            x_index2 = writeLine(x_index2, config, line, out_features2, out_target2, out_key2, known_pn, known_gn, False)
+            lines.remove(line)
+            dev_lines += 1
+        if (test_lines < end_test and len(lines) > 0):
+            line = random.choice(lines)
+            writeLine(x_index3, config, line, out_features3, out_target3, out_key3, known_pn, known_gn, False)
+            lines.remove(line)
+            test_lines += 1
+
     
     writeKey(path)
 
 
-def writeLine(config, line, out_features, out_target, out_key, known_pn, known_gn):
+def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn, known_gn, test_run):
+
     norm_date = config['norm']['date']
     norm_geo  = config['norm']['geo']
     norm_num  = config['norm']['num']
     norm_prof = config['norm']['prof']
-    
-    global x_index
+
+
     line = line.split(',')
     if len(line) < 8:
-        return
+        return x_index
     tablet_id = line[0]
 
     # Clean up the line and ensure that there are no extra spaces
@@ -362,14 +374,14 @@ def writeLine(config, line, out_features, out_target, out_key, known_pn, known_g
 
     # We should skip the first line that labels the csv
     if "text" in text:
-        return
+        return x_index
         
     newText = text;
     words = text.split(' ')
     line_id = line[6]
     # skip description lines
     if line_id == "":
-        return
+        return x_index
     # change to line_id
     line_id = line[4]
     line_id = re.sub("[L]", "", line_id)
@@ -422,28 +434,16 @@ def writeLine(config, line, out_features, out_target, out_key, known_pn, known_g
                 # write last word
                 x_index += writeWord(last_tablet, last_line_id, last_index, last_word_2,
                            last_word, w, x_index, out_key, out_features, out_target,
-                           last_name, last_geo)
-                #out_key.write("{0}, {1}, {2}, {3}\n".format(last_tablet, last_line_id, last_index, last_word))
-                #writeSparse(out_features, last_word_2, last_word, w, x_index)
-                #writeTarget(out_target, last_name, last_geo)
-                #x_index += 1
+                                     last_name, last_geo, test_run)
             elif i == len(words) -1:
                 #write last word
                 x_index += writeWord(last_tablet, last_line_id, last_index, last_word_2,
                            last_word, w, x_index, out_key, out_features, out_target,
-                           last_name, last_geo)
-                #out_key.write("{0}, {1}, {2}, {3}\n".format(last_tablet, last_line_id, last_index, last_word))
-                #writeSparse(out_features, last_word_2, last_word, w, x_index)
-                #writeTarget(out_target, last_name, last_geo)
-                #x_index += 1
+                                     last_name, last_geo, test_run)
                 #write current word
                 x_index += writeWord(tablet_id, line_id, i, last_word, w, "", x_index,
                            out_key, out_features, out_target,
-                           w_type == "PN", w_type == "GN")
-                #out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, w))
-                #writeSparse(out_features, last_word, w, "", x_index)                    
-                #writeTarget(out_target, w_type == "PN", w_type == "GN")
-                #x_index += 1
+                                     w_type == "PN", w_type == "GN", test_run)
                     
         last_word_2 = last_word
         last_word = w
@@ -459,12 +459,25 @@ def writeLine(config, line, out_features, out_target, out_key, known_pn, known_g
             last_geo = True
         else:
             last_geo = False
+    # Return the final index.
+    return x_index
 
 
 def writeWord(tablet_id, line_id, i, last_word, word, next_word, x_index,
-              out_key, out_features, out_target, PN, GN):
-    if len(w) < 1:
+              out_key, out_features, out_target, PN, GN, test_run):
+    if len(word) < 1:
         return 0
+
+    if uniqueNames:
+        if not test_run and PN and word in test_names:
+            return 0
+        if test_run and PN and word in dev_names:
+            return 0
+        if test_run and PN and word:
+            test_names.add(word)
+        else:
+            dev_names.add(word)
+    
     out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, word))
     writeSparse(out_features, last_word, word, next_word, x_index)                    
     writeTarget(out_target, PN, GN)

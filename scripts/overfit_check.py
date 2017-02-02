@@ -1,11 +1,16 @@
 #from itertools import izip
 
-def main(data, options):
-    train_key = 'data/target_train.KEY'
-    train_target = 'data/target_train.RT'
-    dev_key = 'data/target_dev.KEY'
-    dev_target = 'data/target_dev.RT'
-    dev_pred = 'data/dev_prediction.RT'
+def main(config):
+
+    path = config['path']
+    corpus = config['corpus']
+
+    
+    train_key = path + 'target_train.KEY'
+    train_target = path + 'target_train.RT'
+    dev_key = path + 'target_dev.KEY'
+    dev_target = path + 'target_dev.RT'
+    dev_pred = path + 'dev_prediction.RT'
 
     train_names = set()
     dev_names = set()
@@ -24,9 +29,9 @@ def main(data, options):
     #for name in new_names:
     #    print(name)
 
-    dev_key = open('data/target_dev.KEY', "r")
-    dev_target = open('data/target_dev.RT', "r")
-    dev_pred = open('data/dev_prediction.RT', "r")
+    dev_key = open(dev_key, "r")
+    dev_target = open(dev_target, "r")
+    dev_pred = open(dev_pred, "r")
 
     correct = 0
     missed = 0
@@ -86,4 +91,4 @@ def addNames(file_key, file_target, names):
     return name_count
 
 
-main(None, None)
+

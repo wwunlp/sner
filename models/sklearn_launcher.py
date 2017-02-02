@@ -170,14 +170,14 @@ def main(config):
     data = A[:, 2]
     devX = coo_matrix((data, (I, J)), shape=(int(max(I))+1, feature_count))
 
-    A = np.loadtxt(path + 'features_atf.sparseX', ndmin=2)
-    I = A[:, 0]
-    J = A[:, 1]
-    data = A[:, 2]
-    atfX = coo_matrix((data, (I, J)), shape=(int(max(I))+1, feature_count))
+    #A = np.loadtxt(path + 'features_atf.sparseX', ndmin=2)
+    #I = A[:, 0]
+    #J = A[:, 1]
+    #data = A[:, 2]
+    #atfX = coo_matrix((data, (I, J)), shape=(int(max(I))+1, feature_count))
 
     print(devX.shape)
-    print(atfX.shape)
+    #print(atfX.shape)
 
     print("Training model")
 
@@ -228,13 +228,20 @@ def main(config):
     output = pd.DataFrame(data, index=[1])
     output.to_csv(path_or_buf=output_path)
 
-    atf_prediction = model.predict(atfX)
     np.savetxt(
-        path + 'atf_prediction.RT',
-        atf_prediction,
+        path + 'dev_prediction.RT',
+        prediction,
         delimiter=',',
         fmt='%d'
     )
+
+    #atf_prediction = model.predict(atfX)
+    #np.savetxt(
+    #    path + 'atf_prediction.RT',
+    #    atf_prediction,
+    #    delimiter=',',
+    #    fmt='%d'
+    #)
 
     if model_name == 'dec':
         with open(path + 'decModel.dot', 'w') as f:
