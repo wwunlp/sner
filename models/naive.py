@@ -108,12 +108,8 @@ def genHyper():
 while True:
     runModel(genHyper())
 
-
-#numpy.savetxt("predictions_random_forest.txt", prediction, fmt='%.5f')
-
-#print(A.toarray())
-
-
-
-
-
+def main(data, options):
+    """
+    main
+    """
+    pass

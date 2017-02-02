@@ -9,7 +9,7 @@ import random
 # python3 sner.py -r export -nn True -np True 
 
 
-def findKnown(data, options, known_pn, known_gn):
+def findKnown(config, known_pn, known_gn):
     """
     Iterates through the attenstations file for personal and geographical names
      and adds the lineIDs in a list to the known_pn and known_gn dictionaries.
@@ -26,14 +26,17 @@ def findKnown(data, options, known_pn, known_gn):
         None
 
     """
+    path = config['path']
+    norm_num = config['norm']['num']
+    norm_prof = config['norm']['prof']
 
-    file = codecs.open(data.attestations, 'r', encoding = 'utf-8')
+    file = codecs.open(path + 'attestations.csv', 'r', encoding = 'utf-8')
     # find all of the names
     for line in file:
         line = line.split(',')        
-        text = utilities.clean_line(line[4].rstrip(), options.norm_num, options.norm_prof)
+        text = utilities.clean_line(line[4].rstrip(), norm_num, norm_prof)
         text = text.lower()
-        name = utilities.clean_line(line[5].rstrip(), options.norm_num, options.norm_prof)
+        name = utilities.clean_line(line[5].rstrip(), norm_num, norm_prof)
         name = name.lower()
         line_id = line[1]
         line_id = re.sub("[L]", "", line_id)        
@@ -263,7 +266,7 @@ def writeSparse(out_features, word_left, word_middle, word_right, x_index):
 
 
 
-def main(data, options):
+def main(config):
     """
     Finds all names in options.attestations file, and goes through each word 
       in the main options.corpus file to create a sparse matrix file to be used
@@ -285,17 +288,22 @@ def main(data, options):
         None
 
     """
+
+    path = config['path']
+    corpus = config['corpus']
+
+
     global x_index
     known_pn = {}
     known_gn = {}
-    findKnown(data, options, known_pn, known_gn)
+    findKnown(config, known_pn, known_gn)
     
     # iterate each line in Garshana Text and output to specified file
-    file2 = codecs.open(data.corpus, 'r', encoding = 'utf-8')
+    file2 = codecs.open(path + corpus, 'r', encoding = 'utf-8')
 
-    out_features = open('data/features_train.sparseX', "w")
-    out_target = open('data/target_train.RT', "w")
-    out_key = open('data/target_train.KEY', "w")
+    out_features = open(path + 'features_train.sparseX', "w")
+    out_target = open(path + 'target_train.RT', "w")
+    out_key = open(path + 'target_train.KEY', "w")
 
     lines = file2.read().splitlines()
     end_train =  len(lines) * 0.3
@@ -304,37 +312,42 @@ def main(data, options):
     
     while len(lines) > end_train:
         line = random.choice(lines)
-        writeLine(options, line, out_features, out_target, out_key, known_pn, known_gn)
+        writeLine(config, line, out_features, out_target, out_key, known_pn, known_gn)
         lines.remove(line)
 
     out_features.close()
     out_target.close()
-    out_features = open('data/features_dev.sparseX', "w")
-    out_target = open('data/target_dev.RT', "w")
-    out_key = open('data/target_dev.KEY', "w")
+    out_features = open(path + 'features_dev.sparseX', "w")
+    out_target = open(path + 'target_dev.RT', "w")
+    out_key = open(path + 'target_dev.KEY', "w")
     x_index = 0
     
     while len(lines) > end_dev:
         line = random.choice(lines)
-        writeLine(options, line, out_features, out_target, out_key, known_pn, known_gn)
+        writeLine(config, line, out_features, out_target, out_key, known_pn, known_gn)
         lines.remove(line)
 
     out_features.close()
     out_target.close()
-    out_features = open('data/features_test.sparseX', "w")
-    out_target = open('data/target_test.RT', "w")
-    out_key = open('data/target_test.KEY', "w")
+    out_features = open(path + 'features_test.sparseX', "w")
+    out_target = open(path + 'target_test.RT', "w")
+    out_key = open(path + 'target_test.KEY', "w")
     x_index = 0
     
     while len(lines) > 0:
         line = random.choice(lines)
-        writeLine(options, line, out_features, out_target, out_key, known_pn, known_gn)
+        writeLine(config, line, out_features, out_target, out_key, known_pn, known_gn)
         lines.remove(line)
     
-    writeKey()
+    writeKey(path)
 
 
-def writeLine(options, line, out_features, out_target, out_key, known_pn, known_gn):
+def writeLine(config, line, out_features, out_target, out_key, known_pn, known_gn):
+    norm_date = config['norm']['date']
+    norm_geo  = config['norm']['geo']
+    norm_num  = config['norm']['num']
+    norm_prof = config['norm']['prof']
+    
     global x_index
     line = line.split(',')
     if len(line) < 8:
@@ -342,7 +355,7 @@ def writeLine(options, line, out_features, out_target, out_key, known_pn, known_
     tablet_id = line[0]
 
     # Clean up the line and ensure that there are no extra spaces
-    text = utilities.clean_line(line[7].rstrip(), options.norm_num, options.norm_prof)
+    text = utilities.clean_line(line[7].rstrip(), norm_num, norm_prof)
     text = text.lower()
     text = " ".join(text.split())
     text = text.strip()
@@ -385,7 +398,7 @@ def writeLine(options, line, out_features, out_target, out_key, known_pn, known_
                 if (w in known_pn and w_type != "-"):
                     print("Warning, replacing PN with GN!")
                 w_type = "GN"
-                if (options.norm_geo):
+                if (norm_geo):
                     w = "geoname"
         if professions.replaceProfessions(w) == 'profession':
             if (w_type != "-"):
@@ -401,7 +414,7 @@ def writeLine(options, line, out_features, out_target, out_key, known_pn, known_
             if (w_type != "-"):
                 print ("Warning, overwriting a known type with date: ", w, " - ", w_type)
             w_type = "D"
-            if (options.norm_date):
+            if (norm_date):
                 w = 'date'
                     
         if not (i == 0 and (w == "" or w == "-" or w == "...")):
@@ -446,8 +459,8 @@ def writeTarget(out_target, isName, isGN):
     else:
         out_target.write("0\n")
         
-def writeKey():
-    out = open('data/features.KEY', "w")
+def writeKey(path):
+    out = open(path + 'features.KEY', "w")
 
     offset = 0
     
@@ -469,7 +482,3 @@ def writeKey():
     for i in range(len(known_symbols)):
         out.write(known_symbols[i])
         out.write("\n")
-                
-
-if __name__ == '__main__':    
-    main()

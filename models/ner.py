@@ -80,7 +80,7 @@ def import_seed_rules(seed_rules_path, display):
     return seed_rules
 
 
-def assess_strength(rules, corpus, data):
+def assess_strength(rules, corpus, config):
     """
     Args:
         rules ():
@@ -164,7 +164,12 @@ def assess_strength(rules, corpus, data):
         output.loc[i, 'True Strength'] = true_strength
         output.loc[i, 'Occurrences']   = rule.occurrences
 
-    output.to_csv(path_or_buf=data.output)
+    output_path = config['path'].format(
+        'ner',
+        time.strftime('%Y%m%d_%H%M'),
+        'output.csv'
+    )
+    output.to_csv(path_or_buf=output_path)
 
     print("               ", end='\r')
     print("percentage of bad rules:    {}%".format(
@@ -266,7 +271,7 @@ def print_precision_and_recall(selected_elements, relevant_elements, i, log):
     log.loc[i, 'F1 Score'] = f1_score
 
 
-def main(data, options):
+def main(config):
     """
     Rules and names will be lists of RuleSets or TokenSets.
     These sets will represent the results of various iterations of
@@ -288,10 +293,10 @@ def main(data, options):
 
     """
 
-    corpus_path = data.corpus
-    seed_rules_path = data.seed_rules
-    iterations = options.iterations
-    max_rules = options.max_rules
+    corpus_path = config['path'].format('','','corpus.csv')
+    seed_rules_path = config['path'].format('','','seed_rules.csv')
+    iterations = config['iterations']
+    max_rules = config['max_rules']
 
     log_cols = {
         'Iteration Type' : [],
