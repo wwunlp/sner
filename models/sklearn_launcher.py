@@ -5,84 +5,85 @@ import numpy as np
 from sklearn import svm, tree
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import SGDClassifier
-from sklearn.naive_bayes import BernoulliNB, MultinomialNB
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, mean_squared_error
 from sklearn.metrics import median_absolute_error, precision_score, recall_score
 from scipy.sparse import coo_matrix
 
 
-def dec_model(hyperparams):
+def dec_model(params):
     """
     dec
     """
 
     model = tree.DecisionTreeClassifier(
-        criterion=hyperparams['criterion'],
-        splitter=hyperparams['splitter'],
-        max_features=hyperparams['max_features'],
-        max_depth=hyperparams['max_depth'],
-        min_samples_split=hyperparams['min_samples_split'],
-        max_leaf_nodes=hyperparams['max_leaf_nodes'],
-        min_samples_leaf=hyperparams['min_samples_leaf']
+        criterion=params['criterion'],
+        splitter=params['splitter'],
+        max_features=params['max_features'],
+        max_depth=params['max_depth'],
+        min_samples_split=params['min_samples_split'],
+        max_leaf_nodes=params['max_leaf_nodes'],
+        min_samples_leaf=params['min_samples_leaf']
     )
 
     return model
 
 
-def nbc_model(hyperparams):
+def nbc_model(params):
     """
     nbc
     """
 
-    mn_model = MultinomialNB(alpha=alpha)
-    ber_model = BernoulliNB(alpha=alpha, binarize=binarize)
+    model = MultinomialNB(
+        alpha=params['alpha']
+    )
 
-    return mn_model, ber_model
+    return model
 
 
-def rdf_model(hyperparams):
+def rdf_model(params):
     """
     rdf
     """
 
     model = RandomForestClassifier(
-        criterion=hyperparams['criterion'],
-        max_features=hyperparams['max_features'],
-        max_depth=hyperparams['max_depth'],
-        min_samples_split=hyperparams['min_samples_split'],
-        max_leaf_nodes=hyperparams['max_leaf_nodes'],
-        min_samples_leaf=hyperparams['min_samples_leaf'],
-        n_est=hyperparams['n_est'],
+        criterion=params['criterion'],
+        max_features=params['max_features'],
+        max_depth=params['max_depth'],
+        min_samples_split=params['min_samples_split'],
+        max_leaf_nodes=params['max_leaf_nodes'],
+        min_samples_leaf=params['min_samples_leaf'],
+        n_estimators=params['n_estimators'],
         verbose=0
     )
 
     return model
 
 
-def sgd_model(hyperparams):
+def sgd_model(params):
     """
     sgd
     """
 
     model = SGDClassifier(
-        loss=loss,
-        penalty=penalty,
-        alpha=alpha
+        loss=params['loss'],
+        penalty=params['penalty'],
+        alpha=params['alpha']
     )
 
     return model
 
 
-def svc_model(hyperparams):
+def svc_model(params):
     """
     svc
     """
 
     model = svm.SVC(
         decision_function_shape='ovo',
-        C=c,
-        degree=degree,
-        kernel=kernel
+        C=params['C'],
+        degree=params['degree'],
+        kernel=params['kernel']
     )
 
     return model
@@ -98,6 +99,7 @@ def main(config, sklearn_model):
         sklearn_model,
         time.strftime('%Y%m%d_%H%M')
     )
+    params = config['params']
 
     print("Reading data")
 
@@ -130,18 +132,6 @@ def main(config, sklearn_model):
 
     print("Training model")
 
-    hyperparams = {
-        'criterion'        : 'gini',
-        'splitter'         : 'best',
-        'max_features'     : None,
-        'max_depth'        : None,
-        'min_samples_split': 2,
-        'max_leaf_nodes'   : None,
-        'min_samples_leaf' : 1,
-    }
-
-
-
 
 # write new file if it doesn't exist
     if not os.path.isfile(output_path):
@@ -150,10 +140,18 @@ def main(config, sklearn_model):
 
         output.close()
 
-    model = dec_model(hyperparams)
+    if sklearn_model == 'dec':
+        model = dec_model(params)
+    elif sklearn_model == 'nbc':
+        model = nbc_model(params)
+    elif sklearn_model == 'rdf':
+        model = rdf_model(params)
+    elif sklearn_model == 'sgd':
+        model = sgd_model(params)
+    elif sklearn_model == 'svc':
+        model = svc_model(params)
 
     model.fit(X, Y)
-    
 
     prediction = model.predict(X)
     trainMSE = mean_squared_error(Y, prediction)

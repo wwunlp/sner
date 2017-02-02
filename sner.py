@@ -190,6 +190,22 @@ def main():
                 'geo': '',
                 'num': '',
                 'prof': ''
+            },
+            'params': {
+                'alpha': '',
+                'C': '',
+                'criterion': '',
+                'degree': '',
+                'kernel': '',
+                'loss': '',
+                'max_features': '',
+                'max_depth': '',
+                'min_samples_split': '',
+                'max_leaf_nodes': '',
+                'min_samples_leaf': '',
+                'n_estimators': '',
+                'penalty': '',
+                'splitter': ''
             }
         }
 
@@ -234,6 +250,36 @@ def main():
             'prof': args.norm_prof or \
                     config_file['norm']['prof'] or \
                     True
+        },
+        'params': {
+            'alpha': config_file['params']['alpha'] or \
+                     0.503706954708716,
+            'C': config_file['params']['C'] or \
+                 1.67640892878145,
+            'criterion': config_file['params']['criterion'] or \
+                         'gini',
+            'degree': config_file['params']['degree'] or \
+                      4,
+            'kernel': config_file['params']['kernel'] or \
+                      'linear',
+            'loss': config_file['params']['loss'] or \
+                    'squared_hinge',
+            'max_features': config_file['params']['max_features'] or \
+                            None,
+            'max_depth': config_file['params']['max_depth'] or \
+                         None,
+            'min_samples_split': config_file['params']['min_samples_split'] or \
+                                 2,
+            'max_leaf_nodes': config_file['params']['max_leaf_nodes'] or \
+                              None,
+            'min_samples_leaf': config_file['params']['min_samples_leaf'] or \
+                                1,
+            'n_estimators': config_file['params']['n_estimators'] or \
+                            480,
+            'penalty': config_file['params']['penalty'] or \
+                       'elasticnet',
+            'splitter': config_file['params']['splitter'] or \
+                        'best'
         }
     }
 
