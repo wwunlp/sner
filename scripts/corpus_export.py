@@ -407,21 +407,30 @@ def writeLine(options, line, out_features, out_target, out_key, known_pn, known_
         if not (i == 0 and (w == "" or w == "-" or w == "...")):
             if (i > 0 and i < len(words) -1):
                 # write last word
-                out_key.write("{0}, {1}, {2}, {3}\n".format(last_tablet, last_line_id, last_index, last_word))
-                writeSparse(out_features, last_word_2, last_word, w, x_index)
-                writeTarget(out_target, last_name, last_geo)
-                x_index += 1
+                x_index += writeWord(last_tablet, last_line_id, last_index, last_word_2,
+                           last_word, w, x_index, out_key, out_features, out_target,
+                           last_name, last_geo)
+                #out_key.write("{0}, {1}, {2}, {3}\n".format(last_tablet, last_line_id, last_index, last_word))
+                #writeSparse(out_features, last_word_2, last_word, w, x_index)
+                #writeTarget(out_target, last_name, last_geo)
+                #x_index += 1
             elif i == len(words) -1:
                 #write last word
-                out_key.write("{0}, {1}, {2}, {3}\n".format(last_tablet, last_line_id, last_index, last_word))
-                writeSparse(out_features, last_word_2, last_word, w, x_index)
-                writeTarget(out_target, last_name, last_geo)
-                x_index += 1
+                x_index += writeWord(last_tablet, last_line_id, last_index, last_word_2,
+                           last_word, w, x_index, out_key, out_features, out_target,
+                           last_name, last_geo)
+                #out_key.write("{0}, {1}, {2}, {3}\n".format(last_tablet, last_line_id, last_index, last_word))
+                #writeSparse(out_features, last_word_2, last_word, w, x_index)
+                #writeTarget(out_target, last_name, last_geo)
+                #x_index += 1
                 #write current word
-                out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, w))
-                writeSparse(out_features, last_word, w, "", x_index)                    
-                writeTarget(out_target, w_type == "PN", w_type == "GN")
-                x_index += 1
+                x_index += writeWord(tablet_id, line_id, i, last_word, w, "", x_index,
+                           out_key, out_features, out_target,
+                           w_type == "PN", w_type == "GN")
+                #out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, w))
+                #writeSparse(out_features, last_word, w, "", x_index)                    
+                #writeTarget(out_target, w_type == "PN", w_type == "GN")
+                #x_index += 1
                     
         last_word_2 = last_word
         last_word = w
@@ -436,7 +445,18 @@ def writeLine(options, line, out_features, out_target, out_key, known_pn, known_
         if w_type == "GN":
             last_geo = True
         else:
-            last_geo = False 
+            last_geo = False
+
+
+def writeWord(tablet_id, line_id, i, last_word, word, next_word, x_index,
+              out_key, out_features, out_target, PN, GN):
+    if len(w) < 1:
+        return 0
+    out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, word))
+    writeSparse(out_features, last_word, word, next_word, x_index)                    
+    writeTarget(out_target, PN, GN)
+    return 1
+
 
 def writeTarget(out_target, isName, isGN):
     if isName:
