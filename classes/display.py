@@ -83,7 +83,7 @@ class Display:
             progress_bar,
             time_remaining
         )
-
+        print(' ' * 72, end='\r')
         print(output, end='\r')
 
     def finish(self):

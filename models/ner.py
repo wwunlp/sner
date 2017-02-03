@@ -109,12 +109,12 @@ def assess_strength(rules, corpus, config):
 
     i = 0
     cols = {
-        'Iteration'     : [],
-        'Rule'          : [],
-        'Type'          : [],
-        'Strength'      : [],
-        'True Strength' : [],
-        'Occurrences'   : []
+        'Iteration'    : [],
+        'Rule'         : [],
+        'Type'         : [],
+        'Strength'     : [],
+        'True Strength': [],
+        'Occurrences'  : []
     }
     output = pd.DataFrame(data=cols)
 
@@ -359,7 +359,6 @@ def main(config):
             display
         )
 
-        print(" " * 72, end='\r')
         print("Found {} new {} rules".format(len(new_rules), iter_type))
 
         rule_set = rule_set.union(new_rules)
