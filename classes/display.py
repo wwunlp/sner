@@ -1,18 +1,31 @@
-"""Display"""
+"""Display Class"""
 import time
 
 class Display:
-    """
-    Display
+    """Display progress of process.
+
+    Attributes:
+        start_time (float): Seconds since epoch to when progress starts.
+        elapsed_time (float): Seconds since progress started.
+        last_updated (float): Seconds since epoch to when progress was
+            last updated.
     """
 
     def __init__(self):
         self.start_time = None
         self.elapsed_time = None
+        self.last_updated = None
 
     def start(self, message=None):
-        """
-        start time
+        """Initiates start time. Can display start messages.
+        Args:
+            message (string): Optional start message.
+
+        Returns:
+            None
+
+        Raises:
+            None
         """
 
         self.start_time = time.time()
@@ -22,20 +35,26 @@ class Display:
     def update_progress_bar(self, step, end):
         """
         Args:
-
+            step (float): Current iteration of process.
+            end (float): Final iteration of process.
 
         Returns:
             None
 
         Raises:
             None
-
         """
 
         percent = float(step) / float(end)
 
         start_time = self.start_time
         current_time = time.time()
+
+        if current_time < self.last_updated + 0.017:
+            return
+        else:
+            self.last_updated = current_time
+
         elapsed_time = current_time - start_time
         self.elapsed_time = elapsed_time
         estimated_time = (elapsed_time / percent) - elapsed_time
@@ -68,8 +87,16 @@ class Display:
         print(output, end='\r')
 
     def finish(self):
-        """
-        finish
+        """Displays elapsed time of process. Clears attributes.
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        Raises:
+            None
         """
 
         hours = int(self.elapsed_time / 3600.0)
@@ -88,3 +115,4 @@ class Display:
 
         self.start_time = None
         self.elapsed_time = None
+        self.last_updated = None
