@@ -12,8 +12,16 @@ from scipy.sparse import coo_matrix
 
 
 def dec_model(params):
-    """
-    dec
+    """Initiates model as decision tree classifier.
+
+    Args:
+        params (dict): Dictionary of hyperparameters.
+
+    Returns:
+        model (sklearn.tree.DecisionTreeClassifer): Selected model.
+
+    Raises:
+        None
     """
 
     model = tree.DecisionTreeClassifier(
@@ -30,8 +38,16 @@ def dec_model(params):
 
 
 def nbc_model(params):
-    """
-    nbc
+    """Initiates model as multinomial Naive Bayes classifier.
+
+    Args:
+        params (dict): Dictionary of hyperparameters.
+
+    Returns:
+        model (sklearn.naive_bayes.MultinomialNB): Selected model.
+
+    Raises:
+        None
     """
 
     model = MultinomialNB(
@@ -42,8 +58,16 @@ def nbc_model(params):
 
 
 def rdf_model(params):
-    """
-    rdf
+    """Initiates model as random forest classifier.
+
+    Args:
+        params (dict): Dictionary of hyperparameters.
+
+    Returns:
+        model (sklearn.ensemble.RandomForestClassifer): Selected model.
+
+    Raises:
+        None
     """
 
     model = RandomForestClassifier(
@@ -61,8 +85,16 @@ def rdf_model(params):
 
 
 def sgd_model(params):
-    """
-    sgd
+    """Initiates model as linear classifier with stochastic gradient descent.
+
+    Args:
+        params (dict): Dictionary of hyperparameters.
+
+    Returns:
+        model (sklearn.linear_model.SGDClassifer): Selected model.
+
+    Raises:
+        None
     """
 
     model = SGDClassifier(
@@ -75,8 +107,16 @@ def sgd_model(params):
 
 
 def svc_model(params):
-    """
-    svc
+    """Initiates model as c-support vector classifier.
+
+    Args:
+        params (dict): Dictionary of hyperparameters.
+
+    Returns:
+        model (sklearn.svm.SVC): Selected model.
+
+    Raises:
+        None
     """
 
     model = svm.SVC(
@@ -90,8 +130,16 @@ def svc_model(params):
 
 
 def main(config):
-    """
-    main
+    """Load and train scikit-learn models.
+
+    Args:
+        config (dict): Configuration flags and values.
+
+    Returns:
+        None
+
+    Raises:
+        None
     """
 
     model_name = config['run']
@@ -128,7 +176,7 @@ def main(config):
     data = A[:, 2]
     atfX = coo_matrix((data, (I, J)), shape=(int(max(I))+1, feature_count))
 
-    print (devX.shape)
+    print(devX.shape)
     print(atfX.shape)
 
     print("Training model")
@@ -148,8 +196,8 @@ def main(config):
 
     prediction = model.predict(X)
     trainMSE = mean_squared_error(Y, prediction)
-    print( "Train Error: %.3f" % trainMSE)
-    
+    print("Train Error: {:.3f}".format(trainMSE))
+
     prediction = model.predict(devX)
     devMSE = mean_squared_error(devY, prediction)
     devMAE = median_absolute_error(devY, prediction)
@@ -159,10 +207,10 @@ def main(config):
     recall = recall_score(devY, prediction, average=None)
     avg_prec = (sum(prec) / len(prec))
     avg_recall = (sum(recall) / len(recall))
-    print( "Accuracy : %.5f" % acc)
-    print( "Precision : %.4f" % avg_prec)
+    print("Accuracy: {:.5f}".format(acc))
+    print("Precision: {:.4f}".format(avg_prec))
     print(prec)
-    print( "Recall : %.4f" % avg_recall)
+    print("Recall: {:.4f}".format(avg_recall))
     print(recall)
 
     data = params
@@ -189,13 +237,13 @@ def main(config):
     )
 
     if model_name == 'dec':
-        with open("data/decModel.dot", 'w') as f:
-            with open("data/features.KEY", "r") as f2:
+        with open(path + 'decModel.dot', 'w') as f:
+            with open(path + 'features.KEY', 'r') as f2:
                 feature_labels = f2.read().splitlines()
                 class_labels = (
-                    "NotName",
-                    "PersonalName",
-                    "GeoName"
+                    'NotName',
+                    'PersonalName',
+                    'GeoName'
                 )
                 f = tree.export_graphviz(
                     model,
