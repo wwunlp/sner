@@ -41,7 +41,7 @@ If you cloned the repo, you can run `python3 sner.py` from within the repo.
 
 `sner` will check `sner.conf` before using default value.
 The `sner.conf` uses `JSON` syntax.
-i.e. `--corpus `corpus.csv` would be `"corpus": "corpus.csv"`.
+i.e. `--corpus corpus.csv` would be `"corpus": "corpus.csv"`.
 If you want to change the hyperparameters used,
 you can define them in `sner.conf`.
 If your `sner.conf` is not in the root of the repository,
