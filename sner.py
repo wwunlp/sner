@@ -8,7 +8,7 @@ import argparse
 import json
 import os
 import pytest
-from models import sklearn_launcher # ner
+from models import ner, sklearn_launcher
 from scripts import export, export_atf, overfit_check # analysis, export, formatting
 
 
@@ -30,7 +30,7 @@ def add_args(parser):
     parser.add_argument(
         '-r',
         '--run',
-        help='Run one the following models: '
+        help='Run one of the following models: '
         '[dec], '
         '[nbc], '
         '[ner], '

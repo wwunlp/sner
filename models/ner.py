@@ -293,18 +293,19 @@ def main(config):
 
     """
 
-    corpus_path = config['path'].format('','','corpus.csv')
-    seed_rules_path = config['path'].format('','','seed_rules.csv')
+    path = config['path']
+    corpus_path = path + config['corpus']
+    seed_rules_path = path + config['seed-rules']
     iterations = config['iterations']
     max_rules = config['max_rules']
 
     log_cols = {
-        'Iteration Type' : [],
-        'New Rules'      : [],
-        'New Names'      : [],
-        'Precision'      : [],
-        'Recall'         : [],
-        'F1 Score'       : []
+        'Iteration Type': [],
+        'New Rules'     : [],
+        'New Names'     : [],
+        'Precision'     : [],
+        'Recall'        : [],
+        'F1 Score'      : []
     }
     log = pd.DataFrame(data=log_cols)
 
@@ -354,7 +355,7 @@ def main(config):
             name_set,
             max_rules,
             i,
-            options,
+            config,
             display
         )
 
