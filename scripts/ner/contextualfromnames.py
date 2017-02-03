@@ -2,7 +2,7 @@ from classes import Rule, Token
 from scripts.ner import rulesperformance, rulefilter
 
 
-def main(corpus, rules, names, max_rules, iteration, options):
+def main(corpus, rules, names, max_rules, iteration, options, display):
     """
     This is meant to generate conextual rules from a set of identified
     name tokens. It needs the corpus as well as the name set in order to
@@ -44,7 +44,7 @@ def main(corpus, rules, names, max_rules, iteration, options):
             right_context.iteration = iteration
             new_rules.add(right_context)
 
-    rulesperformance.main(corpus, new_rules, options)
+    rulesperformance.main(corpus, new_rules, options, iteration, display)
 
     new_rules = rulefilter.main(new_rules, max_rules)
 

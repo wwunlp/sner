@@ -1,4 +1,3 @@
-from classes.data import Data
-from classes.options import Options
+from classes.display import Display
 from classes.rule import Rule
 from classes.token import Token

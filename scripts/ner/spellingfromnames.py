@@ -53,7 +53,7 @@ def gramsToRules(kgrams, allrules, iteration):
     return rules
 
 
-def main(corpus, allrules, names, maxrules, iteration, options):
+def main(corpus, allrules, names, maxrules, iteration, options, display):
     """
     Produces lists of grams, from monograms up to k-grams.
     Duplicate found in /scripts/readnames.py
@@ -81,7 +81,7 @@ def main(corpus, allrules, names, maxrules, iteration, options):
     kgrams = getKgrams(names, maxGram)
     rules = gramsToRules(kgrams, allrules, iteration)
 
-    rulesperformance.main(corpus, rules, options)
+    rulesperformance.main(corpus, rules, options, iteration, display)
 
     rules = rulefilter.main(rules, maxrules)
 

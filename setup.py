@@ -14,22 +14,27 @@ dev_requirements = [str(ir.req) for ir in dev_install_requirements]
 
 
 setup(
-    name='sner',
-    version='0.1.0',
-    description='Sumerian Named Entity Recognition',
-    author='Andy Brown, Mike Canoy, Ian Fisk, Matt Glitsch, Luke Terry',
-    author_email='browna52@wwu.edu, canoym@wwu.edu, fiski@wwu.edu, glitscm@wwu.edu, terryl@wwu.edu',
+    name = 'sner',
+    version = '0.1.0',
+    description = 'Sumerian Named Entity Recognition',
+    author = 'Andy Brown, Mike Canoy, Ian Fisk, Matt Glitsch, Luke Terry',
+    author_email = 
+        'browna52@wwu.edu, ' \
+        'canoym@wwu.edu, ' \
+        'fiski@wwu.edu, ' \
+        'glitscm@wwu.edu, ' \
+        'terryl@wwu.edu',
     url='https://gitlab.cs.wwu.edu/canoym/sumerian',
-    packages=find_packages(),
-    install_requires=requirements,
+    packages = find_packages(),
+    install_requires = requirements,
     classifiers=[
         'Environment :: Console',
         'Natural Language :: English',
     ],
-    py_modules=['sner', 'editdistance', 'classes', 'models', 'scripts'],
+    py_modules=['classes', 'models', 'scripts', 'tests'],
     entry_points={
         'console_scripts': [
-            'sner=sner:main',
+            'sner = sner:main',
         ]
     },
     extras_require={
