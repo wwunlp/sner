@@ -8,7 +8,7 @@ import argparse
 import json
 import os
 import pytest
-from models import sklearn_launcher # naive, ner, random_forest, sgd, svc
+from models import sklearn_launcher # ner
 from scripts import export, export_atf, overfit_check # analysis, export, formatting
 
 

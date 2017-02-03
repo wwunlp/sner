@@ -187,3 +187,19 @@ def main(config):
         delimiter=',',
         fmt='%d'
     )
+
+    if model_name == 'dec':
+        with open("data/decModel.dot", 'w') as f:
+            with open("data/features.KEY", "r") as f2:
+                feature_labels = f2.read().splitlines()
+                class_labels = (
+                    "NotName",
+                    "PersonalName",
+                    "GeoName"
+                )
+                f = tree.export_graphviz(
+                    model,
+                    out_file=f,
+                    feature_names=feature_labels,
+                    class_names=class_labels
+                )
