@@ -1,7 +1,7 @@
 """Launcher for scikit-learn models"""
 import time
-import os.path
 import numpy as np
+import pandas as pd
 from sklearn import svm, tree
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import SGDClassifier
@@ -89,17 +89,18 @@ def svc_model(params):
     return model
 
 
-def main(config, sklearn_model):
+def main(config):
     """
     main
     """
 
+    model_name = config['run']
+    params = config['params']
     path = config['path']
     output_path = path + "{}_{}_training_results.csv".format(
-        sklearn_model,
+        model_name,
         time.strftime('%Y%m%d_%H%M')
     )
-    params = config['params']
 
     print("Reading data")
 
@@ -132,23 +133,15 @@ def main(config, sklearn_model):
 
     print("Training model")
 
-
-# write new file if it doesn't exist
-    if not os.path.isfile(output_path):
-        output = open(output_path, 'w')
-        output.write("criterion, splitter, max_features, max_depth, min_samples_split, max_leaf_nodes, min_samples_leaf, avg_prec, prec[0], prec[1], prec[2], avg_recall, recall[0], recall[1], recall[2]\n")
-
-        output.close()
-
-    if sklearn_model == 'dec':
+    if model_name == 'dec':
         model = dec_model(params)
-    elif sklearn_model == 'nbc':
+    elif model_name == 'nbc':
         model = nbc_model(params)
-    elif sklearn_model == 'rdf':
+    elif model_name == 'rdf':
         model = rdf_model(params)
-    elif sklearn_model == 'sgd':
+    elif model_name == 'sgd':
         model = sgd_model(params)
-    elif sklearn_model == 'svc':
+    elif model_name == 'svc':
         model = svc_model(params)
 
     model.fit(X, Y)
@@ -171,19 +164,26 @@ def main(config, sklearn_model):
     print(prec)
     print( "Recall : %.4f" % avg_recall)
     print(recall)
-    
-    result = '{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14}\n'
-    result = result.format(criterion, splitter,
-                           max_features, max_depth, min_samples_split,
-                           max_leaf_nodes, min_samples_leaf,                             
-                           avg_prec, prec[0], prec[1], prec[2],
-                           avg_recall, recall[0], recall[1], recall[2])
-    
-    
-    output = open(outputfile, 'a')
-    output.write(result)
-    output.close()
 
+    data = params
+    data.update({
+        'avg_prec': avg_prec,
+        'prec[0]': prec[0],
+        'prec[1]': prec[1],
+        'prec[2]': prec[2],
+        'avg_recall': avg_recall,
+        'recall[0]': recall[0],
+        'recall[1]': recall[1],
+        'recall[2]': recall[2]
+    })
+
+    output = pd.DataFrame(data, index=[1])
+    output.to_csv(path_or_buf=output_path)
 
     atf_prediction = model.predict(atfX)
-    np.savetxt('data/atf_prediction.RT', atf_prediction, delimiter=',',fmt='%d')
+    np.savetxt(
+        path + 'atf_prediction.RT',
+        atf_prediction,
+        delimiter=',',
+        fmt='%d'
+    )

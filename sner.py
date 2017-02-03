@@ -8,7 +8,7 @@ import argparse
 import json
 import os
 import pytest
-from models import decision, random_forest # naive, ner, random_forest, sgd, svc
+from models import sklearn_launcher # naive, ner, random_forest, sgd, svc
 from scripts import export, export_atf, overfit_check # analysis, export, formatting
 
 
@@ -283,27 +283,6 @@ def main():
         }
     }
 
-    # corpus = import_corpus.main(config)
-    # print(corpus)
-    # return
-
-    # Models
-    if config['run'] == 'dec':
-        decision.main(config)
-    elif config['run'] == 'naive':
-        # naive.main(config)
-        pass
-    elif config['run'] == 'ner':
-        # ner.main(config)
-        pass
-    elif config['run'] == 'rdf':
-        random_forest.main(config)
-    elif config['run'] == 'sgd':
-        # sgd.main(config)
-        pass
-    elif config['run'] == 'svc':
-        # svc.main(config)
-        pass
     # Routines
     if config['run'] == 'analysis':
         # analysis.main(config)
@@ -319,6 +298,9 @@ def main():
         pytest.main(['tests/'])
     elif config['run'] == 'over-fit':
         overfit_check.main(config)
+    # Models
+    else:
+        sklearn_launcher.main(config)
 
 
 if __name__ == '__main__':
