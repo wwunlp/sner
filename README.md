@@ -47,4 +47,6 @@ you can define them in `sner.conf`.
 If your `sner.conf` is not in the root of the repository,
 you can set the enviroment variable `SNER_CONF` to the path of `sner.conf`.
 
+![sner](https://i.imgur.com/CpI851D.jpg)
+
 [virtualenv]: https://virtualenv.pypa.io/en/stable/
