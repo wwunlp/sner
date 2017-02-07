@@ -160,26 +160,90 @@ def add_args(parser):
         '-nd',
         '--norm-date',
         help='Enable date normalization',
-        required=False
+        required=False,
+        choices=['True', 'False']
     )
     parser.add_argument(
         '-ng',
         '--norm-geo',
         help='Enable geographical name normalization',
-        required=False
+        required=False,
+        choices=['True', 'False']
     )
     parser.add_argument(
         '-nn',
         '--norm-num',
         help='Enable number normalization',
-        required=False
+        required=False,
+        choices=['True', 'False']
     )
     parser.add_argument(
         '-np',
         '--norm-prof',
         help='Enable profession normalization',
+        required=False,
+        choices=['True', 'False']
+    )
+    parser.add_argument(
+        '-dn',
+        '--disjoint-names',
+        help='Export train / dev with disjoint unique name sets',
+        required=False,
+        choices=['True', 'False']
+    )
+    parser.add_argument(
+        '-el',
+        '--export-left-rules',
+        help='Export uses hardcoded left context rules',
+        required=False,
+        choices=['True', 'False']
+    )
+    parser.add_argument(
+        '-er',
+        '--export-right-rules',
+        help='Export uses hardcoded right context rules',
+        required=False,
+        choices=['True', 'False']
+    )
+    parser.add_argument(
+        '-es',
+        '--export-spelling-rules',
+        help='Export uses hardcoded spelling rules',
+
+        required=False,
+        choices=['True', 'False']
+    )
+    parser.add_argument(
+        '-ef',
+        '--export-found',
+        help='Export creates features out of found syllables',
+        required=False,
+        choices=['True', 'False']
+        
+    )
+    parser.add_argument(
+        '-ds',
+        '--dev-size',
+        help='Percentage for exporter to use for dev set. 0 > size >= 1',
+        type=float,
         required=False
     )
+    parser.add_argument(
+        '-ts',
+        '--train-size',
+        help='Percentage for exporter to use for train set. 0 > size >= 1',
+        type=float,
+        required=False
+    )
+    parser.add_argument(
+        '-vb',
+        '--verbose',
+        help='Verbose output.',
+        required=False,
+        choices=['True', 'False']
+        
+    )
+    
 
 
 def main():
@@ -270,7 +334,43 @@ def main():
                  0.1,
         'k': args.k or \
              config_file['k'] or \
-             2.0,
+             2.0,        
+        'train_size': args.train_size or \
+             0.7,
+        'dev_size': args.dev_size or \
+             0.3,
+        'flags': {
+            'disjoint_names': bool_check(
+                args.disjoint_names,
+                None,
+                False
+            ),
+            'use_left_context': bool_check(
+                 args.export_left_rules,
+                None,
+                False
+            ),
+            'use_right_context': bool_check(
+                args.export_right_rules,
+                None,
+                False
+            ),
+            'use_spelling': bool_check(
+                args.export_spelling_rules,
+                None,
+                False
+            ),
+            'use_syllables': bool_check(
+                 args.export_found,
+                None,
+                True
+            ),
+            'verbose': bool_check(
+                 args.verbose,
+                None,
+                False
+            )
+        },
         'norm': {
             'date': bool_check(
                 args.norm_date,
