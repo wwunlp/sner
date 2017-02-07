@@ -13,8 +13,22 @@ from scripts import export, export_atf, overfit_check # analysis, export, format
 
 
 def bool_check(arg, config, default):
-    """
-    bool check
+    """Return bool from `arg` or `config` str, or `default` bool.
+
+    Arguments from the parser and configuration file are represented as strings.
+    Arguments that represent boolean values need string compares, and then
+    return the actual boolean object.
+
+    Args:
+        arg (str):
+        config (str):
+        default (bool):
+
+    Returns:
+        True, False, or default (bool):
+
+    Raises:
+        TypeError
     """
 
     if arg:
@@ -310,10 +324,6 @@ def main():
                         'best'
         }
     }
-
-    print("args.norm_date:              {}".format(args.norm_date))
-    print("config_file['norm']['date']: {}".format(config_file['norm']['date']))
-    print("config['norm']['date']:      {}".format(config['norm']['date']))
 
     # Routines
     if config['run'] == 'analysis':
