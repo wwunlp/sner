@@ -12,6 +12,30 @@ from models import ner, sklearn_launcher
 from scripts import export, export_atf, overfit_check # analysis, export, formatting
 
 
+def bool_check(arg, config, default):
+    """
+    bool check
+    """
+
+    if arg:
+        if arg == 'True':
+            return True
+        elif arg == 'False':
+            return False
+        else:
+            raise TypeError
+    elif config:
+        if config == 'True':
+            return True
+        elif config == 'False':
+            return False
+        else:
+            raise TypeError
+    else:
+        return default
+
+
+
 def add_args(parser):
     """
     Adds arguments from the command line and interprets them as appropriate.
@@ -122,28 +146,24 @@ def add_args(parser):
         '-nd',
         '--norm-date',
         help='Enable date normalization',
-        type=bool,
         required=False
     )
     parser.add_argument(
         '-ng',
         '--norm-geo',
         help='Enable geographical name normalization',
-        type=bool,
         required=False
     )
     parser.add_argument(
         '-nn',
         '--norm-num',
         help='Enable number normalization',
-        type=bool,
         required=False
     )
     parser.add_argument(
         '-np',
         '--norm-prof',
         help='Enable profession normalization',
-        type=bool,
         required=False
     )
 
@@ -238,18 +258,26 @@ def main():
              config_file['k'] or \
              2.0,
         'norm': {
-            'date': args.norm_date or \
-                    config_file['norm']['date'] or \
-                    True,
-            'geo': args.norm_geo or \
-                   config_file['norm']['geo'] or \
-                   False,
-            'num': args.norm_num or \
-                   config_file['norm']['num'] or \
-                   True,
-            'prof': args.norm_prof or \
-                    config_file['norm']['prof'] or \
-                    True
+            'date': bool_check(
+                args.norm_date,
+                config_file['norm']['date'],
+                False
+            ),
+            'geo': bool_check(
+                args.norm_geo,
+                config_file['norm']['geo'],
+                False
+            ),
+            'num': bool_check(
+                args.norm_num,
+                config_file['norm']['num'],
+                True
+            ),
+            'prof': bool_check(
+                args.norm_prof,
+                config_file['norm']['prof'],
+                True
+            )
         },
         'params': {
             'alpha': config_file['params']['alpha'] or \
@@ -282,6 +310,10 @@ def main():
                         'best'
         }
     }
+
+    print("args.norm_date:              {}".format(args.norm_date))
+    print("config_file['norm']['date']: {}".format(config_file['norm']['date']))
+    print("config['norm']['date']:      {}".format(config['norm']['date']))
 
     # Routines
     if config['run'] == 'analysis':
