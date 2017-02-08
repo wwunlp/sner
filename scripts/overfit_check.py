@@ -38,6 +38,8 @@ def main(config):
     mislabeled = 0
     correct_names = set()
 
+    verbose = config['flags']['verbose']
+
     for x, y, z in zip(dev_key, dev_target, dev_pred):
         x = x.split(',')[3].strip()
         y = y.strip()
@@ -46,16 +48,19 @@ def main(config):
         if int(y) == 1:
             if int(z) == 1:
                 if x in new_names:
-                    print("Found correct new name: %s" % x)
+                    if verbose:
+                        print("Found correct new name: %s" % x)
                     correct_names.add(x)
                     correct += 1
             else :
-                print("Missed the correct name: %s" % x)
+                if verbose:
+                    print("Missed the correct name: %s" % x)
                 missed += 1
 
         else:
             if int(z) == 1:
-                print("Mislabeled name: %s" % x)
+                if verbose:
+                    print("Mislabeled name: %s" % x)
                 mislabeled += 1
 
 

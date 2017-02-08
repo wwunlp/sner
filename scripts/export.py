@@ -58,8 +58,8 @@ def findKnown(config, known_pn, known_gn):
                 known_gn[name].append(line_id)
             
 
-
-left_features =  ['dumu','giri3', 'iti',
+left_features = []
+left_features_phase1 =  ['dumu','giri3', 'iti',
                   'u3',
                   'arad2',
                   'gurum2',
@@ -96,8 +96,8 @@ left_features =  ['dumu','giri3', 'iti',
                   '{gi}gur5',
                   'udug',
                   '{tug2}bar-dul5-ab']
-
-right_features = ['lugal-e','nubanda3',
+right_features = []
+right_features_phase1 = ['lugal-e','nubanda3',
                   'dub-sar',
                   'arad2-zu',
                   'ašgab',
@@ -139,7 +139,8 @@ right_features = ['lugal-e','nubanda3',
                   'lu2-kas4',
                   'šuš3']
 
-spelling_features = ['i3-li',
+spelling_features = []
+spelling_features_phase1 = ['i3-li',
                      'i3-li2',
                      'kab-ta',
                      'kab-ta2',
@@ -219,7 +220,7 @@ known_symbols = []
 test_names = set()
 dev_names = set()
 
-def writeSparse(out_features, word_left, word_middle, word_right, x_index):
+def writeSparse(config, out_features, word_left, word_middle, word_right, x_index):
     """
     Writes a single x vector of features in a one hot inspired representation
       to the out_features file.
@@ -256,10 +257,15 @@ def writeSparse(out_features, word_left, word_middle, word_right, x_index):
         if spelling in word_middle:
             out_features.write("{} {} 1\n".format(x_index, i + offset))
 
+    # write number of syllables
     offset = len(left_features) + len(right_features) + len(spelling_features)
     symbols = word_middle.split('-')
     out_features.write("{} {} {}\n".format(x_index, offset, len(symbols)))
     offset += 1
+    
+    if config['flags']['use_syllables'] == False:
+        return
+    
     foundSym = []
     for sym in symbols:
         if sym not in known_symbols:
@@ -292,9 +298,50 @@ def main(config):
         None
 
     """
+    global left_features
+    global right_features
+    global spelling_features
+    global uniqueNames
     path = config['path']
     corpus = config['corpus']
 
+    if config['norm']['date']:
+        print("Normalizing dates!")
+    if config['norm']['geo']:
+        print("Normalizing geo names!")
+    if config['norm']['num']:
+        print("Normalizing numbers.")
+    if config['norm']['prof']:
+        print("Normalizing professions.")
+        
+    flags = config['flags']
+    if flags['disjoint_names'] == True:
+        uniqueNames = True
+        print("Using disjoint name sets for train / dev.")
+    else:
+        uniqueNames = False
+
+    if flags['use_left_context'] == True:
+        left_features = left_features_phase1
+        print("Using left context from phase 1.")        
+    else:
+        left_features = []
+        
+    if flags['use_right_context'] == True:
+        print("Using right context from phase 1.")
+        right_features = right_features_phase1
+    else:
+        right_features = []
+        
+    if flags['use_spelling'] == True:
+        print("Using spelling rules from phase 1.")
+        spelling_features = spelling_features_phase1
+    else:
+        spelling_features = []
+
+    if flags['use_syllables'] == True:
+        print("Using unique syllables as features.")
+    
 
     known_pn = {}
     known_gn = {}
@@ -303,12 +350,27 @@ def main(config):
     # iterate each line in Garshana Text and output to specified file
     file2 = codecs.open(path + corpus, 'r', encoding = 'utf-8')
 
-  
 
+    dev_size = config['dev_size']
+    train_size = config['train_size']
+
+    if dev_size + train_size > 1.001 or dev_size < 0 or train_size < 0:
+        print(dev_size, train_size)
+        print("Invalid dev or train size! Expecting both to be 0-1 and dev+train <= 1.")
+        return
+
+    
+    test_size = 1 - (dev_size + train_size)
+        
     lines = file2.read().splitlines()
-    end_train =  len(lines) * 0.7
-    end_dev = len(lines) * 0.3
-    end_test = len(lines) * 0
+    end_train =  len(lines) * train_size
+    end_dev = len(lines) * dev_size
+    end_test = len(lines) * test_size
+
+    
+    print ("Train size: %.2f%% %d lines" % (train_size,end_train))
+    print ("Dev size: %.2f%% %d lines" % (dev_size,end_dev))
+    print ("Test size: %.2f%% %d lines" % (test_size,end_test))
 
     out_features = open('data/features_train.sparseX', "w")
     out_target = open('data/target_train.RT', "w")
@@ -422,28 +484,27 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
                 print ("Warning, overwriting a known type with number: ", w, " - ", w_type)
             w_type = "N"
             w = 'number'
-        if last_word == "iti":
+        if last_word == "iti" and norm_date:
             if (w_type != "-"):
                 print ("Warning, overwriting a known type with date: ", w, " - ", w_type)
-            w_type = "D"
-            if (norm_date):
-                w = 'date'
+            w_type = "D"            
+            w = 'date'
                     
         if not (i == 0 and (w == "" or w == "-" or w == "...")):
             if (i > 0 and i < len(words) -1):
                 # write last word
                 x_index += writeWord(last_tablet, last_line_id, last_index, last_word_2,
                            last_word, w, x_index, out_key, out_features, out_target,
-                                     last_name, last_geo, test_run)
+                                     last_name, last_geo, test_run, config)
             elif i == len(words) -1:
                 #write last word
                 x_index += writeWord(last_tablet, last_line_id, last_index, last_word_2,
                            last_word, w, x_index, out_key, out_features, out_target,
-                                     last_name, last_geo, test_run)
+                                     last_name, last_geo, test_run, config)
                 #write current word
                 x_index += writeWord(tablet_id, line_id, i, last_word, w, "", x_index,
                            out_key, out_features, out_target,
-                                     w_type == "PN", w_type == "GN", test_run)
+                                     w_type == "PN", w_type == "GN", test_run, config)
                     
         last_word_2 = last_word
         last_word = w
@@ -464,7 +525,7 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
 
 
 def writeWord(tablet_id, line_id, i, last_word, word, next_word, x_index,
-              out_key, out_features, out_target, PN, GN, test_run):
+              out_key, out_features, out_target, PN, GN, test_run, config):
     if len(word) < 1:
         return 0
 
@@ -479,7 +540,7 @@ def writeWord(tablet_id, line_id, i, last_word, word, next_word, x_index,
             dev_names.add(word)
     
     out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, word))
-    writeSparse(out_features, last_word, word, next_word, x_index)                    
+    writeSparse(config, out_features, last_word, word, next_word, x_index)                    
     writeTarget(out_target, PN, GN)
     return 1
 
