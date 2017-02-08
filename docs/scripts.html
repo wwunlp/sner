@@ -1,0 +1,809 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>scripts package &mdash; SNER 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="SNER 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="sner module" href="sner.html"/>
+        <link rel="prev" title="scripts.ner package" href="scripts.ner.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> SNER
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Sumerian Named Entity Recognition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing to Sumerian Named Entity Recongnition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTORS.html">Contributors to Sumerian Named Entity Recognition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes.html">classes package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.ner.html">scripts.ner package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scripts package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scripts.ner.html">scripts.ner package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.analysis">scripts.analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.context">scripts.context module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.export">scripts.export module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.export_atf">scripts.export_atf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.formatting">scripts.formatting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.import_corpus">scripts.import_corpus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.names">scripts.names module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.overfit_check">scripts.overfit_check module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.professions">scripts.professions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.readnames">scripts.readnames module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.spelling">scripts.spelling module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.utilities">scripts.utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sner.html">sner module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">SNER</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>scripts package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/scripts.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scripts-package">
+<h1>scripts package<a class="headerlink" href="#scripts-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="scripts.ner.html">scripts.ner package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.ner.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.ner.html#module-scripts.ner.contextualfromnames">scripts.ner.contextualfromnames module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.ner.html#module-scripts.ner.namesfromrule">scripts.ner.namesfromrule module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.ner.html#module-scripts.ner.rulefilter">scripts.ner.rulefilter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.ner.html#module-scripts.ner.rulesperformance">scripts.ner.rulesperformance module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.ner.html#module-scripts.ner.spellingfromnames">scripts.ner.spellingfromnames module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.ner.html#module-scripts.ner.updatetokenstrength">scripts.ner.updatetokenstrength module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.ner.html#module-scripts.ner">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-scripts.analysis">
+<span id="scripts-analysis-module"></span><h2>scripts.analysis module<a class="headerlink" href="#module-scripts.analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.analysis.main">
+<code class="descclassname">scripts.analysis.</code><code class="descname">main</code><span class="sig-paren">(</span><em>data</em>, <em>options</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.analysis.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-scripts.context">
+<span id="scripts-context-module"></span><h2>scripts.context module<a class="headerlink" href="#module-scripts.context" title="Permalink to this headline">¶</a></h2>
+<p>Luke Terry 10/4/2016
+Lacking a check if left and right context are the same e.g.:
+dumu3 PN RightContext      and
+LeftContext PN dumu3       are treated as the same rule
+Leaving that bug in there, not sure if we want that fixed or not</p>
+<dl class="function">
+<dt id="scripts.context.main">
+<code class="descclassname">scripts.context.</code><code class="descname">main</code><span class="sig-paren">(</span><em>text</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.context.main" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>= line from corpus split into array split on ' '</strong> (<em>text</em>) &#8211; </li>
+<li><strong>= the PN found in this line</strong> (<em>name</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None (?)
+Probably fills left_rules and right_rules dicts</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.export">
+<span id="scripts-export-module"></span><h2>scripts.export module<a class="headerlink" href="#module-scripts.export" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.export.findKnown">
+<code class="descclassname">scripts.export.</code><code class="descname">findKnown</code><span class="sig-paren">(</span><em>config</em>, <em>known_pn</em>, <em>known_gn</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export.findKnown" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Iterates through the attenstations file for personal and geographical names</dt>
+<dd>and adds the lineIDs in a list to the known_pn and known_gn dictionaries.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; </li>
+<li><strong>options</strong> &#8211; </li>
+<li><strong>= { Personal name</strong> (<em>known_pn</em>) &#8211; line ID }, to be filled in.</li>
+<li><strong>= { Geographical name</strong> (<em>known_gn</em>) &#8211; line ID}, to be filled in.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updates known_pn and known_gn dictionaries with the lineIDs.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.export.main">
+<code class="descclassname">scripts.export.</code><code class="descname">main</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export.main" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Finds all names in options.attestations file, and goes through each word</dt>
+<dd>in the main options.corpus file to create a sparse matrix file to be used
+with scikit learn.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>= True to normalize numbers</strong> (<em>options.norm_num</em>) &#8211; </li>
+<li><strong>= True to normalize professions</strong> (<em>options.norm_prof</em>) &#8211; </li>
+<li><strong>= True to normalize geographical names</strong> (<em>options.norm_geo</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>TabletID, LineID, LocationInSentence, Word, Word Type
+Word Types: &#8216;-&#8216; for unknowns.</p>
+<blockquote>
+<div><p>&#8216;PN&#8217; to identify personal names.
+&#8216;GN&#8217; to identify geographical names.
+&#8216;PF&#8217; to identify professions.</p>
+</div></blockquote>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">csv file with the format</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.export.writeKey">
+<code class="descclassname">scripts.export.</code><code class="descname">writeKey</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export.writeKey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.export.writeLine">
+<code class="descclassname">scripts.export.</code><code class="descname">writeLine</code><span class="sig-paren">(</span><em>x_index</em>, <em>config</em>, <em>line</em>, <em>out_features</em>, <em>out_target</em>, <em>out_key</em>, <em>known_pn</em>, <em>known_gn</em>, <em>test_run</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export.writeLine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.export.writeSparse">
+<code class="descclassname">scripts.export.</code><code class="descname">writeSparse</code><span class="sig-paren">(</span><em>out_features</em>, <em>word_left</em>, <em>word_middle</em>, <em>word_right</em>, <em>x_index</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export.writeSparse" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Writes a single x vector of features in a one hot inspired representation</dt>
+<dd>to the out_features file.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>= output file to write features</strong> (<em>out_features</em>) &#8211; </li>
+<li><strong>= the word left of the word to be output</strong> (<em>word_left</em>) &#8211; </li>
+<li><strong>= the word in question</strong> (<em>word_middle</em>) &#8211; </li>
+<li><strong>= the right context of the word to be output</strong> (<em>word_right</em>) &#8211; </li>
+<li><strong>= the row id for the feature entry</strong> (<em>x_index</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.export.writeTarget">
+<code class="descclassname">scripts.export.</code><code class="descname">writeTarget</code><span class="sig-paren">(</span><em>out_target</em>, <em>isName</em>, <em>isGN</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export.writeTarget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.export.writeWord">
+<code class="descclassname">scripts.export.</code><code class="descname">writeWord</code><span class="sig-paren">(</span><em>tablet_id</em>, <em>line_id</em>, <em>i</em>, <em>last_word</em>, <em>word</em>, <em>next_word</em>, <em>x_index</em>, <em>out_key</em>, <em>out_features</em>, <em>out_target</em>, <em>PN</em>, <em>GN</em>, <em>test_run</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export.writeWord" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-scripts.export_atf">
+<span id="scripts-export-atf-module"></span><h2>scripts.export_atf module<a class="headerlink" href="#module-scripts.export_atf" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.export_atf.main">
+<code class="descclassname">scripts.export_atf.</code><code class="descname">main</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export_atf.main" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Finds all names in options.attestations file, and goes through each word</dt>
+<dd>in the main options.corpus file to create a sparse matrix file to be used
+with scikit learn.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>= True to normalize numbers</strong> (<em>options.norm_num</em>) &#8211; </li>
+<li><strong>= True to normalize professions</strong> (<em>options.norm_prof</em>) &#8211; </li>
+<li><strong>= True to normalize geographical names</strong> (<em>options.norm_geo</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>TabletID, LineID, LocationInSentence, Word, Word Type
+Word Types: &#8216;-&#8216; for unknowns.</p>
+<blockquote>
+<div><p>&#8216;PN&#8217; to identify personal names.
+&#8216;GN&#8217; to identify geographical names.
+&#8216;PF&#8217; to identify professions.</p>
+</div></blockquote>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">csv file with the format</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.export_atf.writeLine">
+<code class="descclassname">scripts.export_atf.</code><code class="descname">writeLine</code><span class="sig-paren">(</span><em>config</em>, <em>line</em>, <em>line_id</em>, <em>out_features</em>, <em>out_target</em>, <em>out_key</em>, <em>known_pn</em>, <em>known_gn</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export_atf.writeLine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.export_atf.writeSparse">
+<code class="descclassname">scripts.export_atf.</code><code class="descname">writeSparse</code><span class="sig-paren">(</span><em>out_features</em>, <em>word_left</em>, <em>word_middle</em>, <em>word_right</em>, <em>x_index</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.export_atf.writeSparse" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Writes a single x vector of features in a one hot inspired representation</dt>
+<dd>to the out_features file.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>= output file to write features</strong> (<em>out_features</em>) &#8211; </li>
+<li><strong>= the word left of the word to be output</strong> (<em>word_left</em>) &#8211; </li>
+<li><strong>= the word in question</strong> (<em>word_middle</em>) &#8211; </li>
+<li><strong>= the right context of the word to be output</strong> (<em>word_right</em>) &#8211; </li>
+<li><strong>= the row id for the feature entry</strong> (<em>x_index</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.formatting">
+<span id="scripts-formatting-module"></span><h2>scripts.formatting module<a class="headerlink" href="#module-scripts.formatting" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.formatting.findKnown">
+<code class="descclassname">scripts.formatting.</code><code class="descname">findKnown</code><span class="sig-paren">(</span><em>data</em>, <em>options</em>, <em>knownPN</em>, <em>knownGN</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.formatting.findKnown" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Iterates through the attenstations file for personal and geographical names</dt>
+<dd>and adds the lineIDs in a list to the knownPN and knownGN dictionaries.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; </li>
+<li><strong>options</strong> &#8211; </li>
+<li><strong>= { Personal name</strong> (<em>knownPN</em>) &#8211; line ID }, to be filled in.</li>
+<li><strong>= { Geographical name</strong> (<em>knownGN</em>) &#8211; line ID}, to be filled in.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updates knownPN and knownGN dictionaries with the lineIDs.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.formatting.main">
+<code class="descclassname">scripts.formatting.</code><code class="descname">main</code><span class="sig-paren">(</span><em>data</em>, <em>options</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.formatting.main" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Finds all names in options.attestations file, and goes through each word</dt>
+<dd>in the main options.corpus file to fill a new output file specified by
+options.output</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>= True to normalize numbers</strong> (<em>options.norm_num</em>) &#8211; </li>
+<li><strong>= True to normalize professions</strong> (<em>options.norm_prof</em>) &#8211; </li>
+<li><strong>= True to normalize geographical names</strong> (<em>options.norm_geo</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>TabletID, LineID, LocationInSentence, Word, Word Type
+Word Types: &#8216;-&#8216; for unknowns.</p>
+<blockquote>
+<div><p>&#8216;PN&#8217; to identify personal names.
+&#8216;GN&#8217; to identify geographical names.
+&#8216;PF&#8217; to identify professions.</p>
+</div></blockquote>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">csv file with the format</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.import_corpus">
+<span id="scripts-import-corpus-module"></span><h2>scripts.import_corpus module<a class="headerlink" href="#module-scripts.import_corpus" title="Permalink to this headline">¶</a></h2>
+<p>Import Corpus</p>
+<dl class="function">
+<dt id="scripts.import_corpus.main">
+<code class="descclassname">scripts.import_corpus.</code><code class="descname">main</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.import_corpus.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-scripts.names">
+<span id="scripts-names-module"></span><h2>scripts.names module<a class="headerlink" href="#module-scripts.names" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-scripts.overfit_check">
+<span id="scripts-overfit-check-module"></span><h2>scripts.overfit_check module<a class="headerlink" href="#module-scripts.overfit_check" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.overfit_check.addNames">
+<code class="descclassname">scripts.overfit_check.</code><code class="descname">addNames</code><span class="sig-paren">(</span><em>file_key</em>, <em>file_target</em>, <em>names</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.overfit_check.addNames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.overfit_check.main">
+<code class="descclassname">scripts.overfit_check.</code><code class="descname">main</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.overfit_check.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-scripts.professions">
+<span id="scripts-professions-module"></span><h2>scripts.professions module<a class="headerlink" href="#module-scripts.professions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.professions.main">
+<code class="descclassname">scripts.professions.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scripts.professions.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Testing function</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.professions.replaceProfessions">
+<code class="descclassname">scripts.professions.</code><code class="descname">replaceProfessions</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.professions.replaceProfessions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces known professions with &#8216;profession&#8217;</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.readnames">
+<span id="scripts-readnames-module"></span><h2>scripts.readnames module<a class="headerlink" href="#module-scripts.readnames" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.readnames.getKgrams">
+<code class="descclassname">scripts.readnames.</code><code class="descname">getKgrams</code><span class="sig-paren">(</span><em>names</em>, <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.readnames.getKgrams" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>= dictionary of the form { Names</strong> (<a class="reference internal" href="#module-scripts.names" title="scripts.names"><em>names</em></a>) &#8211; Occurrences }</li>
+<li><strong>= Max k-gram you want to retrieve.</strong> (<em>k</em>) &#8211; <dl class="docutils">
+<dt>Special values of k = -1 returning dictionary of monograms.</dt>
+<dd><dl class="first last docutils">
+<dt>and k = -2 returning dictionary of monograms,</dt>
+<dd>followed by a dictionary of bigrams.</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><strong>use to get all monograms</strong><strong>, </strong><strong>bigrams</strong><strong>, </strong><strong>and trigrams</strong> (<em>Example</em>) &#8211; </li>
+<li><strong>getKgrams</strong> (<a class="reference internal" href="#scripts.readnames.getPNs" title="scripts.readnames.getPNs"><em>getPNs</em></a><em>(</em><em></em><em>)</em><em></em><em>, </em><em>3</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dictionary of all grams up to order k</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.readnames.getPNs">
+<code class="descclassname">scripts.readnames.</code><code class="descname">getPNs</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.readnames.getPNs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects names in Garshana csv and returns them</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.readnames.getPersonalNames">
+<code class="descclassname">scripts.readnames.</code><code class="descname">getPersonalNames</code><span class="sig-paren">(</span><em>csvFile</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.readnames.getPersonalNames" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>= A csv file with the name on line</strong><strong>[</strong><strong>5</strong><strong>] </strong><strong>and line</strong><strong>[</strong><strong>9</strong><strong>] </strong><strong>is an identifier of its</strong> (<em>csvfile</em>) &#8211; type, where we are looking for &#8216;PN&#8217; indicating a personal name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Puts found names from the csv file and returns them in a dictionary</dt>
+<dd>of the form: { Name : Occurrences }</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.readnames.testKgrams">
+<code class="descclassname">scripts.readnames.</code><code class="descname">testKgrams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scripts.readnames.testKgrams" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple test to print off Trigrams and Quadgrams that
+occur more than once [note: duplicate names will trigger these]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.spelling">
+<span id="scripts-spelling-module"></span><h2>scripts.spelling module<a class="headerlink" href="#module-scripts.spelling" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.spelling.addBigram">
+<code class="descclassname">scripts.spelling.</code><code class="descname">addBigram</code><span class="sig-paren">(</span><em>gram</em>, <em>namecount</em>, <em>totalcount</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.spelling.addBigram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.spelling.addMonogram">
+<code class="descclassname">scripts.spelling.</code><code class="descname">addMonogram</code><span class="sig-paren">(</span><em>gram</em>, <em>namecount</em>, <em>totalcount</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.spelling.addMonogram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.spelling.addTrigram">
+<code class="descclassname">scripts.spelling.</code><code class="descname">addTrigram</code><span class="sig-paren">(</span><em>gram</em>, <em>namecount</em>, <em>totalcount</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.spelling.addTrigram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.spelling.analyzeData">
+<code class="descclassname">scripts.spelling.</code><code class="descname">analyzeData</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.spelling.analyzeData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect percentage statistics from the gram maps.
+:param f = the csv file in utf-8 format being written to, with fields: N-Gram, Percentage, Occurence, Total Occurence</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Filled out csv file, containing all the n-grams.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">If there were no grams of a certain size, states that.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.spelling.gramhelper">
+<code class="descclassname">scripts.spelling.</code><code class="descname">gramhelper</code><span class="sig-paren">(</span><em>gramDict</em>, <em>gram</em>, <em>namecount</em>, <em>totalcount</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.spelling.gramhelper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.spelling.loadData">
+<code class="descclassname">scripts.spelling.</code><code class="descname">loadData</code><span class="sig-paren">(</span><em>data</em>, <em>allgrams</em>, <em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.spelling.loadData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads name data
+:param data:
+:type data: ?
+:param allgrams = dictionary of all grams of the form: { gram : namecount, totalcount }
+:param f:
+:type f: ?</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Fills allgrams dictionary.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><em>If grams are found in name dataset but not in overall dataset, will</em> &#8211; print out the type of gram and oddity.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.spelling.main">
+<code class="descclassname">scripts.spelling.</code><code class="descname">main</code><span class="sig-paren">(</span><em>data</em>, <em>syll_count</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.spelling.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.spelling.outputAnalysis">
+<code class="descclassname">scripts.spelling.</code><code class="descname">outputAnalysis</code><span class="sig-paren">(</span><em>k</em>, <em>v</em>, <em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.spelling.outputAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>=</strong> (<em>v</em>) &#8211; </li>
+<li><strong>=</strong> &#8211; </li>
+<li><strong>= csv file we are writing to.</strong> (<em>f</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">If an n-gram has greater than 100% significance, reports the n-gram.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.utilities">
+<span id="scripts-utilities-module"></span><h2>scripts.utilities module<a class="headerlink" href="#module-scripts.utilities" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="scripts.utilities.clean_line">
+<code class="descclassname">scripts.utilities.</code><code class="descname">clean_line</code><span class="sig-paren">(</span><em>line</em>, <em>normNum=True</em>, <em>normProf=True</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.utilities.clean_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean a line of data, removing all annotations from the line.</p>
+<p>NOTE: The line is expected to only be the TEXT portion of the data files.
+I.e. the ID and line number parts of the data files are expected to be
+previously removed.</p>
+<p>Return the cleaned line.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.utilities.get_counts">
+<code class="descclassname">scripts.utilities.</code><code class="descname">get_counts</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.utilities.get_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the total occurrences of words and syllables in the original Unicode
+Garshana text.
+Remove annotations from the text portion of each line in the data file and
+then track the occurrence of each word and syllable.  For syllables, we are
+counting all unigrams, bigrams, and trigrams.</p>
+<dl class="docutils">
+<dt>Return a dictionary of the word occurrences and</dt>
+<dd>a dictionary of the syllable occurrences.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="scripts.utilities.main">
+<code class="descclassname">scripts.utilities.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scripts.utilities.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scripts.utilities.update_syllable_count">
+<code class="descclassname">scripts.utilities.</code><code class="descname">update_syllable_count</code><span class="sig-paren">(</span><em>word</em>, <em>syll_count</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.utilities.update_syllable_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the total occurrence counts of each unigram, bigram, and trigram
+syllable that occurs in the word.  Note: syllables are separated by a
+dash (&#8216;-&#8216;).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-scripts" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sner.html" class="btn btn-neutral float-right" title="sner module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scripts.ner.html" class="btn btn-neutral" title="scripts.ner package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, WWUNLP SNER Team.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

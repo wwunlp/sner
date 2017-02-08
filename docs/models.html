@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>models package &mdash; SNER 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="SNER 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="scripts.ner package" href="scripts.ner.html"/>
+        <link rel="prev" title="classes package" href="classes.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> SNER
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Sumerian Named Entity Recognition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing to Sumerian Named Entity Recongnition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTORS.html">Contributors to Sumerian Named Entity Recognition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes.html">classes package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-models.ner">models.ner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-models.sklearn_launcher">models.sklearn_launcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.ner.html">scripts.ner package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">scripts package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sner.html">sner module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">SNER</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>models package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/models.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="models-package">
+<h1>models package<a class="headerlink" href="#models-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-models.ner">
+<span id="models-ner-module"></span><h2>models.ner module<a class="headerlink" href="#module-models.ner" title="Permalink to this headline">¶</a></h2>
+<p>NER Model</p>
+<dl class="function">
+<dt id="models.ner.assess_strength">
+<code class="descclassname">models.ner.</code><code class="descname">assess_strength</code><span class="sig-paren">(</span><em>rules</em>, <em>corpus</em>, <em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#models.ner.assess_strength" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong></strong><strong>(</strong><strong></strong><strong>)</strong><strong></strong> (<em>corpus</em>) &#8211; </li>
+<li><strong></strong><strong>(</strong><strong></strong><strong>)</strong><strong></strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.ner.get_new_names">
+<code class="descclassname">models.ner.</code><code class="descname">get_new_names</code><span class="sig-paren">(</span><em>corpus</em>, <em>names</em>, <em>rules</em><span class="sig-paren">)</span><a class="headerlink" href="#models.ner.get_new_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Meant to use the provided ruleset to scan the corpus for names.
+It will then return the names in quesiton, which will be used
+to generate more rules.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>corpus</strong> (<em>set</em>) &#8211; Set of Token objects</li>
+<li><strong>names</strong> (<em>set</em>) &#8211; Set of Token objects</li>
+<li><strong>rules</strong> (<em>set</em>) &#8211; Set of Rule objects</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Set of Token objects</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">new_names (set)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.ner.import_corpus">
+<code class="descclassname">models.ner.</code><code class="descname">import_corpus</code><span class="sig-paren">(</span><em>corpus_path</em>, <em>display</em><span class="sig-paren">)</span><a class="headerlink" href="#models.ner.import_corpus" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>corpus_path</strong> (<em>str</em>) &#8211; Location of corpus file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Set of Token objects.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">corpus (set)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.ner.import_seed_rules">
+<code class="descclassname">models.ner.</code><code class="descname">import_seed_rules</code><span class="sig-paren">(</span><em>seed_rules_path</em>, <em>display</em><span class="sig-paren">)</span><a class="headerlink" href="#models.ner.import_seed_rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will read the seed rule file, and return the contents as
+a set.
+:param rulename: Location of seed rules file.
+:type rulename: str</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Set of Rule objects corresponding to the rules in the</dt>
+<dd>seed rules file.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">rules (set)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">Error printed if unable to open rulename file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.ner.main">
+<code class="descclassname">models.ner.</code><code class="descname">main</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#models.ner.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rules and names will be lists of RuleSets or TokenSets.
+These sets will represent the results of various iterations of
+the algorithm. So index 0 of rules would be the first rule set
+(seed rules) and 1 would be the first rules generated and used by the
+algorithm itself. Index zero of names would be the names that came from
+the seed rules. Index one the rules that came from rule set 1. And so on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>Data</em>) &#8211; Data object with atrributes of locations for data files.</li>
+<li><strong>options</strong> (<em>Options</em>) &#8211; Options object with attributes of flags and
+variables.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.ner.print_precision_and_recall">
+<code class="descclassname">models.ner.</code><code class="descname">print_precision_and_recall</code><span class="sig-paren">(</span><em>selected_elements</em>, <em>relevant_elements</em>, <em>i</em>, <em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#models.ner.print_precision_and_recall" title="Permalink to this definition">¶</a></dt>
+<dd><p>print precision and recall</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-models.sklearn_launcher">
+<span id="models-sklearn-launcher-module"></span><h2>models.sklearn_launcher module<a class="headerlink" href="#module-models.sklearn_launcher" title="Permalink to this headline">¶</a></h2>
+<p>Launcher for scikit-learn models</p>
+<dl class="function">
+<dt id="models.sklearn_launcher.dec_model">
+<code class="descclassname">models.sklearn_launcher.</code><code class="descname">dec_model</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#models.sklearn_launcher.dec_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates model as decision tree classifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<em>dict</em>) &#8211; Dictionary of hyperparameters.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Selected model.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">model (sklearn.tree.DecisionTreeClassifer)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.sklearn_launcher.main">
+<code class="descclassname">models.sklearn_launcher.</code><code class="descname">main</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#models.sklearn_launcher.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and train scikit-learn models.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) &#8211; Configuration flags and values.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.sklearn_launcher.nbc_model">
+<code class="descclassname">models.sklearn_launcher.</code><code class="descname">nbc_model</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#models.sklearn_launcher.nbc_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates model as multinomial Naive Bayes classifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<em>dict</em>) &#8211; Dictionary of hyperparameters.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Selected model.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">model (sklearn.naive_bayes.MultinomialNB)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.sklearn_launcher.rdf_model">
+<code class="descclassname">models.sklearn_launcher.</code><code class="descname">rdf_model</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#models.sklearn_launcher.rdf_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates model as random forest classifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<em>dict</em>) &#8211; Dictionary of hyperparameters.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Selected model.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">model (sklearn.ensemble.RandomForestClassifer)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.sklearn_launcher.sgd_model">
+<code class="descclassname">models.sklearn_launcher.</code><code class="descname">sgd_model</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#models.sklearn_launcher.sgd_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates model as linear classifier with stochastic gradient descent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<em>dict</em>) &#8211; Dictionary of hyperparameters.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Selected model.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">model (sklearn.linear_model.SGDClassifer)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="models.sklearn_launcher.svc_model">
+<code class="descclassname">models.sklearn_launcher.</code><code class="descname">svc_model</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#models.sklearn_launcher.svc_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates model as c-support vector classifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<em>dict</em>) &#8211; Dictionary of hyperparameters.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Selected model.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">model (sklearn.svm.SVC)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-models" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scripts.ner.html" class="btn btn-neutral float-right" title="scripts.ner package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="classes.html" class="btn btn-neutral" title="classes package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, WWUNLP SNER Team.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
