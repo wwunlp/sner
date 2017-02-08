@@ -1,17 +1,17 @@
 # Sumerian Named Entity Recognition
----
+
 ## Installation
-```
-pip3 install git+https://gitlab.cs.wwu.edu/canoym/sumerian.git@master
+```bash
+$ pip3 install git+https://github.com/wwunlp/sner.git@master
 ```
 If you are not in a [virtualenv] you may need to use `pip3` with `sudo` or
 `--user`.
 
 If you'd rather clone the repository.
-```
-git clone https://gitlab.cs.wwu.edu/canoym/sumerian.git
-cd sumerian/
-pip3 install .
+```bash
+$ git clone https://github.com/wwunlp/snergit
+$ cd sner/
+$ pip3 install .
 ```
 
 ## Usage
