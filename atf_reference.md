@@ -34,7 +34,7 @@ Surfaces & locations
 * `@reverse`
 * `@left`, `@right`, `@top`, `@bottom`
 * `@face`
-* `@surface` - generic tag, i.e.
+* `@surface` - generic tag, i.e. `@surface side a`
 * `@edge`
 * `@seal`
 * `@column`
