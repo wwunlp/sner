@@ -9,7 +9,7 @@ If you are not in a [virtualenv] you may need to use `pip3` with `sudo` or
 
 If you'd rather clone the repository.
 ```bash
-$ git clone https://github.com/wwunlp/snergit
+$ git clone https://github.com/wwunlp/sner.git
 $ cd sner/
 $ pip3 install .
 ```
