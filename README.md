@@ -1,4 +1,5 @@
-# Sumerian Named Entity Recognition
+# Sumerian Named Entity Recognition 
+[![Build Status][badge-build]](https://travis-ci.org/wwunlp/sner)
 
 ## Installation
 ```bash
@@ -51,4 +52,5 @@ you can set the enviroment variable `SNER_CONF` to the path of `sner.conf`.
     <img src="https://i.imgur.com/CpI851D.jpg" alt="sner">
 </p>
 
+[badge-build]: https://travis-ci.org/wwunlp/sner.svg?branch=master
 [virtualenv]: https://virtualenv.pypa.io/en/stable/
