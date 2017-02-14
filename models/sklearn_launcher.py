@@ -145,6 +145,11 @@ def main(config):
     model_name = config['run']
     params = config['params']
     path = config['path']
+    use_atf = config['flags']['use_atf']
+
+    if use_atf:
+        print("Exporting ATF prediction.")
+    
     output_path = path + "{}_{}_training_results.csv".format(
         model_name,
         time.strftime('%Y%m%d_%H%M')
@@ -170,11 +175,13 @@ def main(config):
     data = A[:, 2]
     devX = coo_matrix((data, (I, J)), shape=(int(max(I))+1, feature_count))
 
-    #A = np.loadtxt(path + 'features_atf.sparseX', ndmin=2)
-    #I = A[:, 0]
-    #J = A[:, 1]
-    #data = A[:, 2]
-    #atfX = coo_matrix((data, (I, J)), shape=(int(max(I))+1, feature_count))
+    atfX = None
+    if use_atf:
+        A = np.loadtxt(path + 'features_atf.sparseX', ndmin=2)
+        I = A[:, 0]
+        J = A[:, 1]
+        data = A[:, 2]
+        atfX = coo_matrix((data, (I, J)), shape=(int(max(I))+1, feature_count))
 
     print(devX.shape)
     #print(atfX.shape)
@@ -235,13 +242,14 @@ def main(config):
         fmt='%d'
     )
 
-    #atf_prediction = model.predict(atfX)
-    #np.savetxt(
-    #    path + 'atf_prediction.RT',
-    #    atf_prediction,
-    #    delimiter=',',
-    #    fmt='%d'
-    #)
+    if use_atf:        
+        atf_prediction = model.predict(atfX)
+        np.savetxt(
+            path + 'atf_prediction.RT',
+            atf_prediction,
+            delimiter=',',
+            fmt='%d'
+        )
 
     if model_name == 'dec':
         with open(path + 'decModel.dot', 'w') as f:

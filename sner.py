@@ -222,6 +222,14 @@ def add_args(parser):
         
     )
     parser.add_argument(
+        '-atf',
+        '--use-atf',
+        help='Enables use of the atf files for the scikit models',
+
+        required=False,
+        choices=['True', 'False']
+    )
+    parser.add_argument(
         '-ds',
         '--dev-size',
         help='Percentage for exporter to use for dev set. 0 > size >= 1',
@@ -349,7 +357,7 @@ def main():
                  args.export_left_rules,
                 None,
                 False
-            ),
+            ),            
             'use_right_context': bool_check(
                 args.export_right_rules,
                 None,
@@ -367,6 +375,11 @@ def main():
             ),
             'verbose': bool_check(
                  args.verbose,
+                None,
+                False
+            ),
+            'use_atf': bool_check(
+                 args.use_atf,
                 None,
                 False
             )
