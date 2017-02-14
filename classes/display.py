@@ -50,7 +50,7 @@ class Display:
         start_time = self.start_time
         current_time = time.time()
 
-        if current_time < self.last_updated + 0.017:
+        if self.last_updated and current_time < self.last_updated + 0.017:
             return
         else:
             self.last_updated = current_time
@@ -83,7 +83,7 @@ class Display:
             progress_bar,
             time_remaining
         )
-        print(' ' * 72, end='\r')
+        print(' ' * 80, end='\r')
         print(output, end='\r')
 
     def finish(self):
