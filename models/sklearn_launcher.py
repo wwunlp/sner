@@ -220,20 +220,21 @@ def main(config):
     print("Recall: {:.4f}".format(avg_recall))
     print(recall)
 
-    data = params
-    data.update({
+    if not use_atf:
+        data = params
+        data.update({
         'avg_prec': avg_prec,
-        'prec[0]': prec[0],
-        'prec[1]': prec[1],
-        'prec[2]': prec[2],
-        'avg_recall': avg_recall,
-        'recall[0]': recall[0],
-        'recall[1]': recall[1],
-        'recall[2]': recall[2]
-    })
+            'prec[0]': prec[0],
+            'prec[1]': prec[1],
+            'prec[2]': prec[2],
+            'avg_recall': avg_recall,
+            'recall[0]': recall[0],
+            'recall[1]': recall[1],
+            'recall[2]': recall[2]
+        })
 
-    output = pd.DataFrame(data, index=[1])
-    output.to_csv(path_or_buf=output_path)
+        output = pd.DataFrame(data, index=[1])
+        output.to_csv(path_or_buf=output_path)
 
     np.savetxt(
         path + 'dev_prediction.RT',
