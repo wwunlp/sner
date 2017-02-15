@@ -2,6 +2,6 @@
  
 - [Andy Brown](http://ursagames.com/)
 - [Mike Canoy](http://mikecanoy.me/)
-- [Ian Fisk](https://gitlab.cs.wwu.edu/u/fiski/)
+- [Ian Fisk](https://github.com/ianfisk/)
 - [Matt Adler](https://github.com/QuakeIV)
 - [Luke Terry](https://github.com/luketerry147)
