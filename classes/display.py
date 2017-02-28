@@ -2,7 +2,11 @@
 import time
 
 class Display:
-    """Display progress of process.
+    """Display the progress of a process.
+	
+	Will print a progress bar updated by function calls made off of an
+	instance of this type.  Will also estimate time to completion via naieve
+	averaging.
 
     Attributes:
         start_time (float): Seconds since epoch to when progress starts.
@@ -17,7 +21,11 @@ class Display:
         self.last_updated = None
 
     def start(self, message=None):
-        """Initiates start time. Can display start messages.
+        """Used to denote the beginning of whatever process you are displaying
+		the progress of.  Will mark down the current time for purposes of
+		estimating the time remaining.  May display an initial message that
+		you can pass in.
+		
         Args:
             message (string): Optional start message.
 
@@ -33,7 +41,10 @@ class Display:
             print(message)
 
     def update_progress_bar(self, step, end):
-        """
+        """Call at the end of each 'iteration', whatever that happens to mean
+		in the current context.  Will update the progress bar and estimated
+		time remaining accordingly.
+		
         Args:
             step (float): Current iteration of process.
             end (float): Final iteration of process.
@@ -87,7 +98,8 @@ class Display:
         print(output, end='\r')
 
     def finish(self):
-        """Displays elapsed time of process. Clears attributes.
+        """Displays elapsed time of the tracked process. Clears attributes.
+		Call upon the completion of whatever it is you are tracking.
 
         Args:
             None
