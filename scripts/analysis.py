@@ -21,6 +21,8 @@ def main(data, options):
                 names.personal[name] = 1
             context.main(text, name)
 
+    #get a dictionary of words to their occurences, and syllables to their
+    #occurences respectively
     word_count, syll_count = utilities.get_counts(data)
     rules_collection = [
             [context.left_rules,  word_count, 'Left'],

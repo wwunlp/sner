@@ -5,18 +5,19 @@ import re
 
 def get_counts(data):
     """
-    Opens a .csv file with utf-16 encoding, and splits the lines, expecting
-    the line of text to be in the 7th entry per line (as in the Garshana
-    corpus). Removes annotations from each line's text portion, and tracks
-    the occurrence of each word and syllable. All combinations of unigrams,
-    bigrams, and trigrams are treated as individual syllables.
+    This function gets the total occurrences of words and syllables in the
+    original Unicode Garshana corpus.  To do this, it opens a .csv file with
+    utf-16 encoding, and splits on commans, expecting the line of sumerian text
+    to be in the 8th column. Filters annotations from each line, and tracks the
+    occurrence of each word and syllable. All combinations of unigrams, bigrams,
+    and trigrams are treated as individual syllables.
 
     Args:
         data = filename of a .csv file
 
     Returns:
-        Returns dictionary of the word occurrences and a dictionary of
-        the syllable occurrences
+        Returns dictionary of the number of times any unique word occurs, as
+        well as a dictionary of occurrences for syllables.
 
     Raises:
         IOError
@@ -69,7 +70,11 @@ def update_syllable_count(word, syll_count):
 def clean_line(line, normNum=True, normProf=True):
     """
     Clean a line of data, removing all annotations from the line.
-    The line is expected to be only the text portion of the data files.
+
+    NOTE: The line is expected to only be the TEXT portion of the data files.
+    I.e. the ID and line number parts of the data files are expected to be
+    previously removed.
+    
     Args:
         line (str): Line of just the text section of a tablet
     Returns:

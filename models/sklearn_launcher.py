@@ -130,7 +130,9 @@ def svc_model(params):
 
 
 def main(config):
-    """Load and train scikit-learn models.
+    """Load and train a scikit-learn model as specified by the user in configs
+    or command line arguments.  Test the models performance after training and
+    then print performance information (precision, accuracy, recall).
 
     Args:
         config (dict): Configuration flags and values.

@@ -17,6 +17,20 @@ rules = {}
 
 
 def gramhelper(gramDict, gram, namecount, totalcount):
+    """  Utility function to insert n-grams into dictionaries
+    Args:
+            gramDict = dictionary to recieve an n-gram
+            gram = gram to be inserted into the dict
+            namecount = the occurrences for this n-gram in a name
+            totalcount = how many times this gram has occurred in the corpus in any word
+
+    Returns:
+            Updated gram mapping, increasing the count of that name occurring and 
+            that individual gram occurring.
+
+    Raises:
+
+    """
     list = gramDict[gram]
 
     if(len(list) == 0):
