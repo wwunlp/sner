@@ -46,15 +46,23 @@ class Token:
 
     @classmethod
     def find_type(cls, token_type):
-        """
+        """Parse a string representation and return an equivalent Token.Type
+		enumeration value.  A string representation is used in the input data
+		files, however the enumeration allows for faster comparisons.  This
+		function is a convenience to make it easier to scan the appropriate
+		input files.
+		
         Args:
-            word_type (str): Word type from corpus
+            token_type (string): String representation of a type of token.
 
         Returns:
-            Token.Type the correlates to word_type
+            type (Token.Type): Enumeration value representing the type of token.
 
         Raises:
-            TypeError
+            TypeError: If the string represents some unrecognized type of
+					   token, then freak out.  You should probably respond to 
+					   this by adding said rule to the enumeration above as 
+					   well as to the code here.
         """
 
         if token_type == 'PN':
