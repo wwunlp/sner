@@ -224,6 +224,7 @@ def writeSparse(config, out_features, word_left, word_middle, word_right, x_inde
     """
     Writes a single x vector of features in a one hot inspired representation
       to the out_features file.
+
     Args:
       out_features = output file to write features
       word_left = the word left of the word to be output
@@ -233,6 +234,7 @@ def writeSparse(config, out_features, word_left, word_middle, word_right, x_inde
       
     Returns:
       Nothing
+
     Raises:
       None
       
@@ -282,6 +284,7 @@ def main(config):
       in the main options.corpus file to create a sparse matrix file to be used
       with scikit learn.
     Args:
+        options.norm_date = True to normalize numbers
         options.norm_num = True to normalize numbers
         options.norm_prof = True to normalize professions
         options.norm_geo = True to normalize geographical names
@@ -416,7 +419,6 @@ def main(config):
 
 
 def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn, known_gn, test_run):
-
     norm_date = config['norm']['date']
     norm_geo  = config['norm']['geo']
     norm_num  = config['norm']['num']

@@ -53,6 +53,7 @@ def bool_check(arg, config, default):
 def add_args(parser):
     """
     Adds arguments from the command line and interprets them as appropriate.
+    Available arguments:
 
     Args:
         parser

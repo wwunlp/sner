@@ -7,6 +7,16 @@ from classes import Display
 def main(config):
     """
     main
+    Args:
+        corpus = file to pull data from
+        path = where to find the corpus
+
+    Returns:
+        corpus = corpus in an array format
+
+    Raises:
+        None
+
     """
 
     file_name = config['corpus']

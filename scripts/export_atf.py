@@ -21,6 +21,7 @@ def writeSparse(out_features, word_left, word_middle, word_right, x_index):
     """
     Writes a single x vector of features in a one hot inspired representation
       to the out_features file.
+
     Args:
       out_features = output file to write features
       word_left = the word left of the word to be output
@@ -30,6 +31,7 @@ def writeSparse(out_features, word_left, word_middle, word_right, x_index):
       
     Returns:
       Nothing
+
     Raises:
       None
       
@@ -71,6 +73,7 @@ def main(config):
     Finds all names in options.attestations file, and goes through each word 
       in the main options.corpus file to create a sparse matrix file to be used
       with scikit learn.
+
     Args:
         options.norm_num = True to normalize numbers
         options.norm_prof = True to normalize professions

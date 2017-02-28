@@ -2,14 +2,7 @@
 
 # Mike Canoy
 # Authored     5/3/2016
-# Last updated 10/4/2016
-"""
-    Luke Terry 10/4/2016
-    Lacking a check if left and right context are the same e.g.:
-    dumu3 PN RightContext      and
-    LeftContext PN dumu3       are treated as the same rule
-    Leaving that bug in there, not sure if we want that fixed or not
-"""
+# Last updated 2/25/2017
 
 import editdistance
 

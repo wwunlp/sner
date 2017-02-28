@@ -5,21 +5,27 @@ import re
 
 def get_counts(data):
     """
-    Get the total occurrences of words and syllables in the original Unicode
-    Garshana text.
-    Remove annotations from the text portion of each line in the data file and
-    then track the occurrence of each word and syllable.  For syllables, we are
-    counting all unigrams, bigrams, and trigrams.
+    Opens a .csv file with utf-16 encoding, and splits the lines, expecting
+    the line of text to be in the 7th entry per line (as in the Garshana
+    corpus). Removes annotations from each line's text portion, and tracks
+    the occurrence of each word and syllable. All combinations of unigrams,
+    bigrams, and trigrams are treated as individual syllables.
 
-    Return a dictionary of the word occurrences and
-     a dictionary of the syllable occurrences.
+    Args:
+        data = filename of a .csv file
+
+    Returns:
+        Returns dictionary of the word occurrences and a dictionary of
+        the syllable occurrences
+
+    Raises:
+        IOError
+
     """
 
     word_count = {}
     syll_count = {}
 
-    # Hard coding this filename in so there is no ambiguity as to what we
-    # consider the original text to be.
     infile = data.corpus
     try:
 
@@ -63,13 +69,14 @@ def update_syllable_count(word, syll_count):
 def clean_line(line, normNum=True, normProf=True):
     """
     Clean a line of data, removing all annotations from the line.
+    The line is expected to be only the text portion of the data files.
+    Args:
+        line (str): Line of just the text section of a tablet
+    Returns:
+        line (str): The line, with all annotations removed
 
-    NOTE: The line is expected to only be the TEXT portion of the data files.
-    I.e. the ID and line number parts of the data files are expected to be
-    previously removed.
-
-    Return the cleaned line.
-
+    Raises:
+        None
     """
 
     # Remove square brackets, ceiling characters, question marks, other
