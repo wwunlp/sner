@@ -157,8 +157,9 @@ def main(config):
         time.strftime('%Y%m%d_%H%M')
     )
 
+	
+	#read the input data per the configuration information
     print("Reading data")
-
     feature_count = sum(1 for line in open(path + 'features.KEY', 'r'))
 
     Y = np.loadtxt(path + 'target_train.RT')
@@ -187,9 +188,14 @@ def main(config):
 
     print(devX.shape)
     #print(atfX.shape)
-
+	
+	
+	
+	
+	
     print("Training model")
 
+	#select the model based on the configuration data
     if model_name == 'dec':
         model = dec_model(params)
     elif model_name == 'nbc':
@@ -201,12 +207,14 @@ def main(config):
     elif model_name == 'svc':
         model = svc_model(params)
 
+	#train the model on the annotated data
     model.fit(X, Y)
 
     prediction = model.predict(X)
     trainMSE = mean_squared_error(Y, prediction)
     print("Train Error: {:.3f}".format(trainMSE))
 
+	#generate predictions based off of the model, and evaluate its performance
     prediction = model.predict(devX)
     devMSE = mean_squared_error(devY, prediction)
     devMAE = median_absolute_error(devY, prediction)
@@ -222,6 +230,7 @@ def main(config):
     print("Recall: {:.4f}".format(avg_recall))
     print(recall)
 
+	#output results, if use_atf is not set then output a .csv file
     if not use_atf:
         data = params
         data.update({
@@ -245,6 +254,7 @@ def main(config):
         fmt='%d'
     )
 
+	#if use_atf is set, then output a .atf file containing the results
     if use_atf:        
         atf_prediction = model.predict(atfX)
         np.savetxt(
@@ -254,6 +264,7 @@ def main(config):
             fmt='%d'
         )
 
+	#export image of the tree if the decision tree model was used
     if model_name == 'dec':
         with open(path + 'decModel.dot', 'w') as f:
             with open(path + 'features.KEY', 'r') as f2:
