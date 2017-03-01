@@ -8,11 +8,20 @@ import pandas as pd
 
 def import_corpus(corpus_path, display):
     """
+	Imports the corpus for the ner model, from a format of our own design.
+	The format is a CSV containing individual words in the corpus, with columns
+	containing the Tablet ID, the line number within that tablet, the word
+	number within that line, the word itself, and any annotation associated
+	with that word.
+	
     Args:
-        corpus_path (str): Location of corpus file.
+        corpus_path (str): Path of the corpus file.
+		display (Display): Utility object used to print the progress of scanning 
+						   the corpus file.
 
     Returns:
-        corpus (set): Set of Token objects.
+        corpus (set): Set of Token objects, properly initialized from the input
+					  data.
 
     Raises:
         None
@@ -50,7 +59,10 @@ def import_corpus(corpus_path, display):
 def import_seed_rules(seed_rules_path, display):
     """
     This function will read the seed rule file, and return the contents as
-    a set.
+    a set.  The file is a CSV formatted with columns containing the rule type,
+	the contents of the rule, and its strength rating (the probability that a
+	token is a name if the rule applies to said token).
+	
     Args:
         rulename (str): Location of seed rules file.
 
@@ -59,7 +71,7 @@ def import_seed_rules(seed_rules_path, display):
             seed rules file.
 
     Raises:
-        Error printed if unable to open rulename file.
+		None
 
     """
 
@@ -82,9 +94,15 @@ def import_seed_rules(seed_rules_path, display):
 
 def assess_strength(rules, corpus, config):
     """
+	Evaluates the accuracy of the strength rating of the passed-in rules.  This
+	is useful because the ner model will generate rules in an unsupervised
+	fashion.  This function gets used to evaluate the performance of that
+	process.
+	
     Args:
-        rules ():
-        corpus ():
+        rules (set): A set of Rule objects to be evaluated
+        corpus (set): A set of Token objects, representing the entire Garshana
+					  corpus.
 
     Returns:
         None
@@ -203,14 +221,20 @@ def assess_strength(rules, corpus, config):
 
 def get_new_names(corpus, names, rules):
     """
-    Meant to use the provided ruleset to scan the corpus for names.
+    Meant to use the provided ruleset to scan the corpus for new names.
     It will then return the names in quesiton, which will be used
     to generate more rules.
+	
+	Basically, it grabs all tokens from the corpus matching the rules in 
+	question and then return them as a set.  The names parameter lets you
+	specify tokens that are already recognized as names, allowing you to
+	retrieve only new name results.
 
     Args:
-        corpus (set): Set of Token objects
-        names (set): Set of Token objects
-        rules (set): Set of Rule objects
+        corpus (set): Set of Token objects representing the entire Garshana
+					  corpus.
+        names (set): Set of Tokens already recognized as names.
+        rules (set): Set of Rule objects used to find new names
 
     Returns:
         new_names (set): Set of Token objects
@@ -233,7 +257,25 @@ def get_new_names(corpus, names, rules):
 
 def print_precision_and_recall(selected_elements, relevant_elements, i, log):
     """
-    print precision and recall
+	Prints the precision, recall, and F1 score of the algorithm.  Used by
+	passing in tokens in the selected_elements parameter.  These tokens are
+	the tokens considered to be names.  Relevant elements is just the total
+	number of names in the corpus.
+
+    Args:
+        selected_elements (set): Set of Token objects representing names as
+								 identified by the algorithm.
+        relevant_elements (int): Total number of names that exist in the 
+								 corpus.
+        i (int): Index of current log entry.
+		log (pandas.DataFrame): Data structure containing logs
+
+    Returns:
+		None
+
+    Raises:
+        None
+
     """
 
     positives = 0.0
@@ -281,9 +323,9 @@ def main(config):
     the seed rules. Index one the rules that came from rule set 1. And so on.
 
     Args:
-        data (Data): Data object with atrributes of locations for data files.
-        options (Options): Options object with attributes of flags and
-            variables.
+        config (dict): Dictionary containing confiruation information, such as
+					   the location of the input files, as well as various
+					   flags and runtime parameters.  (defined in sner.py)
 
     Returns:
         None
