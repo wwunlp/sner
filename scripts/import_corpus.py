@@ -1,4 +1,4 @@
-"""Import Corpus"""
+"""Imports the corpus data for the scikitlearn model"""
 import math
 import pandas as pd
 from classes import Display
@@ -6,13 +6,18 @@ from classes import Display
 
 def main(config):
     """
-    main
+	Loads the corpus data from a file and returns it as a dataframe.  The
+	DataFrame stores lines of corpus data as well as various metadata
+	specified by the cols variable defined below.  Able to handle .csv formats
+	as well as .atf formats.
+	
     Args:
-        corpus = file to pull data from
-        path = where to find the corpus
+        config(dict) = contains file locations and runtime flags, such as the
+					   location of the corpus file.
 
     Returns:
-        corpus = corpus in an array format
+        corpus(pandas.DataFrame) = corpus information represented in a
+								   dataframe format.  
 
     Raises:
         None
@@ -75,9 +80,23 @@ def main(config):
     ]
 
     def read_csv(corpus, reader):
-        """
-        read csv
-        """
+		"""
+		Handles loading .csv format for the container function.
+		
+		Args:
+			corpus(pandas.DataFrame) = dataframe representation of the corpus
+									   to be filled out
+			reader(pandas.DataFrame) = contains raw file data scanned into
+									   a dataframe
+
+		Returns:
+			corpus(pandas.DataFrame) = corpus information represented in a
+									   dataframe format.  
+
+		Raises:
+			None
+
+		"""
 
         bdtns_id = ''
         line_id = ''
@@ -119,9 +138,23 @@ def main(config):
 
 
     def read_atf(corpus, reader):
-        """
-        read atf
-        """
+		"""
+		Handles loading .atf format for the container function.
+		
+		Args:
+			corpus(pandas.DataFrame) = dataframe representation of the corpus
+									   to be filled out
+			reader(pandas.DataFrame) = contains raw file data scanned into
+									   a dataframe
+
+		Returns:
+			corpus(pandas.DataFrame) = corpus information represented in a
+									   dataframe format.  
+
+		Raises:
+			None
+
+		"""
 
         bdtns_id = ''
         line_id = ''

@@ -5,6 +5,23 @@ import csv
 
 def main(data, options):
     """
+	Currently this region of code is not in full working order.  It originally
+	analyzed the corpus to look for potential rules to identify names.
+	Specifically it would generate every possible spelling and context rule,
+	and then assess its performance.
+	
+    Args:
+        data(string) = the name of the .csv file of the Garshana corpus.  (The one
+			   containing the full text of various tablets.
+        options = object containing various configuration information (i believe
+				  this type no longer exists in the code base, it was intended
+				  to be replaced with the config object)
+
+    Returns:
+        None
+
+    Raises:
+        None
 
     """
 
@@ -28,9 +45,10 @@ def main(data, options):
             [context.left_rules,  word_count, 'Left'],
             [context.right_rules, word_count, 'Right']]
 
-    # Do spelling analysis
+    # Do spelling rule analysis
     spelling.main(data, syll_count)
 
+	# do context rule analysis
     with open('results/context.csv', 'w', newline='',
               encoding='utf-8') as csvfile:
         fieldnames = [

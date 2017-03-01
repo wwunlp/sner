@@ -13,7 +13,8 @@ def get_counts(data):
     and trigrams are treated as individual syllables.
 
     Args:
-        data = filename of a .csv file
+        data = filename of the corpus .csv file, consistent with the formatting
+			   of the .csv files provided with the Garshana corpus.
 
     Returns:
         Returns dictionary of the number of times any unique word occurs, as

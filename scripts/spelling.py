@@ -1,23 +1,24 @@
+"""
+Generates dictionaries of monograms, bigrams, and trigrams, mapping them to
+lists containing the number of times they occur in names, and the number of
+times they occur in total.  This is information later used to evaluate these
+grams usefulness as name recognition rules.
+"""
+
 from scripts import readnames, utilities
 from collections import defaultdict
-
-# Dictionaries of monograms, bigrams, and trigrams
-# Other global declarations
-# Format is a name key, associated with a two element list containing
-#  the number of occurences of that gram
-# The first element is number of occurences of that gram in total,
-#  the second is number of occurences within names
 
 monograms = defaultdict(list)
 bigrams = defaultdict(list)
 trigrams = defaultdict(list)
 rules = {}
 
-# Utility functions to insert grams into maps
-
-
 def gramhelper(gramDict, gram, namecount, totalcount):
-    """  Utility function to insert n-grams into dictionaries
+    """
+	Utility function to insert arbitrary n-grams into dictionaries that
+	associate them with lists containing the number of times that gram occurred
+	as well as the number of times that gram occurred in a name.
+	
     Args:
             gramDict = dictionary to recieve an n-gram
             gram = gram to be inserted into the dict
@@ -25,8 +26,7 @@ def gramhelper(gramDict, gram, namecount, totalcount):
             totalcount = how many times this gram has occurred in the corpus in any word
 
     Returns:
-            Updated gram mapping, increasing the count of that name occurring and 
-            that individual gram occurring.
+            Updates gramDict with the information from gram
 
     Raises:
 
@@ -76,10 +76,10 @@ def loadData(data, allgrams, f):
     """
     Loads name data
     Args:
-        data (?)
-        allgrams = dictionary of all grams of the form:
+        data(string) = name of the corpus data file
+        allgrams(dict) = dictionary of all grams of the form:
                    { gram : namecount, totalcount }
-        f (?)
+        f (file) = object used to access the output file
 
     Returns:
         Fills allgrams dictionary.
@@ -135,16 +135,17 @@ def loadData(data, allgrams, f):
 
 def analyzeData(f):
     """
-    Collect percentage statistics from the gram maps.
+    Collect percentage statistics from the gram maps and writes them to a .csv
+	output file.
     Args:
-        f = the csv file in utf-8 format being written to, with fields:
+        f(file) = the csv file in utf-8 format being written to, with fields:
             N-Gram, Percentage, Occurence, Total Occurence
 
     Returns:
-        Filled out csv file, containing all the n-grams.
+        None
 
     Raises:
-        If there were no grams of a certain size, states that.
+		None
 
     """
     
@@ -177,7 +178,7 @@ def analyzeData(f):
 def outputAnalysis(k, v, f):
     """
     Args:
-        k = (?)
+        k(string) = 
         v = (?)
         f = csv file we are writing to.
     Returns:
