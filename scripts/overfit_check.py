@@ -57,11 +57,10 @@ def main(config):
     print ("Training found %d names." % len(train_names))
 
     if not use_atf:
-        print("Test found %d names." % len(dev_names))
-        print("Unique names in test: %d" % (len(new_names)))
-        print("Test name occurrences: %d" % total_dev_names)
-        print("Test unique name occurrences: %d - %.3f%%" % (len(dev_output), 100 * len(dev_output) /
-                                                             total_dev_names))
+        print("dev found %d names." % len(dev_names))
+        print("Unique names in dev: %d" % (len(new_names)))
+        print("dev name occurrences: %d" % total_dev_names)
+        print("dev unique name occurrences: %d - %.3f%%" % (len(dev_output), 100 * len(dev_output) / total_dev_names))
         
     # Exit early when looking at ATF names.             
     if use_atf:
@@ -112,12 +111,9 @@ def main(config):
 
     
     print ()
-    print ("Total names in train: %d\nTotal names in test: %d\nTotal names in pred: %d\n" %
-           (total_train_names, total_dev_names, total_pred_names))
+    print ("Total names in train: %d\nTotal names in dev: %d\nTotal names in pred: %d\n" % (total_train_names, total_dev_names, total_pred_names))
     
-    print ("Training has %d unique names.\nTest has %d unique names.\n
-           Unique names to test: %d\n
-           Unique names found in pred: %d"
+    print ("Training has %d unique names.\nDev has %d unique names.\nUnique names to dev: %d\nUnique names found in pred: %d"
            % (len(train_names), len(dev_names), len(dev_unique_names), len(new_names)))
     print ("Correct unique names in pred: %d / %d [%.2f%%]\n" %
            (len(correct_names), len(dev_unique_names), 100 * len(correct_names) / len(dev_unique_names)))
