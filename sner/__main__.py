@@ -7,9 +7,8 @@ Also offers interface for our analysis and formatting tools and test functions.
 import argparse
 import json
 import os
-import pytest
 from sner.models import ner, sklearn_launcher
-from sner.scripts import export, export_atf, overfit_check # analysis, export, formatting
+from sner.scripts import export, export_atf, overfit_check, output
 
 
 def bool_check(arg, config, default):
@@ -75,6 +74,7 @@ def add_args(parser):
         '[ner], '
         '[rdf], '
         '[sgd], '
+        '[forest], '
         'or [svc]. '
         'Or one of the following routines: '
         '[analysis], '
@@ -82,6 +82,7 @@ def add_args(parser):
         '[export-atf], '
         '[formatting], '
         '[over-fit], '
+        '[output], '
         'or [testing].',
         required=False,
         choices=[
@@ -96,7 +97,9 @@ def add_args(parser):
             'export-atf',
             'formatting',
             'testing',
-            'over-fit'
+            'over-fit',
+            'forest',
+            'output'
         ]
     )
     parser.add_argument(
@@ -252,6 +255,36 @@ def add_args(parser):
         choices=['True', 'False']
         
     )
+    parser.add_argument(
+        '-ran',
+        '--random',        
+        help='Randomize hyper parameters.',
+        required=False,
+        default='False',
+        choices=['True', 'False']
+        
+    )
+    parser.add_argument(
+        '-loop',
+        '--looping',
+        help='Enables looping of sklearn models (useful for random hyper parameter)',
+        default='False',
+        required=False,
+        choices=['True', 'False']
+    )
+    parser.add_argument(
+        '-test',
+        '--eval-test',
+        help='Evaluates the model on the test dataset.',
+        default='False',
+        required=False,
+        choices=['True', 'False']
+    )
+    parser.add_argument(
+        '-output-file',
+        help="Name of output file. Default will gen a new name.",
+        required=False,
+        default=None)
     
 
 
@@ -326,6 +359,7 @@ def main():
         'corpus': args.corpus or \
                   config_file['corpus'] or \
                   'corpus.csv',
+        'output-file': args.output_file,
         'attestations': args.attestations or \
                         config_file['attestations'] or \
                         'attestations.csv',
@@ -348,6 +382,16 @@ def main():
              0.7,
         'dev_size': args.dev_size or \
              0.3,
+        'looping': bool_check(
+            args.looping,
+            None,
+            False
+        ),
+        'eval-test': bool_check(
+            args.eval_test,
+            None,
+            False
+        ),
         'flags': {
             'disjoint_names': bool_check(
                 args.disjoint_names,
@@ -406,14 +450,14 @@ def main():
                 config_file['norm']['prof'],
                 True
             )
-        },
+        },        
         'params': {
             'alpha': config_file['params']['alpha'] or \
                      0.503706954708716,
             'C': config_file['params']['C'] or \
                  1.67640892878145,
             'criterion': config_file['params']['criterion'] or \
-                         'gini',
+                         'entropy',
             'degree': config_file['params']['degree'] or \
                       4,
             'kernel': config_file['params']['kernel'] or \
@@ -421,9 +465,9 @@ def main():
             'loss': config_file['params']['loss'] or \
                     'squared_hinge',
             'max_features': config_file['params']['max_features'] or \
-                            None,
+                            75,
             'max_depth': config_file['params']['max_depth'] or \
-                         None,
+                         165,
             'min_samples_split': config_file['params']['min_samples_split'] or \
                                  2,
             'max_leaf_nodes': config_file['params']['max_leaf_nodes'] or \
@@ -431,13 +475,17 @@ def main():
             'min_samples_leaf': config_file['params']['min_samples_leaf'] or \
                                 1,
             'n_estimators': config_file['params']['n_estimators'] or \
-                            480,
+                            100,
             'penalty': config_file['params']['penalty'] or \
                        'elasticnet',
             'splitter': config_file['params']['splitter'] or \
                         'best'
         }
     }
+
+    config['params']['random'] = False
+    if args.random == 'True':
+        config['params']['random'] = True
 
     # Routines
     if config['run'] == 'analysis':
@@ -448,12 +496,16 @@ def main():
     elif config['run'] == 'export-atf':
         export_atf.main(config)
     elif config['run'] == 'formatting':
-        # formatting.main(config)
+        #formatting.main(config)
         pass
     elif config['run'] == 'testing':
-        pytest.main(['tests/'])
+        #pytest.main(['tests/'])
+        print("no.")
     elif config['run'] == 'over-fit':
         overfit_check.main(config)
+    elif config['run'] == 'output':
+        output.main(config)
+
     # Models
     else:
         sklearn_launcher.main(config)

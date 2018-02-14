@@ -142,8 +142,11 @@ def main(config):
     display.start('Writing sparse matrix')
 
     i = 0
+    tablet_id = 0
     while i < len(lines):
         line = lines[i]
+        if "@tablet" in line:
+            tablet_id += 1
         if not (len(line) > 0 and line[0] in tags):
             j = 0
             while (j < len(line) and line[j].isdigit()):
@@ -161,7 +164,8 @@ def main(config):
                     out_target,
                     out_key,
                     known_pn,
-                    known_gn
+                    known_gn,
+                    tablet_id
                 )
         i += 1
         display.update_progress_bar(i, len(lines))
@@ -172,7 +176,7 @@ def main(config):
     out_target.close()
     
 
-def writeLine(config, line, line_id, out_features, out_target, out_key, known_pn, known_gn):
+def writeLine(config, line, line_id, out_features, out_target, out_key, known_pn, known_gn, tablet_id):
     norm_date = config['norm']['date']
     norm_geo  = config['norm']['geo']
     norm_num  = config['norm']['num']
@@ -203,17 +207,17 @@ def writeLine(config, line, line_id, out_features, out_target, out_key, known_pn
         w_type = "-"
         # Set types if they are known and avoid
         # conflicts by using the line_id.            
-        if professions.replaceProfessions(w) == 'profession':
+        if norm_prof and professions.replaceProfessions(w) == 'profession':
             if (w_type != "-"):
                 print ("Warning, replacing name with profession!")
             w_type = "PF"
                 
-        if 'number' in w:
+        if norm_num and 'number' in w:
             if (w_type != "-"):
                 print ("Warning, overwriting a known type with number: ", w, " - ", w_type)
             w_type = "N"
             w = 'number'
-        if last_word == "iti":
+        if norm_date and last_word == "iti":
             if (w_type != "-"):
                 print ("Warning, overwriting a known type with date: ", w, " - ", w_type)
             w_type = "D"
@@ -223,16 +227,16 @@ def writeLine(config, line, line_id, out_features, out_target, out_key, known_pn
         if not (i == 0 and (w == "" or w == "-" or w == "...")):
             if (i > 0 and i < len(words) -1):
                 # write last word
-                out_key.write("{0}, {1}, {2}\n".format(last_line_id, last_index, last_word))
+                out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, last_line_id, last_index, last_word))
                 writeSparse(out_features, last_word_2, last_word, w, x_index)
                 x_index += 1
             elif i == len(words) -1:
                 #write last word
-                out_key.write("{0}, {1}, {2}\n".format(last_line_id, last_index, last_word))
+                out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, last_line_id, last_index, last_word))
                 writeSparse(out_features, last_word_2, last_word, w, x_index)
                 x_index += 1
                 #write current word
-                out_key.write("{0}, {1}, {2}\n".format(line_id, i, w))
+                out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, w))
                 writeSparse(out_features, last_word, w, "", x_index)                    
                 x_index += 1
                     

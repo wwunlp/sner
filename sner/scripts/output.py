@@ -57,18 +57,17 @@ def main(config):
     print ("Training found %d names." % len(train_names))
 
     if not use_atf:
-        print("dev found %d names." % len(dev_names))
-        print("Unique names in dev: %d" % (len(new_names)))
-        print("dev name occurrences: %d" % total_dev_names)
-        print("dev unique name occurrences: %d - %.3f%%" % (len(dev_output), 100 * len(dev_output) / total_dev_names))
+        print("Test found %d names." % len(dev_names))
+        print("Unique names in test: %d" % (len(new_names)))
+        print("Test name occurrences: %d" % total_dev_names)
+        print("Test unique name occurrences: %d - %.3f%%" % (len(dev_output), 100 * len(dev_output) / total_dev_names))
         
     # Exit early when looking at ATF names.             
     if use_atf:
         print("Names found in atf: %d" % len(atf_names))
         print("Unique names found in atf: %d" % len(atf_unique_names))
         print("Total name occurrences in ATF: %d" % total_atf_names)
-        print("Unique name occurrences in ATF: %d - %.3f%%" % (len(atf_output), 100 * len(atf_output) /
-                                                               total_atf_names ))
+        print("Unique name occurrences in ATF: %d - %.3f%%" % (len(atf_output), 100 * len(atf_output) / total_atf_names ))
         outputATF(config, atf_output)
         return
 
@@ -111,17 +110,15 @@ def main(config):
 
     
     print ()
-    print ("Total names in train: %d\nTotal names in dev: %d\nTotal names in pred: %d\n" % (total_train_names, total_dev_names, total_pred_names))
+    print ("Total names in train: %d\nTotal names in test: %d\nTotal names in pred: %d\n" % (total_train_names, total_dev_names, total_pred_names))
     
-    print ("Training has %d unique names.\nDev has %d unique names.\nUnique names to dev: %d\nUnique names found in pred: %d"
+    print ("Training has %d unique names.\nTest has %d unique names.\nUnique names to test: %d\nUnique names found in pred: %d"
            % (len(train_names), len(dev_names), len(dev_unique_names), len(new_names)))
-    print ("Correct unique names in pred: %d / %d [%.2f%%]\n" %
-           (len(correct_names), len(dev_unique_names), 100 * len(correct_names) / len(dev_unique_names)))
+    print ("Correct unique names in pred: %d / %d [%.2f%%]\n" % (len(correct_names), len(dev_unique_names), 100 * len(correct_names) / len(dev_unique_names)))
     
     print ("Correct unique occurrences: %d" % (correct))
     print ("Missed names: %d / %d [%.2f%%]" % (missed, total_dev_names, 100 * missed / total_dev_names))
-    print ("Mislabeled names: %d / %d [%.2f%%]" %
-           (mislabeled, total_pred_names, 100 * mislabeled / total_pred_names))
+    print ("Mislabeled names: %d / %d [%.2f%%]" % (mislabeled, total_pred_names, 100 * mislabeled / total_pred_names))
 
 
 def outputATF(config, output_list):
@@ -142,7 +139,8 @@ def outputATF(config, output_list):
 
     sorted_names = sorted(name_counts.items(), key=operator.itemgetter(1), reverse=True)
 
-    while count < 100:
+    end = len(sorted_names)
+    while count < end:
         #print(sorted_names[count])        
         line = name_line[sorted_names[count][0]]
         #print(line)
@@ -165,23 +163,27 @@ def outputATF(config, output_list):
     #        count += 1
 
     print("----------------------")
+    print("lineid, wordid, occurences, name")
     ordered = sorted(selected, key=lambda x: float(x[0]))
 
     corpus = codecs.open(path + config['corpus'], 'r', encoding = 'utf-8')
 
     lineid = -1
     nextname = 0
-    
+    len_names = len(ordered)
     for line in corpus:
+              
+        lineid += 1
         
-        lineid += 1        
-
-        if lineid == int(ordered[nextname][0]):
+        while  nextname < len_names and lineid == int(ordered[nextname][0]):
             nn = ordered[nextname]
             print("%s, %s, %s, %s" % (nn[0].strip(), nn[1].strip(), nn[3], nn[2].strip()))
-            print(line.strip())
-            print()
+            if config['flags']['verbose']:
+                print(line.strip())
+                print()
             nextname += 1
+        
+            
 
         if nextname >= len(ordered):
             break
