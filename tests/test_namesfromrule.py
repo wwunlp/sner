@@ -1,6 +1,6 @@
-from classes import Display, Rule, Token
-from models import ner
-from scripts.ner import namesfromrule
+from sner.classes import Display, Rule, Token
+from sner.models import ner
+from sner.scripts.ner import namesfromrule
 
 
 def test_namesfromrule_main():

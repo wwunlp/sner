@@ -1,7 +1,7 @@
 """Imports the corpus data for the scikitlearn model"""
 import math
 import pandas as pd
-from classes import Display
+from sner.classes import Display
 
 
 def main(config):

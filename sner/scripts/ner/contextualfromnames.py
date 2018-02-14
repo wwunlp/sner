@@ -1,5 +1,5 @@
-from classes import Rule, Token
-from scripts.ner import rulesperformance, rulefilter
+from sner.classes import Rule, Token
+from sner.scripts.ner import rulesperformance, rulefilter
 
 
 def main(corpus, rules, names, max_rules, iteration, options, display):

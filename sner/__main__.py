@@ -7,9 +7,8 @@ Also offers interface for our analysis and formatting tools and test functions.
 import argparse
 import json
 import os
-#import pytest
-from models import ner, sklearn_launcher
-from scripts import export, export_atf, overfit_check, output # analysis, export, formatting
+from sner.models import ner, sklearn_launcher
+from sner.scripts import export, export_atf, overfit_check, output
 
 
 def bool_check(arg, config, default):

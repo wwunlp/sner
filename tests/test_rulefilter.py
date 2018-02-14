@@ -1,6 +1,6 @@
 import numpy as np
-from classes import Rule
-from scripts.ner import rulefilter
+from sner.classes import Rule
+from sner.scripts.ner import rulefilter
 
 
 def test_rulefilter_main():

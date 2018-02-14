@@ -1,4 +1,4 @@
-from classes import Rule, Token
+from sner.classes import Rule, Token
 
 
 def main(ruleset, maxrules):

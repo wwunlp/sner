@@ -1,8 +1,8 @@
 # This file is meant to generate spelling rules from a list of identified name
 # tokens.
 
-from classes import Rule, Token
-from scripts.ner import rulefilter, rulesperformance
+from sner.classes import Rule, Token
+from sner.scripts.ner import rulefilter, rulesperformance
 
 
 # Produces a list of monograms on up to k-grams

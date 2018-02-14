@@ -1,4 +1,4 @@
-from scripts import context, names, spelling, utilities
+from sner.scripts import context, names, spelling, utilities
 import codecs
 import csv
 
