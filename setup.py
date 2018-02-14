@@ -42,7 +42,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'sner=sner',
+            'sner=sner.__main__:main',
         ],
     },
 )
