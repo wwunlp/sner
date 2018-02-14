@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+0.1.2 - 20XX-XX-XX
+------------------
+- Minor bug fixes.
+
 0.1.1 - 2018-02-14
 ------------------
 - Initial release on PyPI.
