@@ -1,7 +1,7 @@
 """NER Model"""
-from classes import Display, Rule, Token
-from scripts.ner import contextualfromnames, namesfromrule
-from scripts.ner import spellingfromnames, updatetokenstrength
+from sner.classes import Display, Rule, Token
+from sner.scripts.ner import contextualfromnames, namesfromrule
+from sner.scripts.ner import spellingfromnames, updatetokenstrength
 import matplotlib.pyplot as plt
 import pandas as pd
 

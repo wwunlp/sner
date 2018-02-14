@@ -1,4 +1,4 @@
-from scripts import professions, utilities
+from sner.scripts import professions, utilities
 import codecs
 import csv
 import re

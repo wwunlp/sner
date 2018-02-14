@@ -1,4 +1,4 @@
-from classes import Rule
+from sner.classes import Rule
 
 
 def test_rule_init():

@@ -5,7 +5,7 @@ times they occur in total.  This is information later used to evaluate these
 grams usefulness as name recognition rules.
 """
 
-from scripts import readnames, utilities
+from sner.scripts import readnames, utilities
 from collections import defaultdict
 
 monograms = defaultdict(list)

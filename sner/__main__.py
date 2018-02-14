@@ -8,8 +8,8 @@ import argparse
 import json
 import os
 import pytest
-from models import ner, sklearn_launcher
-from scripts import export, export_atf, overfit_check # analysis, export, formatting
+from sner.models import ner, sklearn_launcher
+from sner.scripts import export, export_atf, overfit_check # analysis, export, formatting
 
 
 def bool_check(arg, config, default):

@@ -1,4 +1,4 @@
-from scripts import utilities
+from sner.scripts import utilities
 from collections import defaultdict
 import codecs
 import editdistance
