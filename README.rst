@@ -15,12 +15,12 @@ If you are not in a
 you may need to use ``pip3`` with ``sudo`` or ``--user``.
 
 If you'd rather clone the repository.
+
 .. code-block:: bash
 
    $ git clone https://github.com/wwunlp/sner.git
    $ cd sner/
    $ pip3 install .
-
 
 Usage
 -----
