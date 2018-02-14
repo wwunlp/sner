@@ -21,6 +21,7 @@ If you'd rather clone the repository.
    $ cd sner/
    $ pip3 install .
 
+
 Usage
 -----
 If you used ``pip3`` to install ``sner``, you can call ``sner`` from the
@@ -66,5 +67,6 @@ of the repository, you can set the enviroment variable ``SNER_CONF`` to the
 path of ``sner.conf``.
 
 .. image:: https://i.imgur.com/CpI851D.jpg
+   :align: center
    :alt: ERMAHGERD SNER
    :target: https://imgur.com/CpI851D
