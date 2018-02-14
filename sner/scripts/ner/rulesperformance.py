@@ -3,8 +3,8 @@
 # It will check the annotations of these tokens to see if they are really names
 # then it will use that to compute a strength rating
 
-from classes import Rule, Token
-from scripts.ner import namesfromrule
+from sner.classes import Rule, Token
+from sner.scripts.ner import namesfromrule
 
 
 # Rate the strength of the individual rule passed in,

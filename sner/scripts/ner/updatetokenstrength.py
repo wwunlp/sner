@@ -1,5 +1,5 @@
-from classes import Rule, Token
-from scripts.ner import namesfromrule
+from sner.classes import Rule, Token
+from sner.scripts.ner import namesfromrule
 
 
 def main(tokens, rules):
