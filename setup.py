@@ -1,43 +1,48 @@
-import os.path
+"""setup.py: Based on github.com/pypa/sampleproject"""
+from os import path
 from setuptools import setup, find_packages
-from pip.req import parse_requirements
 
-here = os.path.abspath(os.path.dirname(__file__))
 
-requirements_path = os.path.join(here, 'requirements.txt')
-install_requirements = parse_requirements(requirements_path, session=False)
-requirements = [str(ir.req) for ir in install_requirements]
+here = path.abspath(path.dirname(__file__))
 
-dev_requirements_path = os.path.join(here, 'dev-requirements.txt')
-dev_install_requirements = parse_requirements(dev_requirements_path, session=False)
-dev_requirements = [str(ir.req) for ir in dev_install_requirements]
-
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
-    name = 'sner',
-    version = '0.1.0',
-    description = 'Sumerian Named Entity Recognition',
-    author = 'Andy Brown, Mike Canoy, Ian Fisk, Matt Glitsch, Luke Terry',
-    author_email = 
-        'browna52@wwu.edu, ' \
-        'canoym@wwu.edu, ' \
-        'fiski@wwu.edu, ' \
-        'glitscm@wwu.edu, ' \
-        'terryl@wwu.edu',
-    url='https://gitlab.cs.wwu.edu/canoym/sumerian',
-    packages = find_packages(),
-    install_requires = requirements,
+    name='sumerian-ner',
+    version='0.1.1',
+    description='Sumerian Named Entity Recognition',
+    long_description=long_description,
+    url='https://github.com/wwunlp/sner',
+    author='Matt Adler, Andy Brown, Mike Canoy, Ian Fisk, Luke Terry',
+    author_email='glitscm@wwu.edu, browna52@wwu.edu, canoym@wwu.edu, ' \
+                 'fiski@wwu.edu, terryl@wwu.edu',
     classifiers=[
-        'Environment :: Console',
-        'Natural Language :: English',
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'Topic :: Text Processing :: Linguistic',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
-    py_modules=['classes', 'models', 'scripts', 'tests'],
+    keywords='sumerian named entity recognition',
+    packages=find_packages(exclude=['docs', 'tests']),
+    install_requires=[
+        'editdistance==0.3.1',
+        'matplotlib==1.5.3',
+        'numpy==1.12.0',
+        'pandas==0.19.2',
+        'pytest==3.0.5',
+        'scikit-learn==0.18.1'
+    ],
+    extras_require={
+        'dev': ['pylint', 'sphinx'],
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': [
-            'sner = sner:main',
-        ]
-    },
-    extras_require={
-        'develop': dev_requirements,
+            'sner=sner',
+        ],
     },
 )
