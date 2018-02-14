@@ -40,6 +40,7 @@ setup(
         'dev': ['pylint', 'sphinx'],
         'test': ['pytest'],
     },
+    python_requires='~=3.5',
     entry_points={
         'console_scripts': [
             'sner=sner.__main__:main',
