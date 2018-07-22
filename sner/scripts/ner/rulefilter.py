@@ -1,4 +1,4 @@
-from classes import Rule, Token
+from sner.classes import Rule, Token
 
 
 def main(ruleset, maxrules):
@@ -18,7 +18,7 @@ def main(ruleset, maxrules):
         None
 
     """
-    
+
     #sort the rules from best to worst (uses the __lt__ function defined in Rule class (in ruleset.py))
     sortedlist = sorted(ruleset, reverse=True)
 

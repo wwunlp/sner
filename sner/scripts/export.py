@@ -1,4 +1,4 @@
-from scripts import professions, utilities
+from sner.scripts import professions, utilities
 import codecs
 import csv
 import re
@@ -8,8 +8,8 @@ import random
 
 uniqueNames = True
 
-# To run: 
-# python3 sner.py -r export -nn True -np True 
+# To run:
+# python3 sner.py -r export -nn True -np True
 
 
 def findKnown(config, known_pn, known_gn):
@@ -36,13 +36,13 @@ def findKnown(config, known_pn, known_gn):
     file = codecs.open(path + 'attestations.csv', 'r', encoding = 'utf-8')
     # find all of the names
     for line in file:
-        line = line.split(',')        
+        line = line.split(',')
         text = utilities.clean_line(line[4].rstrip(), norm_num, norm_prof)
         text = text.lower()
         name = utilities.clean_line(line[5].rstrip(), norm_num, norm_prof)
         name = name.lower()
         line_id = line[1]
-        line_id = re.sub("[L]", "", line_id)        
+        line_id = re.sub("[L]", "", line_id)
 
         if line[9].rstrip() == 'PN':
             if (name not in known_pn):
@@ -56,7 +56,7 @@ def findKnown(config, known_pn, known_gn):
                     print ("Note: ", name, " is both a PN and GN.")
             else :
                 known_gn[name].append(line_id)
-            
+
 
 left_features = []
 left_features_phase1 =  ['dumu','giri3', 'iti',
@@ -231,13 +231,13 @@ def writeSparse(config, out_features, word_left, word_middle, word_right, x_inde
       word_middle = the word in question
       word_right = the right context of the word to be output
       x_index = the row id for the feature entry
-      
+
     Returns:
       Nothing
 
     Raises:
       None
-      
+
     """
 
     offset = 0
@@ -245,14 +245,14 @@ def writeSparse(config, out_features, word_left, word_middle, word_right, x_inde
         left = left_features[i]
         if word_left == left:
             out_features.write("{} {} 1\n".format(x_index, i + offset))
-            
+
     offset = len(left_features)
     for i in range(len(right_features)):
         right = right_features[i]
-        
+
         if word_right == right:
             out_features.write("{} {} 1\n".format(x_index, i + offset))
-            
+
     offset = len(left_features) + len(right_features)
     for i in range(len(spelling_features)):
         spelling = spelling_features[i]
@@ -264,10 +264,10 @@ def writeSparse(config, out_features, word_left, word_middle, word_right, x_inde
     symbols = word_middle.split('-')
     out_features.write("{} {} {}\n".format(x_index, offset, len(symbols)))
     offset += 1
-    
+
     if config['flags']['use_syllables'] == False:
         return
-    
+
     foundSym = []
     for sym in symbols:
         if sym not in known_symbols:
@@ -280,7 +280,7 @@ def writeSparse(config, out_features, word_left, word_middle, word_right, x_inde
 
 def main(config):
     """
-    Finds all names in options.attestations file, and goes through each word 
+    Finds all names in options.attestations file, and goes through each word
       in the main options.corpus file to create a sparse matrix file to be used
       with scikit learn.
     Args:
@@ -316,7 +316,7 @@ def main(config):
         print("Normalizing numbers.")
     if config['norm']['prof']:
         print("Normalizing professions.")
-        
+
     flags = config['flags']
     if flags['disjoint_names'] == True:
         uniqueNames = True
@@ -326,16 +326,16 @@ def main(config):
 
     if flags['use_left_context'] == True:
         left_features = left_features_phase1
-        print("Using left context from phase 1.")        
+        print("Using left context from phase 1.")
     else:
         left_features = []
-        
+
     if flags['use_right_context'] == True:
         print("Using right context from phase 1.")
         right_features = right_features_phase1
     else:
         right_features = []
-        
+
     if flags['use_spelling'] == True:
         print("Using spelling rules from phase 1.")
         spelling_features = spelling_features_phase1
@@ -344,12 +344,12 @@ def main(config):
 
     if flags['use_syllables'] == True:
         print("Using unique syllables as features.")
-    
+
 
     known_pn = {}
     known_gn = {}
     findKnown(config, known_pn, known_gn)
-    
+
     # iterate each line in Garshana Text and output to specified file
     file2 = codecs.open(path + corpus, 'r', encoding = 'utf-8')
 
@@ -362,15 +362,15 @@ def main(config):
         print("Invalid dev or train size! Expecting both to be 0-1 and dev+train <= 1.")
         return
 
-    
+
     test_size = 1 - (dev_size + train_size)
-        
+
     lines = file2.read().splitlines()
     end_train =  len(lines) * train_size
     end_dev = len(lines) * dev_size
     end_test = len(lines) * test_size
 
-    
+
     print ("Train size: %.2f%% %d lines" % (train_size,end_train))
     print ("Dev size: %.2f%% %d lines" % (dev_size,end_dev))
     print ("Test size: %.2f%% %d lines" % (test_size,end_test))
@@ -396,7 +396,7 @@ def main(config):
     dev_lines = 0
     test_lines = 0
 
-    
+
     while len(lines) > 0:
         if (train_lines < end_train or (dev_lines >= end_dev and test_lines >= end_test)):
             line = random.choice(lines)
@@ -414,7 +414,7 @@ def main(config):
             lines.remove(line)
             test_lines += 1
 
-    
+
     writeKey(path)
 
 
@@ -439,7 +439,7 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
     # We should skip the first line that labels the csv
     if "text" in text:
         return x_index
-        
+
     newText = text;
     words = text.split(' ')
     line_id = line[6]
@@ -454,10 +454,10 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
     last_line_id = ""
     last_tablet = ""
     last_index = -1
-    
+
     last_name = False
     last_geo = False
-        
+
     if "'" in line_id:
         line_id = re.sub("[']", "", line_id)
         line_id = "'" + line_id
@@ -465,7 +465,7 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
     if ("{joined" in text):
         print(text)
         return x_index
-    
+
     if ("writen" in text):
         print(text)
         return x_index
@@ -474,17 +474,17 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
         print("Getting rid of erasure: %s" % text)
         return x_index
 
-        
-        
-    for i in range(len(words)):            
-        w = words[i]        
+
+
+    for i in range(len(words)):
+        w = words[i]
         w_type = "-"
 
-        if ("." in w):            
+        if ("." in w):
             continue
-        
+
         # Set types if they are known and avoid
-        # conflicts by using the line_id.            
+        # conflicts by using the line_id.
         if w in known_pn:
             if (line_id in known_pn[w]):
                 w_type = "PN"
@@ -499,7 +499,7 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
             if (w_type != "-"):
                 print ("Warning, replacing name with profession!")
             w_type = "PF"
-                
+
         if 'number' in w:
             if (w_type != "-"):
                 print ("Warning, overwriting a known type with number: ", w, " - ", w_type)
@@ -508,7 +508,7 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
         if last_word == "iti" and norm_date:
             if (w_type != "-"):
                 print ("Warning, overwriting a known type with date: ", w, " - ", w_type)
-            w_type = "D"            
+            w_type = "D"
             w = 'date'
 
         if not (i == 0 and (w == "" or w == "-")):
@@ -526,13 +526,13 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
                 x_index += writeWord(tablet_id, line_id, i, last_word, w, "", x_index,
                            out_key, out_features, out_target,
                                      w_type == "PN", w_type == "GN", test_run, config)
-                    
+
         last_word_2 = last_word
         last_word = w
         last_line_id = line_id
         last_tablet = tablet_id
         last_index = i
-        
+
         if w_type == "PN":
             last_name = True
         else:
@@ -559,9 +559,9 @@ def writeWord(tablet_id, line_id, i, last_word, word, next_word, x_index,
             test_names.add(word)
         else:
             dev_names.add(word)
-    
+
     out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, word))
-    writeSparse(config, out_features, last_word, word, next_word, x_index)                    
+    writeSparse(config, out_features, last_word, word, next_word, x_index)
     writeTarget(out_target, PN, GN)
     return 1
 
@@ -573,12 +573,12 @@ def writeTarget(out_target, isName, isGN):
         out_target.write("2\n")
     else:
         out_target.write("0\n")
-        
+
 def writeKey(path):
     out = open(path + 'features.KEY', "w")
 
     offset = 0
-    
+
     for i in range(len(left_features)):
         out.write("[L]")
         out.write(left_features[i])

@@ -1,4 +1,4 @@
-from scripts import context, names, spelling, utilities
+from sner.scripts import context, names, spelling, utilities
 import codecs
 import csv
 
@@ -9,7 +9,7 @@ def main(data, options):
 	analyzed the corpus to look for potential rules to identify names.
 	Specifically it would generate every possible spelling and context rule,
 	and then assess its performance.
-	
+
     Args:
         data(string) = the name of the .csv file of the Garshana corpus.  (The one
 			   containing the full text of various tablets.
@@ -26,7 +26,7 @@ def main(data, options):
     """
 
     file = codecs.open('data/Attestations_PNs.csv','r', encoding='utf-16')
-    
+
     for line in file:
         line = line.split(',')
         if line[9].rstrip() == 'PN':

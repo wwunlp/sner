@@ -1,10 +1,10 @@
-from scripts import professions, utilities
+from sner.scripts import professions, utilities
 import codecs
 import csv
 import re
 import argparse
 import random
-from classes import Display
+from sner.classes import Display
 
 
 left_features =  []
@@ -28,13 +28,13 @@ def writeSparse(out_features, word_left, word_middle, word_right, x_index):
       word_middle = the word in question
       word_right = the right context of the word to be output
       x_index = the row id for the feature entry
-      
+
     Returns:
       Nothing
 
     Raises:
       None
-      
+
     """
 
     offset = 0
@@ -42,14 +42,14 @@ def writeSparse(out_features, word_left, word_middle, word_right, x_index):
         left = left_features[i]
         if word_left == left:
             out_features.write("{} {} 1\n".format(x_index, i + offset))
-            
+
     offset = len(left_features)
     for i in range(len(right_features)):
         right = right_features[i]
-        
+
         if word_right == right:
             out_features.write("{} {} 1\n".format(x_index, i + offset))
-            
+
     offset = len(left_features) + len(right_features)
     for i in range(len(spelling_features)):
         spelling = spelling_features[i]
@@ -70,7 +70,7 @@ def writeSparse(out_features, word_left, word_middle, word_right, x_index):
 
 def main(config):
     """
-    Finds all names in options.attestations file, and goes through each word 
+    Finds all names in options.attestations file, and goes through each word
       in the main options.corpus file to create a sparse matrix file to be used
       with scikit learn.
 
@@ -155,7 +155,7 @@ def main(config):
             if line[j:j + 2] == ". " or line[j:j + 3] == "'. ":
                 k = line.index(' ')
                 line = line[k + 1:]
-                
+
                 writeLine(
                     config,
                     line,
@@ -174,14 +174,14 @@ def main(config):
     display.finish()
     out_features.close()
     out_target.close()
-    
+
 
 def writeLine(config, line, line_id, out_features, out_target, out_key, known_pn, known_gn, tablet_id):
     norm_date = config['norm']['date']
     norm_geo  = config['norm']['geo']
     norm_num  = config['norm']['num']
     norm_prof = config['norm']['prof']
-    
+
     global x_index
 
     # Clean up the line and ensure that there are no extra spaces
@@ -198,20 +198,20 @@ def writeLine(config, line, line_id, out_features, out_target, out_key, known_pn
     last_line_id = ""
     last_tablet = ""
     last_index = -1
-    
+
     last_name = False
     last_geo = False
-        
-    for i in range(len(words)):            
+
+    for i in range(len(words)):
         w = words[i]
         w_type = "-"
         # Set types if they are known and avoid
-        # conflicts by using the line_id.            
+        # conflicts by using the line_id.
         if norm_prof and professions.replaceProfessions(w) == 'profession':
             if (w_type != "-"):
                 print ("Warning, replacing name with profession!")
             w_type = "PF"
-                
+
         if norm_num and 'number' in w:
             if (w_type != "-"):
                 print ("Warning, overwriting a known type with number: ", w, " - ", w_type)
@@ -223,7 +223,7 @@ def writeLine(config, line, line_id, out_features, out_target, out_key, known_pn
             w_type = "D"
             if (norm_date):
                 w = 'date'
-                    
+
         if not (i == 0 and (w == "" or w == "-" or w == "...")):
             if (i > 0 and i < len(words) -1):
                 # write last word
@@ -237,9 +237,9 @@ def writeLine(config, line, line_id, out_features, out_target, out_key, known_pn
                 x_index += 1
                 #write current word
                 out_key.write("{0}, {1}, {2}, {3}\n".format(tablet_id, line_id, i, w))
-                writeSparse(out_features, last_word, w, "", x_index)                    
+                writeSparse(out_features, last_word, w, "", x_index)
                 x_index += 1
-                    
+
         last_word_2 = last_word
         last_word = w
         last_line_id = line_id

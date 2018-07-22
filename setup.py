@@ -1,43 +1,33 @@
-import os.path
+"""setup.py: From github.com/pypa/sampleproject"""
 from setuptools import setup, find_packages
-from pip.req import parse_requirements
 
-here = os.path.abspath(os.path.dirname(__file__))
 
-requirements_path = os.path.join(here, 'requirements.txt')
-install_requirements = parse_requirements(requirements_path, session=False)
-requirements = [str(ir.req) for ir in install_requirements]
-
-dev_requirements_path = os.path.join(here, 'dev-requirements.txt')
-dev_install_requirements = parse_requirements(dev_requirements_path, session=False)
-dev_requirements = [str(ir.req) for ir in dev_install_requirements]
-
+with open('README.rst') as readme:
+    long_description = readme.read()
 
 setup(
-    name = 'sner',
-    version = '0.1.0',
-    description = 'Sumerian Named Entity Recognition',
-    author = 'Andy Brown, Mike Canoy, Ian Fisk, Matt Glitsch, Luke Terry',
-    author_email = 
-        'browna52@wwu.edu, ' \
-        'canoym@wwu.edu, ' \
-        'fiski@wwu.edu, ' \
-        'glitscm@wwu.edu, ' \
-        'terryl@wwu.edu',
-    url='https://gitlab.cs.wwu.edu/canoym/sumerian',
-    packages = find_packages(),
-    install_requires = requirements,
-    classifiers=[
-        'Environment :: Console',
-        'Natural Language :: English',
+    name='sner',
+    version='0.1.0',
+    description='Sumerian Named Entity Recognition',
+    long_description=long_description,
+    url='https://github.com/wwunlp/sner',
+    author='WWUNLP SNER Team',
+    packages=find_packages(exclude=['docs', 'tests']),
+    install_requires=[
+        'editdistance',
+        'matplotlib',
+        'numpy',
+        'pandas',
+        'scikit-learn',
+        'scipy'
     ],
-    py_modules=['classes', 'models', 'scripts', 'tests'],
     entry_points={
         'console_scripts': [
-            'sner = sner:main',
-        ]
+            'sner=sner:main',
+        ],
     },
-    extras_require={
-        'develop': dev_requirements,
-    },
+    project_urls={
+        'Bug Reports': 'https://github.com/wwunlp/sner/issues',
+        'Source': 'https://github.com/wwunlp/sner',
+    }
 )

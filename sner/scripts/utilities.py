@@ -1,4 +1,4 @@
-from scripts import professions
+from sner.scripts import professions
 import codecs
 import re
 
@@ -75,7 +75,7 @@ def clean_line(line, normNum=True, normProf=True):
     NOTE: The line is expected to only be the TEXT portion of the data files.
     I.e. the ID and line number parts of the data files are expected to be
     previously removed.
-    
+
     Args:
         line (str): Line of just the text section of a tablet
     Returns:
@@ -103,10 +103,10 @@ def clean_line(line, normNum=True, normProf=True):
     line = re.sub(r'[=]{2}', '', line)
 
     # Replace numbers with 'number'
-    if normNum is True:        
+    if normNum is True:
         line = re.sub(r'\b(?<!-)(\d+)(?![\w-])', 'number', line)
         line = re.sub(r'[-+]?\b\d+\b', 'number', line)
-         
+
         #line = re.sub(r'\b([\-\.0-9]+)(?![\w-])', 'number', line)
 
     # Replace professions with 'profession'

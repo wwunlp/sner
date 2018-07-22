@@ -1,5 +1,5 @@
 """Names from rule."""
-from classes import Rule
+from sner.classes import Rule
 
 
 def main(corpus, rule):

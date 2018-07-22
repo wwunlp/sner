@@ -1,7 +1,7 @@
 """NER Model"""
-from classes import Display, Rule, Token
-from scripts.ner import contextualfromnames, namesfromrule
-from scripts.ner import spellingfromnames, updatetokenstrength
+from sner.classes import Display, Rule, Token
+from sner.scripts.ner import contextualfromnames, namesfromrule
+from sner.scripts.ner import spellingfromnames, updatetokenstrength
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -13,10 +13,10 @@ def import_corpus(corpus_path, display):
 	containing the Tablet ID, the line number within that tablet, the word
 	number within that line, the word itself, and any annotation associated
 	with that word.
-	
+
     Args:
         corpus_path (str): Path of the corpus file.
-		display (Display): Utility object used to print the progress of scanning 
+		display (Display): Utility object used to print the progress of scanning
 						   the corpus file.
 
     Returns:
@@ -62,7 +62,7 @@ def import_seed_rules(seed_rules_path, display):
     a set.  The file is a CSV formatted with columns containing the rule type,
 	the contents of the rule, and its strength rating (the probability that a
 	token is a name if the rule applies to said token).
-	
+
     Args:
         rulename (str): Location of seed rules file.
 
@@ -98,7 +98,7 @@ def assess_strength(rules, corpus, config):
 	is useful because the ner model will generate rules in an unsupervised
 	fashion.  This function gets used to evaluate the performance of that
 	process.
-	
+
     Args:
         rules (set): A set of Rule objects to be evaluated
         corpus (set): A set of Token objects, representing the entire Garshana
@@ -224,8 +224,8 @@ def get_new_names(corpus, names, rules):
     Meant to use the provided ruleset to scan the corpus for new names.
     It will then return the names in quesiton, which will be used
     to generate more rules.
-	
-	Basically, it grabs all tokens from the corpus matching the rules in 
+
+	Basically, it grabs all tokens from the corpus matching the rules in
 	question and then return them as a set.  The names parameter lets you
 	specify tokens that are already recognized as names, allowing you to
 	retrieve only new name results.
@@ -265,7 +265,7 @@ def print_precision_and_recall(selected_elements, relevant_elements, i, log):
     Args:
         selected_elements (set): Set of Token objects representing names as
 								 identified by the algorithm.
-        relevant_elements (int): Total number of names that exist in the 
+        relevant_elements (int): Total number of names that exist in the
 								 corpus.
         i (int): Index of current log entry.
 		log (pandas.DataFrame): Data structure containing logs

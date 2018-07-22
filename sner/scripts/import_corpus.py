@@ -1,7 +1,7 @@
 """Imports the corpus data for the scikitlearn model"""
 import math
 import pandas as pd
-from classes import Display
+from sner.classes import Display
 
 
 def main(config):
@@ -10,14 +10,14 @@ def main(config):
 	DataFrame stores lines of corpus data as well as various metadata
 	specified by the cols variable defined below.  Able to handle .csv formats
 	as well as .atf formats.
-	
+
     Args:
         config(dict) = contains file locations and runtime flags, such as the
 					   location of the corpus file.
 
     Returns:
         corpus(pandas.DataFrame) = corpus information represented in a
-								   dataframe format.  
+								   dataframe format.
 
     Raises:
         None
@@ -82,7 +82,7 @@ def main(config):
     def read_csv(corpus, reader):
 		"""
 		Handles loading .csv format for the container function.
-		
+
 		Args:
 			corpus(pandas.DataFrame) = dataframe representation of the corpus
 									   to be filled out
@@ -91,7 +91,7 @@ def main(config):
 
 		Returns:
 			corpus(pandas.DataFrame) = corpus information represented in a
-									   dataframe format.  
+									   dataframe format.
 
 		Raises:
 			None
@@ -140,7 +140,7 @@ def main(config):
     def read_atf(corpus, reader):
 		"""
 		Handles loading .atf format for the container function.
-		
+
 		Args:
 			corpus(pandas.DataFrame) = dataframe representation of the corpus
 									   to be filled out
@@ -149,7 +149,7 @@ def main(config):
 
 		Returns:
 			corpus(pandas.DataFrame) = corpus information represented in a
-									   dataframe format.  
+									   dataframe format.
 
 		Raises:
 			None
