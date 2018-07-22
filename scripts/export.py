@@ -410,7 +410,7 @@ def main(config):
             dev_lines += 1
         if (test_lines < end_test and len(lines) > 0):
             line = random.choice(lines)
-            writeLine(x_index3, config, line, out_features3, out_target3, out_key3, known_pn, known_gn, False)
+            x_index3 = writeLine(x_index3, config, line, out_features3, out_target3, out_key3, known_pn, known_gn, False)
             lines.remove(line)
             test_lines += 1
 
@@ -461,9 +461,28 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
     if "'" in line_id:
         line_id = re.sub("[']", "", line_id)
         line_id = "'" + line_id
+
+    if ("{joined" in text):
+        print(text)
+        return x_index
+    
+    if ("writen" in text):
+        print(text)
+        return x_index
+
+    if ("erasure" in text):
+        print("Getting rid of erasure: %s" % text)
+        return x_index
+
+        
+        
     for i in range(len(words)):            
-        w = words[i]
+        w = words[i]        
         w_type = "-"
+
+        if ("." in w):            
+            continue
+        
         # Set types if they are known and avoid
         # conflicts by using the line_id.            
         if w in known_pn:
@@ -491,8 +510,8 @@ def writeLine(x_index, config, line, out_features, out_target, out_key, known_pn
                 print ("Warning, overwriting a known type with date: ", w, " - ", w_type)
             w_type = "D"            
             w = 'date'
-                    
-        if not (i == 0 and (w == "" or w == "-" or w == "...")):
+
+        if not (i == 0 and (w == "" or w == "-")):
             if (i > 0 and i < len(words) -1):
                 # write last word
                 x_index += writeWord(last_tablet, last_line_id, last_index, last_word_2,
