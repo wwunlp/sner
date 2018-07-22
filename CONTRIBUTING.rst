@@ -22,4 +22,4 @@ The project is organized into
 - Compile docs with ``sphinx``, and post the html files to ``docs/``.
 
 If you're parsing ``.atf`` files, please look at the
-:doc:`ATF reference <atf_reference.rst>`.
+:ref:`ATF reference <atf_reference.rst>`_.

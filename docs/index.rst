@@ -8,6 +8,7 @@ Contents
    changelog
    contributing
    contributors
+   atf_reference
 
 Indices and tables
 ------------------
