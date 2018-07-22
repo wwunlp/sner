@@ -12,8 +12,8 @@ models.ner module
     :undoc-members:
     :show-inheritance:
 
-models.sklearn_launcher module
-------------------------------
+models.sklearn\_launcher module
+-------------------------------
 
 .. automodule:: models.sklearn_launcher
     :members:

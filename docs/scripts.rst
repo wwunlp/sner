@@ -35,8 +35,8 @@ scripts.export module
     :undoc-members:
     :show-inheritance:
 
-scripts.export_atf module
--------------------------
+scripts.export\_atf module
+--------------------------
 
 .. automodule:: scripts.export_atf
     :members:
@@ -51,8 +51,8 @@ scripts.formatting module
     :undoc-members:
     :show-inheritance:
 
-scripts.import_corpus module
-----------------------------
+scripts.import\_corpus module
+-----------------------------
 
 .. automodule:: scripts.import_corpus
     :members:
@@ -67,8 +67,16 @@ scripts.names module
     :undoc-members:
     :show-inheritance:
 
-scripts.overfit_check module
-----------------------------
+scripts.output module
+---------------------
+
+.. automodule:: scripts.output
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+scripts.overfit\_check module
+-----------------------------
 
 .. automodule:: scripts.overfit_check
     :members:
