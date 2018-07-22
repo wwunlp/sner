@@ -1,5 +1,17 @@
-sner module
-===========
+sner package
+============
+
+Subpackages
+-----------
+
+.. toctree::
+
+    sner.classes
+    sner.models
+    sner.scripts
+
+Module contents
+---------------
 
 .. automodule:: sner
     :members:
