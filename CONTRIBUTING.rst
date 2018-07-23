@@ -7,7 +7,7 @@ To start contributing, you can install the project by
 
    git clone https://github.com/wwunlp/sner.git
    cd sner/
-   pip3 install .'[develop]'
+   pip3 install .
 
 Please follow the
 `Google Python Style Guide <https://google.github.io/styleguide/pyguide>`_.

@@ -6,8 +6,8 @@ with open('README.rst') as readme:
     long_description = readme.read()
 
 setup(
-    name='sner',
-    version='0.1.0',
+    name='sumerian-ner',
+    version='0.1.1',
     description='Sumerian Named Entity Recognition',
     long_description=long_description,
     url='https://github.com/wwunlp/sner',
