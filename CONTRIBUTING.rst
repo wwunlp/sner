@@ -4,6 +4,7 @@ Contributing to Sumerian Named Entity Recongnition
 To start contributing, you can install the project by
 
 .. code-block:: bash
+
    git clone https://github.com/wwunlp/sner.git
    cd sner/
    pip3 install .'[develop]'
