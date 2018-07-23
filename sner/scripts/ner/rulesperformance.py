@@ -3,8 +3,8 @@
 # It will check the annotations of these tokens to see if they are really names
 # then it will use that to compute a strength rating
 
-from classes import Rule, Token
-from scripts.ner import namesfromrule
+from sner.classes import Rule, Token
+from sner.scripts.ner import namesfromrule
 
 
 # Rate the strength of the individual rule passed in,
@@ -31,7 +31,7 @@ def rateRulePerformance(results, rule, alpha, k, accept_threshold):
 def main(corpus, rules, options, iteration, display):
     """
     Finds all tokens that match a given rule, using that to rate the rules
-    performance. Rates rule performance by totalling up the tokens that 
+    performance. Rates rule performance by totalling up the tokens that
     match the rule, and comparing that to how many of the tokens in that set
     are considered to be a PN.
     Args:

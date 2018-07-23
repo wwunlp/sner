@@ -1,4 +1,4 @@
-from scripts import professions, utilities
+from sner.scripts import professions, utilities
 import codecs
 import csv
 import re
@@ -26,13 +26,13 @@ def findKnown(data, options, knownPN, knownGN):
     file = codecs.open(data.attestations, 'r', encoding = 'utf-8')
     # find all of the names
     for line in file:
-        line = line.split(',')        
+        line = line.split(',')
         text = utilities.clean_line(line[4].rstrip(), options.norm_num, options.norm_prof)
         text = text.lower()
         name = utilities.clean_line(line[5].rstrip(), options.norm_num, options.norm_prof)
         name = name.lower()
         lineID = line[1]
-        lineID = re.sub("[L]", "", lineID)        
+        lineID = re.sub("[L]", "", lineID)
 
         if line[9].rstrip() == 'PN':
             if (name not in knownPN):
@@ -45,11 +45,11 @@ def findKnown(data, options, knownPN, knownGN):
                 if (name in knownPN):
                     print ("Note: ", name, " is both a PN and GN.")
             else :
-                knownGN[name].append(lineID)                
+                knownGN[name].append(lineID)
 
 def main(data, options):
     """
-    Finds all names in options.attestations file, and goes through each word 
+    Finds all names in options.attestations file, and goes through each word
       in the main options.corpus file to fill a new output file specified by
       options.output
     Args:
@@ -69,17 +69,17 @@ def main(data, options):
         None
 
     """
-    
+
     knownPN = {}
     knownGN = {}
     findKnown(data, options, knownPN, knownGN)
-    
+
     # iterate each line in Garshana Text and output to specified file
     file2 = codecs.open(data.corpus, 'r', encoding = 'utf-8')
     out = open(data.output, "w")
-        
+
     out.write("Tablet ID,Line Number,Word Number,Word,Word Type\n")
-    
+
     for line in file2:
         line = line.split(',')
         tabletID = line[0]
@@ -93,7 +93,7 @@ def main(data, options):
         # We should skip the first line that labels the csv
         if "text" in text:
             continue
-        
+
         newText = text;
         words = text.split(' ')
         lineID = line[6]
@@ -126,7 +126,7 @@ def main(data, options):
                 if (wType != "-"):
                     print ("Warning, replacing name with profession!")
                 wType = "PF"
-                
+
             if 'number' in w:
                 if (wType != "-"):
                     print ("Warning, overwriting a known type with number: ", w, " - ", wType)
@@ -138,7 +138,7 @@ def main(data, options):
                 wType = "D"
                 if (options.norm_date):
                     w = 'date'
-                
-            lastWord = w            
+
+            lastWord = w
             if not (i == 0 and (w == "" or w == "-" or w == "...")):
-                out.write("{},{},{},{},{}\n".format(tabletID, lineID, i, w, wType))  
+                out.write("{},{},{},{},{}\n".format(tabletID, lineID, i, w, wType))

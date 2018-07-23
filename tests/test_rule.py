@@ -1,4 +1,4 @@
-from classes import Rule
+from sner.classes import Rule
 
 
 def test_rule_init():
@@ -42,4 +42,3 @@ def test_rule_str():
     rule = Rule(Rule.Type.left_context, 'ki', 0.989010989)
     expected_result = 'Rule(type=left_context, rule=ki, strength=0.989010989)'
     assert str(rule) == expected_result
-

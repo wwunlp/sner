@@ -9,11 +9,12 @@ Contents
    contributing
    contributors
    atf_reference
-   classes
-   models
-   scripts.ner
-   scripts
    sner
+   sner.classes
+   sner.models
+   sner.scripts
+   sner.scripts.ner
+   modules
 
 Indices and tables
 ------------------

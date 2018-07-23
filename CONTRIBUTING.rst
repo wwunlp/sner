@@ -4,9 +4,10 @@ Contributing to Sumerian Named Entity Recongnition
 To start contributing, you can install the project by
 
 .. code-block:: bash
+
    git clone https://github.com/wwunlp/sner.git
    cd sner/
-   pip3 install .'[develop]'
+   pip3 install .
 
 Please follow the
 `Google Python Style Guide <https://google.github.io/styleguide/pyguide>`_.
@@ -22,4 +23,4 @@ The project is organized into
 - Compile docs with ``sphinx``, and post the html files to ``docs/``.
 
 If you're parsing ``.atf`` files, please look at the
-:ref:`ATF reference <atf_reference.rst>`_.
+`ATF reference <https://sner.readthedocs.io/en/latest/atf_reference.html>`_.

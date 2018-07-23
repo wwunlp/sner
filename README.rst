@@ -12,7 +12,7 @@ Installation
 ------------
 .. code-block:: bash
 
-   $ pip3 install git+https://github.com/wwunlp/sner.git@master
+   $ pip3 install sumerian-ner
 
 If you are not in a
 `virtualenv <https://virtualenv.pypa.io>`_
@@ -30,7 +30,7 @@ Usage
 -----
 If you used ``pip3`` to install ``sner``,
 you can call ``sner`` from the command line.
-If you cloned the repo, you can run ``python3 sner.py`` from within the repo.
+If you cloned the repo, you can run ``python3 -m sner`` from within the repo.
 
 Options and Arguments
 ---------------------

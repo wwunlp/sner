@@ -5,7 +5,7 @@ times they occur in total.  This is information later used to evaluate these
 grams usefulness as name recognition rules.
 """
 
-from scripts import readnames, utilities
+from sner.scripts import readnames, utilities
 from collections import defaultdict
 
 monograms = defaultdict(list)
@@ -18,7 +18,7 @@ def gramhelper(gramDict, gram, namecount, totalcount):
 	Utility function to insert arbitrary n-grams into dictionaries that
 	associate them with lists containing the number of times that gram occurred
 	as well as the number of times that gram occurred in a name.
-	
+
     Args:
             gramDict = dictionary to recieve an n-gram
             gram = gram to be inserted into the dict
@@ -57,7 +57,7 @@ Returns:
 Raises:
 
 """
-    
+
 def addMonogram(gram, namecount, totalcount):
     gramhelper(monograms, gram, namecount, totalcount)
 
@@ -89,7 +89,7 @@ def loadData(data, allgrams, f):
           print out the type of gram and oddity.
 
     """
-    
+
     # Load ngrams found in names
     namegrams = readnames.getKgrams(readnames.getPNs(data), 3)
 
@@ -148,7 +148,7 @@ def analyzeData(f):
 		None
 
     """
-    
+
     f.write("N-gram, Percentage, Occurence, Total Occurence\n".encode('utf-8'))
 
     print('monogram analysis')
@@ -178,7 +178,7 @@ def analyzeData(f):
 def outputAnalysis(k, v, f):
     """
     Args:
-        k(string) = 
+        k(string) =
         v = (?)
         f = csv file we are writing to.
     Returns:
@@ -187,7 +187,7 @@ def outputAnalysis(k, v, f):
         If an n-gram has greater than 100% significance, reports the n-gram.
 
     """
-    
+
     significance = v[1] / v[0]
     if significance > 1:
         print("ERROR: ngram \"{0}\" has greater than 100% significance" +

@@ -6,7 +6,7 @@ project = 'SNER'
 author = 'WWUNLP SNER Team'
 copyright = '2017, ' + author
 
-release = '0.1.0'
+release = '0.1.1'
 
 extensions = [
     'sphinx.ext.autodoc',

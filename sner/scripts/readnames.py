@@ -1,4 +1,4 @@
-from scripts import utilities
+from sner.scripts import utilities
 from collections import defaultdict
 import codecs
 import editdistance
@@ -9,7 +9,7 @@ def getPersonalNames(csvFile):
     Args:
         csvfile = A csv file with the name on line[5] and line[9] is an identifier of its
                   type, where we are looking for 'PN' indicating a personal name.
-        
+
 
     Returns:
         Puts found names from the csv file and returns them in a dictionary

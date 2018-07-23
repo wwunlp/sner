@@ -1,5 +1,5 @@
-from classes import Rule, Token
-from scripts.ner import rulesperformance
+from sner.classes import Rule, Token
+from sner.scripts.ner import rulesperformance
 
 
 def test_rulesperformance_rateRulePerformance():
